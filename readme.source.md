@@ -1,9 +1,9 @@
 # <img src="/src/icon.png" height="30px"> Verify.EntityFramework
 
-[![Build status](https://ci.appveyor.com/api/projects/status/eedjhmx5o3082tyq?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-entityframework)
+[![Build status](https://ci.appveyor.com/api/projects/status/g6njwv0aox62atu0?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-entityframework)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg)](https://www.nuget.org/packages/Verify.EntityFramework/)
 
-Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of web bits.
+Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of EntityFramewok bits.
 
 
 toc
@@ -16,25 +16,42 @@ https://nuget.org/packages/Verify.EntityFramework/
 
 ## Usage
 
-Enable VerifyWeb once at assembly load time:
+Enable VerifyEntityFramewok once at assembly load time:
 
 snippet: Enable
 
 
-### Controller
-
-Given the following controller:
-
-//snippet: MyController.cs
+### Added entry
 
 This test:
 
-//snippet: MyControllerTest
+snippet: Added
 
 Will result in the following verified file:
 
-//snippet: MyControllerTests.Test.verified.txt
+snippet: Tests.Added.verified.txt
 
+
+### Deleted entry
+
+This test:
+
+snippet: Deleted
+
+Will result in the following verified file:
+
+snippet: Tests.Deleted.verified.txt
+
+
+### Modified entry
+
+This test:
+
+snippet: Modified
+
+Will result in the following verified file:
+
+snippet: Tests.Modified.verified.txt
 
 
 ## Icon

@@ -15,10 +15,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.40" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Snippets\Usage.Test.verified.txt">
-      <DependentUpon>Usage.cs</DependentUpon>
-    </None>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
   </ItemGroup>
 </Project>
