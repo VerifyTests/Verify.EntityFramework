@@ -10,6 +10,7 @@
                 {
                     var converters = serializer.Converters;
                     converters.Add(new DbContextConverter());
+                    converters.Add(new QueryableConverter());
                 });
             });
         }

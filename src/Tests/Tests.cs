@@ -62,6 +62,13 @@ public class Tests :
     }
     #endregion
 
+    [Fact]
+    public async Task Queryable()
+    {
+        var database = await DbContextBuilder.GetDatabase("Queryable");
+        await Verify(database.Context.Companies.Where(x=>x.Content == "a"));
+    }
+
     static DbContextOptions<SampleDbContext> DbContextOptions(
         [CallerMemberName] string databaseName = "")
     {
