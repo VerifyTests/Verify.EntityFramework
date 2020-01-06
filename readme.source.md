@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g6njwv0aox62atu0?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-entityframework)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg)](https://www.nuget.org/packages/Verify.EntityFramework/)
 
-Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of EntityFramewok bits.
+Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of EntityFramework bits.
 
 
 toc
