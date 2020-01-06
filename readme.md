@@ -68,12 +68,13 @@ Will result in the following verified file:
 {
   Added: {
     Company: {
-      Id: 0
+      Id: 0,
+      Content: 'before'
     }
   }
 }
 ```
-<sup><a href='/src/Tests/Tests.Added.verified.txt#L1-L7' title='File snippet `Tests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Added.verified.txt' title='Navigate to start of snippet `Tests.Added.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.Added.verified.txt#L1-L8' title='File snippet `Tests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Added.verified.txt' title='Navigate to start of snippet `Tests.Added.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 

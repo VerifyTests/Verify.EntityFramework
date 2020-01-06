@@ -1,7 +1,8 @@
 {
   Added: {
     Company: {
-      Id: 0
+      Id: 0,
+      Content: 'before'
     }
   }
 }
