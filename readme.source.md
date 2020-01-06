@@ -54,6 +54,17 @@ Will result in the following verified file:
 snippet: Tests.Modified.verified.txt
 
 
+### Queryable
+
+This test:
+
+snippet: Queryable
+
+Will result in the following verified file:
+
+snippet: Tests.Queryable.verified.txt
+
+
 ## Icon
 
 [Database](https://thenounproject.com/term/database/310841/) designed by [Creative Stall](https://thenounproject.com/creativestall/) from [The Noun Project](https://thenounproject.com/creativepriyanka).

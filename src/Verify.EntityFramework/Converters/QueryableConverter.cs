@@ -15,19 +15,28 @@ class QueryableConverter :
             return;
         }
 
+        var sql = QueryToSql(context);
+        serializer.Serialize(writer, sql);
+    }
+
+    public static string QueryToSql(object context)
+    {
         var entityType = context.GetType().GetGenericArguments().Single();
         var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(entityType);
-        var memberInfos = queryableSerializer.GetMembers(BindingFlags.Static|BindingFlags.NonPublic);
-        var sql = (string)queryableSerializer.InvokeMember(
+        return (string) queryableSerializer.InvokeMember(
             name: "ToSql",
             invokeAttr: BindingFlags.InvokeMethod,
             binder: null,
             target: null,
-            args: new []{context});
-        serializer.Serialize(writer, sql);
+            args: new[] {context});
     }
 
     public override bool CanConvert(Type type)
+    {
+        return IsQueryable(type);
+    }
+
+    public static bool IsQueryable(Type type)
     {
         if (!type.IsGenericType)
         {
@@ -35,6 +44,7 @@ class QueryableConverter :
         }
 
         var genericType = type.GetGenericTypeDefinition();
-        return genericType == typeof(EntityQueryable<>);
+        return genericType == typeof(EntityQueryable<>) ||
+               genericType == typeof(IQueryable<>) ;
     }
 }

@@ -19,7 +19,8 @@ Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of 
   * [Usage](#usage)
     * [Added entry](#added-entry)
     * [Deleted entry](#deleted-entry)
-    * [Modified entry](#modified-entry)<!-- endtoc -->
+    * [Modified entry](#modified-entry)
+    * [Queryable](#queryable)<!-- endtoc -->
 
 
 ## NuGet package
@@ -170,6 +171,38 @@ Will result in the following verified file:
 }
 ```
 <sup><a href='/src/Tests/Tests.Modified.verified.txt#L1-L11' title='File snippet `Tests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Modified.verified.txt' title='Navigate to start of snippet `Tests.Modified.verified.txt`'>anchor</a></sup>
+<!-- endsnippet -->
+
+
+### Queryable
+
+This test:
+
+<!-- snippet: Queryable -->
+<a id='snippet-queryable'/></a>
+```cs
+[Fact]
+public async Task Queryable()
+{
+    var database = await DbContextBuilder.GetDatabase("Queryable");
+    var dbContext = database.Context;
+    var queryable = dbContext.Companies.Where(x => x.Content == "value");
+    await Verify(queryable);
+}
+```
+<sup><a href='/src/Tests/Tests.cs#L65-L74' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<!-- endsnippet -->
+
+Will result in the following verified file:
+
+<!-- snippet: Tests.Queryable.verified.txt -->
+<a id='snippet-Tests.Queryable.verified.txt'/></a>
+```txt
+SELECT [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'value'
+```
+<sup><a href='/src/Tests/Tests.Queryable.verified.txt#L1-L3' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
