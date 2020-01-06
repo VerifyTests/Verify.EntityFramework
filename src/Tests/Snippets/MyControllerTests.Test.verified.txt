@@ -1,0 +1,19 @@
+{
+  result: [
+    {
+      Value: 'Value1'
+    },
+    {
+      Value: 'Value2'
+    }
+  ],
+  context: {
+    Headers: {
+      headerKey: 'headerValue',
+      receivedInput: 'inputValue'
+    },
+    Cookies: {
+      cookieKey: 'cookieValue'
+    }
+  }
+}
