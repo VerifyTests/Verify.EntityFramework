@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -20,7 +19,31 @@ class DbContextConverter :
         foreach (var entry in context.ChangeTracker.Entries()
             .Where(x => x.State != EntityState.Unchanged))
         {
-            foreach (var property in entry.ChangedProperties())
+            switch (entry.State)
+            {
+                case EntityState.Detached:
+                    break;
+                case EntityState.Deleted:
+                    break;
+                case EntityState.Modified:
+                    HandleModified(writer, serializer, entry);
+                    break;
+                case EntityState.Added:
+                    break;
+            }
+        }
+
+        writer.WriteEndObject();
+    }
+
+    static void HandleModified(JsonWriter writer, JsonSerializer serializer, EntityEntry entry)
+    {
+        var changed = entry.ChangedProperties().ToList();
+        if (changed.Any())
+        {
+            writer.WritePropertyName("Modified");
+            writer.WriteStartObject();
+            foreach (var property in changed)
             {
                 writer.WritePropertyName(property.Metadata.Name);
                 serializer.Serialize(
@@ -28,11 +51,10 @@ class DbContextConverter :
                     new
                     {
                         Original = property.OriginalValue,
-                        Current = property.CurrentValue,
+                        Current = property.CurrentValue
                     });
             }
+            writer.WriteEndObject();
         }
-
-        writer.WriteEndObject();
     }
 }
