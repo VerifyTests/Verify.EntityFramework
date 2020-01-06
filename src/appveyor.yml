@@ -9,3 +9,4 @@ build_script:
 test: off
 artifacts:
 - path: nugets\**\*.nupkg
+- path: **\*.received.*
