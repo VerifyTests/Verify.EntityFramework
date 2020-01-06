@@ -16,4 +16,9 @@
     <PackageReference Include="ProjectDefaults" Version="1.0.40" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Snippets\Usage.Test.verified.txt">
+      <DependentUpon>Usage.cs</DependentUpon>
+    </None>
+  </ItemGroup>
 </Project>

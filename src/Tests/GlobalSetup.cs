@@ -1,4 +1,4 @@
-﻿using Verify.Web;
+﻿using Verify.EntityFramework;
 using Xunit;
 
 [GlobalSetUp]
@@ -7,7 +7,7 @@ public static class GlobalSetup
     public static void Setup()
     {
         #region Enable
-        VerifyWeb.Enable();
+        VerifyEntityFramework.Enable();
         #endregion
     }
 }
