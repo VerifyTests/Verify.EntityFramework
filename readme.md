@@ -190,7 +190,7 @@ public async Task Queryable()
     await Verify(queryable);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L86-L95' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L113-L122' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:

@@ -7,7 +7,8 @@ public static class Extensions
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry)
     {
         return entry.Properties
-            .Where(x => x.IsModified);
+            .Where(x => x.IsModified &&
+                        x.OriginalValue != x.CurrentValue);
     }
 
     public static IEnumerable<(string name, object value)> FindPrimaryKeyValues(this EntityEntry entry)

@@ -62,6 +62,33 @@ public class Tests :
     }
     #endregion
     [Fact]
+    public async Task WithNavigationProp()
+    {
+        var options = DbContextOptions();
+
+        await using (var context = new SampleDbContext(options))
+        {
+            var company = new Company
+            {
+                Content = "companyBefore"
+            };
+            context.Add(company);
+            context.Add(new Employee
+            {
+                Content = "employeeBefore",
+                Company = company
+            });
+            context.SaveChanges();
+        }
+
+        await using (var context = new SampleDbContext(options))
+        {
+            context.Companies.Single().Content = "companyAfter";
+            context.Employees.Single().Content = "employeeAfter";
+            await Verify(context);
+        }
+    }
+    [Fact]
     public async Task SomePropsModified()
     {
         var options = DbContextOptions();
