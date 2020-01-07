@@ -109,6 +109,27 @@ public class Tests :
             await Verify(context);
         }
     }
+    [Fact]
+    public async Task UpdateEntity()
+    {
+        var options = DbContextOptions();
+
+        await using (var context = new SampleDbContext(options))
+        {
+            context.Add(new Employee
+            {
+                Content = "before",
+            });
+            context.SaveChanges();
+        }
+
+        await using (var context = new SampleDbContext(options))
+        {
+            var employee = context.Employees.Single();
+            context.Update(employee).Entity.Content = "after";
+            await Verify(context);
+        }
+    }
 
     #region Queryable
     [Fact]
