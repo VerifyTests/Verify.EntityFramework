@@ -50,7 +50,7 @@ public class Tests :
 
         await using (var context = new SampleDbContext(options))
         {
-            context.Companies.Add(new Company {Content = "before"});
+            context.Add(new Company {Content = "before"});
             context.SaveChanges();
         }
 
@@ -61,6 +61,27 @@ public class Tests :
         }
     }
     #endregion
+    [Fact]
+    public async Task SomePropsModified()
+    {
+        var options = DbContextOptions();
+
+        await using (var context = new SampleDbContext(options))
+        {
+            context.Add(new Employee
+            {
+                Content = "before",
+                Age = 10
+            });
+            context.SaveChanges();
+        }
+
+        await using (var context = new SampleDbContext(options))
+        {
+            context.Employees.Single().Content = "after";
+            await Verify(context);
+        }
+    }
 
     #region Queryable
     [Fact]
