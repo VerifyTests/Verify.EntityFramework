@@ -16,7 +16,7 @@ public class Tests :
         var options = DbContextOptions();
 
         await using var context = new SampleDbContext(options);
-        context.Companies.Add(new Company {Content = "before"});
+        context.Add(new Company {Content = "before"});
         await Verify(context);
     }
     #endregion
@@ -29,7 +29,7 @@ public class Tests :
 
         await using (var context = new SampleDbContext(options))
         {
-            context.Companies.Add(new Company {Content = "before"});
+            context.Add(new Company {Content = "before"});
             context.SaveChanges();
         }
 
@@ -48,87 +48,72 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            context.Add(new Company {Content = "before"});
-            context.SaveChanges();
-        }
+        await using var context = new SampleDbContext(options);
+        var company = new Company {Content = "before"};
+        context.Add(company);
+        context.SaveChanges();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            context.Companies.Single().Content = "after";
-            await Verify(context);
-        }
+        context.Companies.Single().Content = "after";
+        await Verify(context);
     }
     #endregion
+
     [Fact]
     public async Task WithNavigationProp()
     {
         var options = DbContextOptions();
 
-        await using (var context = new SampleDbContext(options))
+        await using var context = new SampleDbContext(options);
+        var company = new Company
         {
-            var company = new Company
-            {
-                Content = "companyBefore"
-            };
-            context.Add(company);
-            context.Add(new Employee
-            {
-                Content = "employeeBefore",
-                Company = company
-            });
-            context.SaveChanges();
-        }
+            Content = "companyBefore"
+        };
+        context.Add(company);
+        var employee = new Employee
+        {
+            Content = "employeeBefore",
+            Company = company
+        };
+        context.Add(employee);
+        context.SaveChanges();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            context.Companies.Single().Content = "companyAfter";
-            context.Employees.Single().Content = "employeeAfter";
-            await Verify(context);
-        }
+        context.Companies.Single().Content = "companyAfter";
+        context.Employees.Single().Content = "employeeAfter";
+        await Verify(context);
     }
+
     [Fact]
     public async Task SomePropsModified()
     {
         var options = DbContextOptions();
 
-        await using (var context = new SampleDbContext(options))
+        await using var context = new SampleDbContext(options);
+        context.Add(new Employee
         {
-            context.Add(new Employee
-            {
-                Content = "before",
-                Age = 10
-            });
-            context.SaveChanges();
-        }
+            Content = "before",
+            Age = 10
+        });
+        context.SaveChanges();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            context.Employees.Single().Content = "after";
-            await Verify(context);
-        }
+        context.Employees.Single().Content = "after";
+        await Verify(context);
     }
+
     [Fact]
     public async Task UpdateEntity()
     {
         var options = DbContextOptions();
 
-        await using (var context = new SampleDbContext(options))
+        await using var context = new SampleDbContext(options);
+        context.Add(new Employee
         {
-            context.Add(new Employee
-            {
-                Content = "before",
-            });
-            context.SaveChanges();
-        }
+            Content = "before",
+        });
+        context.SaveChanges();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            var employee = context.Employees.Single();
-            context.Update(employee).Entity.Content = "after";
-            await Verify(context);
-        }
+        var employee = context.Employees.Single();
+        context.Update(employee).Entity.Content = "after";
+        await Verify(context);
     }
 
     #region Queryable
