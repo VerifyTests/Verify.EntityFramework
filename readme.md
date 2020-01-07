@@ -94,21 +94,16 @@ public async Task Deleted()
 {
     var options = DbContextOptions();
 
-    await using (var context = new SampleDbContext(options))
-    {
-        context.Add(new Company {Content = "before"});
-        context.SaveChanges();
-    }
+    await using var context = new SampleDbContext(options);
+    context.Add(new Company {Content = "before"});
+    context.SaveChanges();
 
-    await using (var context = new SampleDbContext(options))
-    {
-        var company = context.Companies.Single();
-        context.Companies.Remove(company);
-        await Verify(context);
-    }
+    var company = context.Companies.Single();
+    context.Companies.Remove(company);
+    await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L24-L43' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -149,7 +144,7 @@ public async Task Modified()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L45-L59' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -189,7 +184,7 @@ public async Task Queryable()
     await Verify(queryable);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L119-L128' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L114-L123' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:

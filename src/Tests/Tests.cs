@@ -27,18 +27,13 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            context.Add(new Company {Content = "before"});
-            context.SaveChanges();
-        }
+        await using var context = new SampleDbContext(options);
+        context.Add(new Company {Content = "before"});
+        context.SaveChanges();
 
-        await using (var context = new SampleDbContext(options))
-        {
-            var company = context.Companies.Single();
-            context.Companies.Remove(company);
-            await Verify(context);
-        }
+        var company = context.Companies.Single();
+        context.Companies.Remove(company);
+        await Verify(context);
     }
     #endregion
 
