@@ -22,7 +22,7 @@ namespace Verify.EntityFramework
 
         static IEnumerable<Stream> QueryableToSql(object arg)
         {
-            var sql = QueryableConverter.QueryToSql(arg);
+            var sql = QueryableConverter.QueryToSql(arg).Replace("\r\n", "\n");
             yield return new MemoryStream(Encoding.UTF8.GetBytes(sql));
         }
     }
