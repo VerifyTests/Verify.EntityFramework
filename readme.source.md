@@ -21,7 +21,12 @@ Enable VerifyEntityFramewok once at assembly load time:
 snippet: Enable
 
 
-### Added entry
+### ChangeTracking
+
+Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying that context. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).
+
+
+#### Added entity
 
 This test:
 
@@ -32,7 +37,7 @@ Will result in the following verified file:
 snippet: Tests.Added.verified.txt
 
 
-### Deleted entry
+#### Deleted entity
 
 This test:
 
@@ -43,7 +48,7 @@ Will result in the following verified file:
 snippet: Tests.Deleted.verified.txt
 
 
-### Modified entry
+#### Modified entity
 
 This test:
 

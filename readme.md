@@ -17,9 +17,7 @@ Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of 
 ## Contents
 
   * [Usage](#usage)
-    * [Added entry](#added-entry)
-    * [Deleted entry](#deleted-entry)
-    * [Modified entry](#modified-entry)
+    * [ChangeTracking](#changetracking)
     * [Queryable](#queryable)<!-- endtoc -->
 
 
@@ -41,7 +39,12 @@ VerifyEntityFramework.Enable();
 <!-- endsnippet -->
 
 
-### Added entry
+### ChangeTracking
+
+Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying that context. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).
+
+
+#### Added entity
 
 This test:
 
@@ -79,7 +82,7 @@ Will result in the following verified file:
 <!-- endsnippet -->
 
 
-### Deleted entry
+#### Deleted entity
 
 This test:
 
@@ -125,7 +128,7 @@ Will result in the following verified file:
 <!-- endsnippet -->
 
 
-### Modified entry
+#### Modified entity
 
 This test:
 
