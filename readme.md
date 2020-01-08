@@ -18,7 +18,8 @@ Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of 
 
   * [Usage](#usage)
     * [ChangeTracking](#changetracking)
-    * [Queryable](#queryable)<!-- endtoc -->
+    * [Queryable](#queryable)
+    * [SqlServer Schema](#sqlserver-schema)<!-- endtoc -->
 
 
 ## NuGet package
@@ -61,7 +62,7 @@ public async Task Added()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L12-L22' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L13-L23' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -103,7 +104,7 @@ public async Task Deleted()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L25-L39' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -144,7 +145,7 @@ public async Task Modified()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L41-L55' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -184,7 +185,7 @@ public async Task Queryable()
     await Verify(queryable);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L114-L123' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Tests/Tests.cs#L115-L124' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -197,6 +198,45 @@ FROM [Companies] AS [c]
 WHERE [c].[Content] = N'value'
 ```
 <sup><a href='/src/Tests/Tests.Queryable.verified.txt#L1-L3' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
+<!-- endsnippet -->
+
+
+### SqlServer Schema
+
+This test:
+
+<!-- snippet: SqlServerSchema -->
+<a id='snippet-sqlserverschema'/></a>
+```cs
+[Fact]
+public async Task SqlServerSchema()
+{
+    var database = await DbContextBuilder.GetDatabase("SqlServerSchema");
+    var dbContext = database.Context;
+    await Verify(dbContext.Database.GetDbConnection());
+}
+```
+<sup><a href='/src/Tests/Tests.cs#L126-L134' title='File snippet `sqlserverschema` was extracted from'>snippet source</a> | <a href='#snippet-sqlserverschema' title='Navigate to start of snippet `sqlserverschema`'>anchor</a></sup>
+<!-- endsnippet -->
+
+Will result in the following verified file:
+
+<!-- snippet: Tests.SqlServerSchema.verified.sql -->
+<a id='snippet-Tests.SqlServerSchema.verified.sql'/></a>
+```sql
+CREATE TABLE [dbo].[Companies](
+	[Id] [int] NOT NULL,
+	[Content] [nvarchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE TABLE [dbo].[Employees](
+	[Id] [int] NOT NULL,
+	[CompanyId] [int] NOT NULL,
+	[Content] [nvarchar](max) NULL,
+	[Age] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+```
+<sup><a href='/src/Tests/Tests.SqlServerSchema.verified.sql#L1-L11' title='File snippet `Tests.SqlServerSchema.verified.sql` was extracted from'>snippet source</a> | <a href='#snippet-Tests.SqlServerSchema.verified.sql' title='Navigate to start of snippet `Tests.SqlServerSchema.verified.sql`'>anchor</a></sup>
 <!-- endsnippet -->
 
 

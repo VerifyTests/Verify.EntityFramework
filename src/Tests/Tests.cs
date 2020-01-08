@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Verify;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
@@ -119,6 +120,32 @@ public class Tests :
         var dbContext = database.Context;
         var queryable = dbContext.Companies.Where(x => x.Content == "value");
         await Verify(queryable);
+    }
+    #endregion
+
+    #region SqlServerSchema
+    [Fact]
+    public async Task SqlServerSchema()
+    {
+        var database = await DbContextBuilder.GetDatabase("SqlServerSchema");
+        var dbContext = database.Context;
+        await Verify(dbContext.Database.GetDbConnection());
+    }
+    #endregion
+
+    #region SqlServerSchemaSettings
+    [Fact]
+    public async Task SqlServerSchemaSettings()
+    {
+        var database = await DbContextBuilder.GetDatabase("SchemaSettings");
+        var dbContext = database.Context;
+        var settings = new VerifySettings();
+        settings.SchemaSettings(
+            storedProcedures: true,
+            tables: true,
+            views: true,
+            includeItem: itemName => itemName == "Companies");
+        await Verify(dbContext.Database.GetDbConnection(), settings);
     }
     #endregion
 

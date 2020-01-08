@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-public static class Extensions
+static class Extensions
 {
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry)
     {
