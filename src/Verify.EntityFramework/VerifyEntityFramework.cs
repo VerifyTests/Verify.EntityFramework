@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Microsoft.Data.SqlClient;
 
 namespace Verify.EntityFramework
 {
@@ -11,7 +8,6 @@ namespace Verify.EntityFramework
     {
         public static void Enable()
         {
-            SharedVerifySettings.RegisterFileConverter<DbConnection>("sql", ConnectionToSql);
             SharedVerifySettings.RegisterFileConverter("txt", QueryableToSql, QueryableConverter.IsQueryable);
             SharedVerifySettings.ModifySerialization(settings =>
             {
@@ -22,19 +18,6 @@ namespace Verify.EntityFramework
                     converters.Add(new QueryableConverter());
                 });
             });
-        }
-
-        static IEnumerable<Stream> ConnectionToSql(DbConnection dbConnection, VerifySettings settings)
-        {
-            if (!(dbConnection is SqlConnection sqlConnection))
-            {
-                throw new Exception("Only verification of a SqlConnection is supported");
-            }
-
-            var schemaSettings = settings.GetSchemaSettings();
-            var builder = new SqlScriptBuilder(schemaSettings);
-            var sql = builder.BuildScript(sqlConnection);
-            yield return StringToMemoryStream(sql);
         }
 
         static IEnumerable<Stream> QueryableToSql(object arg)

@@ -70,17 +70,6 @@ Will result in the following verified file:
 snippet: Tests.Queryable.verified.txt
 
 
-### SqlServer Schema
-
-This test:
-
-snippet: SqlServerSchema
-
-Will result in the following verified file:
-
-snippet: Tests.SqlServerSchema.verified.sql
-
-
 ## Icon
 
 [Database](https://thenounproject.com/term/database/310841/) designed by [Creative Stall](https://thenounproject.com/creativestall/) from [The Noun Project](https://thenounproject.com/creativepriyanka).
