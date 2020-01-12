@@ -20,10 +20,10 @@ namespace Verify.EntityFramework
             });
         }
 
-        static IEnumerable<Stream> QueryableToSql(object arg)
+        static ConversionResult QueryableToSql(object arg, VerifySettings settings)
         {
             var sql = QueryableConverter.QueryToSql(arg);
-            yield return StringToMemoryStream(sql);
+            return new ConversionResult(null, new Stream[] {StringToMemoryStream(sql)});
         }
 
         static MemoryStream StringToMemoryStream(string text)
