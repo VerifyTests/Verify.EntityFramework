@@ -70,6 +70,16 @@ Will result in the following verified file:
 snippet: Tests.Queryable.verified.txt
 
 
+## Security contact information
+
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
+
+
+## Release Notes
+
+See [closed milestones](../../milestones?state=closed).
+
+
 ## Icon
 
 [Database](https://thenounproject.com/term/database/310841/) designed by [Creative Stall](https://thenounproject.com/creativestall/) from [The Noun Project](https://thenounproject.com/creativepriyanka).

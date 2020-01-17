@@ -18,7 +18,8 @@ Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of 
 
   * [Usage](#usage)
     * [ChangeTracking](#changetracking)
-    * [Queryable](#queryable)<!-- endtoc -->
+    * [Queryable](#queryable)
+  * [Security contact information](#security-contact-information)<!-- endtoc -->
 
 
 ## NuGet package
@@ -198,6 +199,16 @@ WHERE [c].[Content] = N'value'
 ```
 <sup><a href='/src/Tests/Tests.Queryable.verified.txt#L1-L3' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
+
+
+## Security contact information
+
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
+
+
+## Release Notes
+
+See [closed milestones](../../milestones?state=closed).
 
 
 ## Icon
