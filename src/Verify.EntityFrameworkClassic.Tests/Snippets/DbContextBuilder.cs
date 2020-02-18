@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.Common;
+using System.Data.Entity.Infrastructure;
+using System.Threading.Tasks;
 using EfLocalDb;
 
 // LocalDb is used to make the sample simpler.
@@ -9,14 +11,24 @@ public static class DbContextBuilder
     {
         sqlInstance = new SqlInstance<SampleDbContext>(
             buildTemplate: CreateDb,
-            constructInstance: builder => new SampleDbContext(builder.Options));
+            constructInstance: connection => new SampleDbContext(connection),
+            instanceSuffix:"Classic");
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;
 
     static async Task CreateDb(SampleDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
+        //TODO: use helper from localdb
+        var script = ((IObjectContextAdapter)context).ObjectContext.CreateDatabaseScript();
+        try
+        {
+            await context.Database.ExecuteSqlCommandAsync(script);
+        }
+        catch (DbException)
+        {
+            //swallow for already exists
+        }
 
         var company1 = new Company
         {
@@ -59,7 +71,13 @@ public static class DbContextBuilder
             Id = 7,
             Content = "Company4"
         };
-        context.AddRange(company1, employee1, employee2, company2, company3, company4, employee4);
+        context.Companies.Add(company1);
+        context.Companies.Add(company2);
+        context.Companies.Add(company3);
+        context.Companies.Add(company4);
+        context.Employees.Add(employee1);
+        context.Employees.Add(employee2);
+        context.Employees.Add(employee4);
         await context.SaveChangesAsync();
     }
 

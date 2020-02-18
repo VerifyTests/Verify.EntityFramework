@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Verify.VerifyEntityFrameworkClassic
+namespace Verify
 {
     public static class VerifyEntityFrameworkClassic
     {

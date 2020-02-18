@@ -1,3 +1,5 @@
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'value'
+SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[Content] AS [Content]
+    FROM [dbo].[Companies] AS [Extent1]
+    WHERE N'value' = [Extent1].[Content]

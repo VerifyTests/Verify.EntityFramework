@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using EfLocalDb;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
@@ -9,26 +8,26 @@ using Xunit.Abstractions;
 public class Tests :
     VerifyBase
 {
-    #region Added
+    static SqlInstance<SampleDbContext> sqlInstance;
+
+    #region AddedClassic
     [Fact]
     public async Task Added()
     {
-        var options = DbContextOptions();
-
-        await using var context = new SampleDbContext(options);
-        context.Add(new Company {Content = "before"});
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
+        context.Companies.Add(new Company {Content = "before"});
         await Verify(context);
     }
     #endregion
 
-    #region Deleted
+    #region DeletedClassic
     [Fact]
     public async Task Deleted()
     {
-        var options = DbContextOptions();
-
-        await using var context = new SampleDbContext(options);
-        context.Add(new Company {Content = "before"});
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
+        context.Companies.Add(new Company {Content = "before"});
         context.SaveChanges();
 
         var company = context.Companies.Single();
@@ -37,15 +36,14 @@ public class Tests :
     }
     #endregion
 
-    #region Modified
+    #region ModifiedClassic
     [Fact]
     public async Task Modified()
     {
-        var options = DbContextOptions();
-
-        await using var context = new SampleDbContext(options);
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
         var company = new Company {Content = "before"};
-        context.Add(company);
+        context.Companies.Add(company);
         context.SaveChanges();
 
         context.Companies.Single().Content = "after";
@@ -56,20 +54,19 @@ public class Tests :
     [Fact]
     public async Task WithNavigationProp()
     {
-        var options = DbContextOptions();
-
-        await using var context = new SampleDbContext(options);
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
         var company = new Company
         {
             Content = "companyBefore"
         };
-        context.Add(company);
+        context.Companies.Add(company);
         var employee = new Employee
         {
             Content = "employeeBefore",
             Company = company
         };
-        context.Add(employee);
+        context.Employees.Add(employee);
         context.SaveChanges();
 
         context.Companies.Single().Content = "companyAfter";
@@ -77,41 +74,43 @@ public class Tests :
         await Verify(context);
     }
 
-    [Fact]
+    [Fact(Skip = "TODO")]
     public async Task SomePropsModified()
     {
-        var options = DbContextOptions();
-
-        await using var context = new SampleDbContext(options);
-        context.Add(new Employee
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
+        var company = new Company
         {
             Content = "before",
-            Age = 10
-        });
+        };
+        context.Companies.Add(company);
         context.SaveChanges();
-
-        context.Employees.Single().Content = "after";
+        var entity = context.Companies.Attach(new Company {Id = company.Id});
+        entity.Content = "after";
+        context.Entry(entity).Property(_ => _.Content).IsModified = true;
+        context.Configuration.ValidateOnSaveEnabled = false;
+        context.SaveChanges();
         await Verify(context);
     }
 
     [Fact]
     public async Task UpdateEntity()
     {
-        var options = DbContextOptions();
+        using var database = await sqlInstance.Build();
+        var context = database.Context;
 
-        await using var context = new SampleDbContext(options);
-        context.Add(new Employee
+        context.Companies.Add(new Company
         {
             Content = "before",
         });
         context.SaveChanges();
 
-        var employee = context.Employees.Single();
-        context.Update(employee).Entity.Content = "after";
+        var company = context.Companies.Single();
+        company.Content = "after";
         await Verify(context);
     }
 
-    #region Queryable
+    #region QueryableClassic
     [Fact]
     public async Task Queryable()
     {
@@ -122,16 +121,15 @@ public class Tests :
     }
     #endregion
 
-    static DbContextOptions<SampleDbContext> DbContextOptions(
-        [CallerMemberName] string databaseName = "")
-    {
-        return new DbContextOptionsBuilder<SampleDbContext>()
-            .UseInMemoryDatabase(databaseName)
-            .Options;
-    }
-
     public Tests(ITestOutputHelper output) :
         base(output)
     {
+    }
+
+    static Tests()
+    {
+
+        sqlInstance = new SqlInstance<SampleDbContext>(
+            constructInstance: connection => new SampleDbContext(connection),instanceSuffix:"Tests");
     }
 }

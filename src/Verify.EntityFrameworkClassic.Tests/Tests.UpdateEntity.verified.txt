@@ -1,6 +1,6 @@
 {
   Modified: {
-    Employee: {
+    Company: {
       Id: 0,
       Content: {
         Original: 'before',
