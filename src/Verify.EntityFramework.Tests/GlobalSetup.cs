@@ -1,4 +1,4 @@
-﻿using Verify.EntityFramework;
+﻿using Verify;
 using Xunit;
 
 [GlobalSetUp]

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Verify
 {
-    public static class VerifyEntityFramework
+    public static class VerifyEntityFrameworkClassic
     {
         public static void Enable()
         {

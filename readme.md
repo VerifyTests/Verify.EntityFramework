@@ -37,7 +37,12 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Tests/GlobalSetup.cs#L9-L11' title='File snippet `enable` was extracted from'>snippet source</a> | <a href='#snippet-enable' title='Navigate to start of snippet `enable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/GlobalSetup.cs#L9-L11' title='File snippet `enable` was extracted from'>snippet source</a> | <a href='#snippet-enable' title='Navigate to start of snippet `enable`'>anchor</a></sup>
+<a id='snippet-enable-1'/></a>
+```cs
+VerifyEntityFrameworkClassic.Enable();
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/GlobalSetup.cs#L9-L11' title='File snippet `enable` was extracted from'>snippet source</a> | <a href='#snippet-enable-1' title='Navigate to start of snippet `enable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -63,7 +68,7 @@ public async Task Added()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L12-L22' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L12-L22' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -80,7 +85,19 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Tests/Tests.Added.verified.txt#L1-L8' title='File snippet `Tests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Added.verified.txt' title='Navigate to start of snippet `Tests.Added.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.Added.verified.txt#L1-L8' title='File snippet `Tests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Added.verified.txt' title='Navigate to start of snippet `Tests.Added.verified.txt`'>anchor</a></sup>
+<a id='snippet-Tests.Added.verified.txt-1'/></a>
+```txt
+{
+  Added: {
+    Company: {
+      Id: 0,
+      Content: 'before'
+    }
+  }
+}
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/Tests.Added.verified.txt#L1-L8' title='File snippet `Tests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Added.verified.txt-1' title='Navigate to start of snippet `Tests.Added.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -105,7 +122,7 @@ public async Task Deleted()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -121,7 +138,18 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Tests/Tests.Deleted.verified.txt#L1-L7' title='File snippet `Tests.Deleted.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Deleted.verified.txt' title='Navigate to start of snippet `Tests.Deleted.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.Deleted.verified.txt#L1-L7' title='File snippet `Tests.Deleted.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Deleted.verified.txt' title='Navigate to start of snippet `Tests.Deleted.verified.txt`'>anchor</a></sup>
+<a id='snippet-Tests.Deleted.verified.txt-1'/></a>
+```txt
+{
+  Deleted: {
+    Company: {
+      Id: 0
+    }
+  }
+}
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/Tests.Deleted.verified.txt#L1-L7' title='File snippet `Tests.Deleted.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Deleted.verified.txt-1' title='Navigate to start of snippet `Tests.Deleted.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -146,7 +174,7 @@ public async Task Modified()
     await Verify(context);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -166,7 +194,22 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Tests/Tests.Modified.verified.txt#L1-L11' title='File snippet `Tests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Modified.verified.txt' title='Navigate to start of snippet `Tests.Modified.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.Modified.verified.txt#L1-L11' title='File snippet `Tests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Modified.verified.txt' title='Navigate to start of snippet `Tests.Modified.verified.txt`'>anchor</a></sup>
+<a id='snippet-Tests.Modified.verified.txt-1'/></a>
+```txt
+{
+  Modified: {
+    Company: {
+      Id: 0,
+      Content: {
+        Original: 'before',
+        Current: 'after'
+      }
+    }
+  }
+}
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/Tests.Modified.verified.txt#L1-L11' title='File snippet `Tests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Modified.verified.txt-1' title='Navigate to start of snippet `Tests.Modified.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -186,7 +229,7 @@ public async Task Queryable()
     await Verify(queryable);
 }
 ```
-<sup><a href='/src/Tests/Tests.cs#L114-L123' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L114-L123' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -198,7 +241,16 @@ SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'value'
 ```
-<sup><a href='/src/Tests/Tests.Queryable.verified.txt#L1-L3' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/Tests.Queryable.verified.txt#L1-L3' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
+<a id='snippet-Tests.Queryable.verified.txt-1'/></a>
+```txt
+SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[Content] AS [Content]
+    FROM [dbo].[Companies] AS [Extent1]
+    WHERE N'value' = [Extent1].[Content]
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/Tests.Queryable.verified.txt#L1-L5' title='File snippet `Tests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-Tests.Queryable.verified.txt-1' title='Navigate to start of snippet `Tests.Queryable.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
