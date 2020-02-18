@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-using System.Data.Entity.Infrastructure;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EfLocalDb;
 
 // LocalDb is used to make the sample simpler.
