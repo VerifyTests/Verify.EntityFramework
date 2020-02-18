@@ -19,16 +19,7 @@ public static class DbContextBuilder
 
     static async Task CreateDb(SampleDbContext context)
     {
-        //TODO: use helper from localdb
-        var script = ((IObjectContextAdapter)context).ObjectContext.CreateDatabaseScript();
-        try
-        {
-            await context.Database.ExecuteSqlCommandAsync(script);
-        }
-        catch (DbException)
-        {
-            //swallow for already exists
-        }
+        await context.CreateOnExistingDb();
 
         var company1 = new Company
         {

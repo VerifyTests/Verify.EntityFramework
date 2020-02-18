@@ -9,6 +9,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/g6njwv0aox62atu0?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-entityframework)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg)](https://www.nuget.org/packages/Verify.EntityFramework/)
+[![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFrameworkClassic.svg)](https://www.nuget.org/packages/Verify.EntityFrameworkClassic/)
 
 Extends [Verify](https://github.com/SimonCropp/Verify) to allow verification of EntityFramework bits.
 
@@ -25,7 +26,8 @@ Support is available via a [Tidelift Subscription](https://tidelift.com/subscrip
 
 ## NuGet package
 
-https://nuget.org/packages/Verify.EntityFramework/
+ * https://nuget.org/packages/Verify.EntityFramework/
+ * https://nuget.org/packages/Verify.EntityFrameworkClassic/
 
 
 ## Usage
