@@ -29,7 +29,7 @@ public class Tests :
 
         await using var context = new SampleDbContext(options);
         context.Add(new Company {Content = "before"});
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         var company = context.Companies.Single();
         context.Companies.Remove(company);
@@ -46,7 +46,7 @@ public class Tests :
         await using var context = new SampleDbContext(options);
         var company = new Company {Content = "before"};
         context.Add(company);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         context.Companies.Single().Content = "after";
         await Verify(context);
@@ -70,7 +70,7 @@ public class Tests :
             Company = company
         };
         context.Add(employee);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         context.Companies.Single().Content = "companyAfter";
         context.Employees.Single().Content = "employeeAfter";
@@ -88,7 +88,7 @@ public class Tests :
             Content = "before",
             Age = 10
         });
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         context.Employees.Single().Content = "after";
         await Verify(context);
@@ -104,7 +104,7 @@ public class Tests :
         {
             Content = "before",
         });
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         var employee = context.Employees.Single();
         context.Update(employee).Entity.Content = "after";

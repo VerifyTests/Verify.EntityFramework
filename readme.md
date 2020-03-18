@@ -117,7 +117,7 @@ public async Task Deleted()
 
     await using var context = new SampleDbContext(options);
     context.Add(new Company {Content = "before"});
-    context.SaveChanges();
+    await context.SaveChangesAsync();
 
     var company = context.Companies.Single();
     context.Companies.Remove(company);
@@ -170,7 +170,7 @@ public async Task Modified()
     await using var context = new SampleDbContext(options);
     var company = new Company {Content = "before"};
     context.Add(company);
-    context.SaveChanges();
+    await context.SaveChangesAsync();
 
     context.Companies.Single().Content = "after";
     await Verify(context);

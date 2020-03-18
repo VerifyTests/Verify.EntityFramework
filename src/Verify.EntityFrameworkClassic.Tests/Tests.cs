@@ -28,7 +28,7 @@ public class Tests :
         using var database = await sqlInstance.Build();
         var context = database.Context;
         context.Companies.Add(new Company {Content = "before"});
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         var company = context.Companies.Single();
         context.Companies.Remove(company);
@@ -44,7 +44,7 @@ public class Tests :
         var context = database.Context;
         var company = new Company {Content = "before"};
         context.Companies.Add(company);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         context.Companies.Single().Content = "after";
         await Verify(context);
@@ -67,7 +67,7 @@ public class Tests :
             Company = company
         };
         context.Employees.Add(employee);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         context.Companies.Single().Content = "companyAfter";
         context.Employees.Single().Content = "employeeAfter";
@@ -84,12 +84,12 @@ public class Tests :
             Content = "before",
         };
         context.Companies.Add(company);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
         var entity = context.Companies.Attach(new Company {Id = company.Id});
         entity.Content = "after";
         context.Entry(entity).Property(_ => _.Content).IsModified = true;
         context.Configuration.ValidateOnSaveEnabled = false;
-        context.SaveChanges();
+        await context.SaveChangesAsync();
         await Verify(context);
     }
 
@@ -103,7 +103,7 @@ public class Tests :
         {
             Content = "before",
         });
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         var company = context.Companies.Single();
         company.Content = "after";
@@ -128,7 +128,6 @@ public class Tests :
 
     static Tests()
     {
-
         sqlInstance = new SqlInstance<SampleDbContext>(
             constructInstance: connection => new SampleDbContext(connection),instanceSuffix:"Tests");
     }
