@@ -7,27 +7,27 @@ using Verify;
 class QueryableConverter :
     WriteOnlyJsonConverter
 {
-    public override void WriteJson(JsonWriter writer, object? context, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object? data, JsonSerializer serializer)
     {
-        if (context == null)
+        if (data == null)
         {
             return;
         }
 
-        var sql = QueryToSql(context);
+        var sql = QueryToSql(data);
         serializer.Serialize(writer, sql);
     }
 
-    public static string QueryToSql(object context)
+    public static string QueryToSql(object data)
     {
-        var entityType = context.GetType().GetGenericArguments().Single();
+        var entityType = data.GetType().GetGenericArguments().Single();
         var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(entityType);
         return (string) queryableSerializer.InvokeMember(
             name: "ToSql",
             invokeAttr: BindingFlags.InvokeMethod,
             binder: null,
             target: null,
-            args: new[] {context});
+            args: new[] {data});
     }
 
     public override bool CanConvert(Type type)

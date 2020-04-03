@@ -14,9 +14,9 @@ public static class DbContextBuilder
 
     static SqlInstance<SampleDbContext> sqlInstance;
 
-    static async Task CreateDb(SampleDbContext context)
+    static async Task CreateDb(SampleDbContext data)
     {
-        await context.Database.EnsureCreatedAsync();
+        await data.Database.EnsureCreatedAsync();
 
         var company1 = new Company
         {
@@ -59,8 +59,8 @@ public static class DbContextBuilder
             Id = 7,
             Content = "Company4"
         };
-        context.AddRange(company1, employee1, employee2, company2, company3, company4, employee4);
-        await context.SaveChangesAsync();
+        data.AddRange(company1, employee1, employee2, company2, company3, company4, employee4);
+        await data.SaveChangesAsync();
     }
 
     public static Task<SqlDatabase<SampleDbContext>> GetDatabase(string suffix)

@@ -65,9 +65,9 @@ public async Task Added()
 {
     var options = DbContextOptions();
 
-    await using var context = new SampleDbContext(options);
-    context.Add(new Company {Content = "before"});
-    await Verify(context);
+    await using var data = new SampleDbContext(options);
+    data.Add(new Company {Content = "before"});
+    await Verify(data);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L12-L22' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
@@ -115,13 +115,13 @@ public async Task Deleted()
 {
     var options = DbContextOptions();
 
-    await using var context = new SampleDbContext(options);
-    context.Add(new Company {Content = "before"});
-    await context.SaveChangesAsync();
+    await using var data = new SampleDbContext(options);
+    data.Add(new Company {Content = "before"});
+    await data.SaveChangesAsync();
 
-    var company = context.Companies.Single();
-    context.Companies.Remove(company);
-    await Verify(context);
+    var company = data.Companies.Single();
+    data.Companies.Remove(company);
+    await Verify(data);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
@@ -167,13 +167,13 @@ public async Task Modified()
 {
     var options = DbContextOptions();
 
-    await using var context = new SampleDbContext(options);
+    await using var data = new SampleDbContext(options);
     var company = new Company {Content = "before"};
-    context.Add(company);
-    await context.SaveChangesAsync();
+    data.Add(company);
+    await data.SaveChangesAsync();
 
-    context.Companies.Single().Content = "after";
-    await Verify(context);
+    data.Companies.Single().Content = "after";
+    await Verify(data);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/Tests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
@@ -226,8 +226,8 @@ This test:
 public async Task Queryable()
 {
     var database = await DbContextBuilder.GetDatabase("Queryable");
-    var dbContext = database.Context;
-    var queryable = dbContext.Companies.Where(x => x.Content == "value");
+    var data = database.Context;
+    var queryable = data.Companies.Where(x => x.Content == "value");
     await Verify(queryable);
 }
 ```

@@ -8,16 +8,16 @@ using Verify;
 class DbContextConverter :
     WriteOnlyJsonConverter<DbContext>
 {
-    public override void WriteJson(JsonWriter writer, DbContext? context, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, DbContext? data, JsonSerializer serializer)
     {
-        if (context == null)
+        if (data == null)
         {
             return;
         }
 
         writer.WriteStartObject();
 
-        var entries = context.ChangeTracker.Entries().ToList();
+        var entries = data.ChangeTracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
         HandleModified(entries, writer, serializer);
         HandleDeleted(entries, writer, serializer);

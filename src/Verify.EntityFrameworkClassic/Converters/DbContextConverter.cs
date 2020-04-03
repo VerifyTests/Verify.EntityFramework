@@ -8,23 +8,23 @@ using Verify;
 class DbContextConverter :
     WriteOnlyJsonConverter<DbContext>
 {
-    public override void WriteJson(JsonWriter writer, DbContext? context, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, DbContext? data, JsonSerializer serializer)
     {
-        if (context == null)
+        if (data == null)
         {
             return;
         }
 
         writer.WriteStartObject();
-        var entries = context.ChangeTracker.Entries().ToList();
+        var entries = data.ChangeTracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
-        HandleModified(entries, writer, serializer, context);
-        HandleDeleted(entries, writer, serializer, context);
+        HandleModified(entries, writer, serializer, data);
+        HandleDeleted(entries, writer, serializer, data);
 
         writer.WriteEndObject();
     }
 
-    static void HandleDeleted(List<DbEntityEntry> entries, JsonWriter writer, JsonSerializer serializer, DbContext context)
+    static void HandleDeleted(List<DbEntityEntry> entries, JsonWriter writer, JsonSerializer serializer, DbContext data)
     {
         var deleted = entries
             .Where(x => x.State == EntityState.Deleted)
@@ -40,7 +40,7 @@ class DbContextConverter :
         {
             writer.WritePropertyName(entry.Entity.GetType().Name);
             writer.WriteStartObject();
-            WriteId(writer, serializer, entry, context);
+            WriteId(writer, serializer, entry, data);
             writer.WriteEndObject();
         }
 

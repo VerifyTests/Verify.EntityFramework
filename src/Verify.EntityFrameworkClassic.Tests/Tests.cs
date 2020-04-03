@@ -15,9 +15,9 @@ public class Tests :
     public async Task Added()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
-        context.Companies.Add(new Company {Content = "before"});
-        await Verify(context);
+        var data = database.Context;
+        data.Companies.Add(new Company {Content = "before"});
+        await Verify(data);
     }
     #endregion
 
@@ -26,13 +26,13 @@ public class Tests :
     public async Task Deleted()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
-        context.Companies.Add(new Company {Content = "before"});
-        await context.SaveChangesAsync();
+        var data = database.Context;
+        data.Companies.Add(new Company {Content = "before"});
+        await data.SaveChangesAsync();
 
-        var company = context.Companies.Single();
-        context.Companies.Remove(company);
-        await Verify(context);
+        var company = data.Companies.Single();
+        data.Companies.Remove(company);
+        await Verify(data);
     }
     #endregion
 
@@ -41,13 +41,13 @@ public class Tests :
     public async Task Modified()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
+        var data = database.Context;
         var company = new Company {Content = "before"};
-        context.Companies.Add(company);
-        await context.SaveChangesAsync();
+        data.Companies.Add(company);
+        await data.SaveChangesAsync();
 
-        context.Companies.Single().Content = "after";
-        await Verify(context);
+        data.Companies.Single().Content = "after";
+        await Verify(data);
     }
     #endregion
 
@@ -55,59 +55,59 @@ public class Tests :
     public async Task WithNavigationProp()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
+        var data = database.Context;
         var company = new Company
         {
             Content = "companyBefore"
         };
-        context.Companies.Add(company);
+        data.Companies.Add(company);
         var employee = new Employee
         {
             Content = "employeeBefore",
             Company = company
         };
-        context.Employees.Add(employee);
-        await context.SaveChangesAsync();
+        data.Employees.Add(employee);
+        await data.SaveChangesAsync();
 
-        context.Companies.Single().Content = "companyAfter";
-        context.Employees.Single().Content = "employeeAfter";
-        await Verify(context);
+        data.Companies.Single().Content = "companyAfter";
+        data.Employees.Single().Content = "employeeAfter";
+        await Verify(data);
     }
 
     [Fact(Skip = "TODO")]
     public async Task SomePropsModified()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
+        var data = database.Context;
         var company = new Company
         {
             Content = "before",
         };
-        context.Companies.Add(company);
-        await context.SaveChangesAsync();
-        var entity = context.Companies.Attach(new Company {Id = company.Id});
+        data.Companies.Add(company);
+        await data.SaveChangesAsync();
+        var entity = data.Companies.Attach(new Company {Id = company.Id});
         entity.Content = "after";
-        context.Entry(entity).Property(_ => _.Content).IsModified = true;
-        context.Configuration.ValidateOnSaveEnabled = false;
-        await context.SaveChangesAsync();
-        await Verify(context);
+        data.Entry(entity).Property(_ => _.Content).IsModified = true;
+        data.Configuration.ValidateOnSaveEnabled = false;
+        await data.SaveChangesAsync();
+        await Verify(data);
     }
 
     [Fact]
     public async Task UpdateEntity()
     {
         using var database = await sqlInstance.Build();
-        var context = database.Context;
+        var data = database.Context;
 
-        context.Companies.Add(new Company
+        data.Companies.Add(new Company
         {
             Content = "before",
         });
-        await context.SaveChangesAsync();
+        await data.SaveChangesAsync();
 
-        var company = context.Companies.Single();
+        var company = data.Companies.Single();
         company.Content = "after";
-        await Verify(context);
+        await Verify(data);
     }
 
     #region QueryableClassic
@@ -115,8 +115,8 @@ public class Tests :
     public async Task Queryable()
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
-        var dbContext = database.Context;
-        var queryable = dbContext.Companies.Where(x => x.Content == "value");
+        var data = database.Context;
+        var queryable = data.Companies.Where(x => x.Content == "value");
         await Verify(queryable);
     }
     #endregion

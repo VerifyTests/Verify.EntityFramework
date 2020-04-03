@@ -15,9 +15,9 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
-        context.Add(new Company {Content = "before"});
-        await Verify(context);
+        await using var data = new SampleDbContext(options);
+        data.Add(new Company {Content = "before"});
+        await Verify(data);
     }
     #endregion
 
@@ -27,13 +27,13 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
-        context.Add(new Company {Content = "before"});
-        await context.SaveChangesAsync();
+        await using var data = new SampleDbContext(options);
+        data.Add(new Company {Content = "before"});
+        await data.SaveChangesAsync();
 
-        var company = context.Companies.Single();
-        context.Companies.Remove(company);
-        await Verify(context);
+        var company = data.Companies.Single();
+        data.Companies.Remove(company);
+        await Verify(data);
     }
     #endregion
 
@@ -43,13 +43,13 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
+        await using var data = new SampleDbContext(options);
         var company = new Company {Content = "before"};
-        context.Add(company);
-        await context.SaveChangesAsync();
+        data.Add(company);
+        await data.SaveChangesAsync();
 
-        context.Companies.Single().Content = "after";
-        await Verify(context);
+        data.Companies.Single().Content = "after";
+        await Verify(data);
     }
     #endregion
 
@@ -58,23 +58,23 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
+        await using var data = new SampleDbContext(options);
         var company = new Company
         {
             Content = "companyBefore"
         };
-        context.Add(company);
+        data.Add(company);
         var employee = new Employee
         {
             Content = "employeeBefore",
             Company = company
         };
-        context.Add(employee);
-        await context.SaveChangesAsync();
+        data.Add(employee);
+        await data.SaveChangesAsync();
 
-        context.Companies.Single().Content = "companyAfter";
-        context.Employees.Single().Content = "employeeAfter";
-        await Verify(context);
+        data.Companies.Single().Content = "companyAfter";
+        data.Employees.Single().Content = "employeeAfter";
+        await Verify(data);
     }
 
     [Fact]
@@ -82,16 +82,16 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
-        context.Add(new Employee
+        await using var data = new SampleDbContext(options);
+        data.Add(new Employee
         {
             Content = "before",
             Age = 10
         });
-        await context.SaveChangesAsync();
+        await data.SaveChangesAsync();
 
-        context.Employees.Single().Content = "after";
-        await Verify(context);
+        data.Employees.Single().Content = "after";
+        await Verify(data);
     }
 
     [Fact]
@@ -99,16 +99,16 @@ public class Tests :
     {
         var options = DbContextOptions();
 
-        await using var context = new SampleDbContext(options);
-        context.Add(new Employee
+        await using var data = new SampleDbContext(options);
+        data.Add(new Employee
         {
             Content = "before",
         });
-        await context.SaveChangesAsync();
+        await data.SaveChangesAsync();
 
-        var employee = context.Employees.Single();
-        context.Update(employee).Entity.Content = "after";
-        await Verify(context);
+        var employee = data.Employees.Single();
+        data.Update(employee).Entity.Content = "after";
+        await Verify(data);
     }
 
     #region Queryable
@@ -116,8 +116,8 @@ public class Tests :
     public async Task Queryable()
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
-        var dbContext = database.Context;
-        var queryable = dbContext.Companies.Where(x => x.Content == "value");
+        var data = database.Context;
+        var queryable = data.Companies.Where(x => x.Content == "value");
         await Verify(queryable);
     }
     #endregion

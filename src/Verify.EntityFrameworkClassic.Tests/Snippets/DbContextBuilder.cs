@@ -10,14 +10,14 @@ public static class DbContextBuilder
         sqlInstance = new SqlInstance<SampleDbContext>(
             buildTemplate: CreateDb,
             constructInstance: connection => new SampleDbContext(connection),
-            instanceSuffix:"Classic");
+            instanceSuffix: "Classic");
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;
 
-    static async Task CreateDb(SampleDbContext context)
+    static async Task CreateDb(SampleDbContext data)
     {
-        await context.CreateOnExistingDb();
+        await data.CreateOnExistingDb();
 
         var company1 = new Company
         {
@@ -60,14 +60,14 @@ public static class DbContextBuilder
             Id = 7,
             Content = "Company4"
         };
-        context.Companies.Add(company1);
-        context.Companies.Add(company2);
-        context.Companies.Add(company3);
-        context.Companies.Add(company4);
-        context.Employees.Add(employee1);
-        context.Employees.Add(employee2);
-        context.Employees.Add(employee4);
-        await context.SaveChangesAsync();
+        data.Companies.Add(company1);
+        data.Companies.Add(company2);
+        data.Companies.Add(company3);
+        data.Companies.Add(company4);
+        data.Employees.Add(employee1);
+        data.Employees.Add(employee2);
+        data.Employees.Add(employee4);
+        await data.SaveChangesAsync();
     }
 
     public static Task<SqlDatabase<SampleDbContext>> GetDatabase(string suffix)
