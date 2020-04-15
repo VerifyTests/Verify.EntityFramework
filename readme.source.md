@@ -21,7 +21,15 @@ toc
 
 Enable VerifyEntityFramewok once at assembly load time:
 
-snippet: Enable
+
+### EF Core
+
+snippet: EnableCore
+
+
+### EF Classic
+
+snippet: EnableClassic
 
 
 ### ChangeTracking
@@ -37,7 +45,7 @@ snippet: Added
 
 Will result in the following verified file:
 
-snippet: Tests.Added.verified.txt
+snippet: CoreTests.Added.verified.txt
 
 
 #### Deleted entity
@@ -48,7 +56,7 @@ snippet: Deleted
 
 Will result in the following verified file:
 
-snippet: Tests.Deleted.verified.txt
+snippet: CoreTests.Deleted.verified.txt
 
 
 #### Modified entity
@@ -59,7 +67,7 @@ snippet: Modified
 
 Will result in the following verified file:
 
-snippet: Tests.Modified.verified.txt
+snippet: CoreTests.Modified.verified.txt
 
 
 ### Queryable
@@ -70,7 +78,15 @@ snippet: Queryable
 
 Will result in the following verified file:
 
-snippet: Tests.Queryable.verified.txt
+
+### EF Core
+
+snippet: CoreTests.Queryable.verified.txt
+
+
+### EF Classic
+
+snippet: ClassicTests.Queryable.verified.txt
 
 
 ## Security contact information

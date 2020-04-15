@@ -6,7 +6,7 @@ public static class GlobalSetup
 {
     public static void Setup()
     {
-        #region Enable
+        #region EnableClassic
         VerifyEntityFrameworkClassic.Enable();
         #endregion
     }

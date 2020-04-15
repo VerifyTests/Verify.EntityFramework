@@ -6,7 +6,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class Tests :
+public class ClassicTests :
     VerifyBase
 {
     #region Added
@@ -130,7 +130,7 @@ public class Tests :
             .Options;
     }
 
-    public Tests(ITestOutputHelper output) :
+    public ClassicTests(ITestOutputHelper output) :
         base(output)
     {
     }

@@ -5,7 +5,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class Tests :
+public class CoreTests :
     VerifyBase
 {
     static SqlInstance<SampleDbContext> sqlInstance;
@@ -121,12 +121,12 @@ public class Tests :
     }
     #endregion
 
-    public Tests(ITestOutputHelper output) :
+    public CoreTests(ITestOutputHelper output) :
         base(output)
     {
     }
 
-    static Tests()
+    static CoreTests()
     {
         sqlInstance = new SqlInstance<SampleDbContext>(
             constructInstance: connection => new SampleDbContext(connection),instanceSuffix:"Tests");
