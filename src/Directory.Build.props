@@ -3,6 +3,7 @@
   <PropertyGroup>
     <NoWarn>CS1591;CS0649;CS8632</NoWarn>
     <Version>0.2.1</Version>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
     <PackageTags>EntityFramework, Verify</PackageTags>
     <Description>Extends Verify (https://github.com/SimonCropp/Verify) to allow verification of EntityFramework bits.</Description>
   </PropertyGroup>
