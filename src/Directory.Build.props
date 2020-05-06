@@ -5,6 +5,6 @@
     <Version>1.1.0</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <PackageTags>EntityFramework, Verify</PackageTags>
-    <Description>Extends Verify (https://github.com/SimonCropp/Verify) to allow verification of EntityFramework bits.</Description>
+    <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification of EntityFramework bits.</Description>
   </PropertyGroup>
 </Project>
