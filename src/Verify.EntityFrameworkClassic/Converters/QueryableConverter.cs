@@ -35,8 +35,9 @@ class QueryableConverter :
         return IsQueryable(type);
     }
 
-    public static bool IsQueryable(Type type)
+    public static bool IsQueryable(object target)
     {
+        var type = target.GetType();
         if (!type.IsGenericType)
         {
             return false;

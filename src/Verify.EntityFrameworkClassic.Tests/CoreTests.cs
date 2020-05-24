@@ -129,6 +129,7 @@ public class CoreTests :
     static CoreTests()
     {
         sqlInstance = new SqlInstance<SampleDbContext>(
-            constructInstance: connection => new SampleDbContext(connection),instanceSuffix:"Tests");
+            constructInstance: connection => new SampleDbContext(connection),
+            storage: Storage.FromSuffix<SampleDbContext>("Tests"));
     }
 }

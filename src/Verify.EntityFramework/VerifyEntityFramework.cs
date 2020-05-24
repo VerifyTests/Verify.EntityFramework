@@ -7,7 +7,10 @@ namespace Verify
     {
         public static void Enable()
         {
-            SharedVerifySettings.RegisterFileConverter("txt", QueryableToSql, QueryableConverter.IsQueryable);
+            SharedVerifySettings.RegisterFileConverter(
+                "txt",
+                QueryableToSql,
+                QueryableConverter.IsQueryable);
             SharedVerifySettings.ModifySerialization(settings =>
             {
                 settings.AddExtraSettings(serializer =>
