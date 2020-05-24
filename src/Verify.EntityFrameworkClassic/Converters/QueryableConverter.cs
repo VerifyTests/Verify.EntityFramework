@@ -37,13 +37,6 @@ class QueryableConverter :
 
     public static bool IsQueryable(object target)
     {
-        var type = target.GetType();
-        if (!type.IsGenericType)
-        {
-            return false;
-        }
-
-        var genericType = type.GetGenericTypeDefinition();
-        return genericType == typeof(IQueryable<>);
+        return target is IQueryable;
     }
 }
