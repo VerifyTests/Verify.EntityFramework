@@ -57,7 +57,7 @@ VerifyEntityFramework.Enable();
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.cs#L126-L128' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.cs#L129-L131' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
