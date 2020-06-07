@@ -2,27 +2,27 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using VerifyXunit;
-using Xunit;
-using Xunit.Abstractions;
+using VerifyNUnit;
+using NUnit.Framework;
+using Verify;
 
-public class ClassicTests :
-    VerifyBase
+[TestFixture]
+public class ClassicTests
 {
     #region Added
-    [Fact]
+    [Test]
     public async Task Added()
     {
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
         data.Add(new Company {Content = "before"});
-        await Verify(data);
+        await Verifier.Verify(data);
     }
     #endregion
 
     #region Deleted
-    [Fact]
+    [Test]
     public async Task Deleted()
     {
         var options = DbContextOptions();
@@ -33,12 +33,12 @@ public class ClassicTests :
 
         var company = data.Companies.Single();
         data.Companies.Remove(company);
-        await Verify(data);
+        await Verifier.Verify(data);
     }
     #endregion
 
     #region Modified
-    [Fact]
+    [Test]
     public async Task Modified()
     {
         var options = DbContextOptions();
@@ -49,11 +49,11 @@ public class ClassicTests :
         await data.SaveChangesAsync();
 
         data.Companies.Single().Content = "after";
-        await Verify(data);
+        await Verifier.Verify(data);
     }
     #endregion
 
-    [Fact]
+    [Test]
     public async Task WithNavigationProp()
     {
         var options = DbContextOptions();
@@ -74,10 +74,10 @@ public class ClassicTests :
 
         data.Companies.Single().Content = "companyAfter";
         data.Employees.Single().Content = "employeeAfter";
-        await Verify(data);
+        await Verifier.Verify(data);
     }
 
-    [Fact]
+    [Test]
     public async Task SomePropsModified()
     {
         var options = DbContextOptions();
@@ -91,10 +91,10 @@ public class ClassicTests :
         await data.SaveChangesAsync();
 
         data.Employees.Single().Content = "after";
-        await Verify(data);
+        await Verifier.Verify(data);
     }
 
-    [Fact]
+    [Test]
     public async Task UpdateEntity()
     {
         var options = DbContextOptions();
@@ -108,17 +108,17 @@ public class ClassicTests :
 
         var employee = data.Employees.Single();
         data.Update(employee).Entity.Content = "after";
-        await Verify(data);
+        await Verifier.Verify(data);
     }
 
     #region Queryable
-    [Fact]
+    [Test]
     public async Task Queryable()
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
         var data = database.Context;
         var queryable = data.Companies.Where(x => x.Content == "value");
-        await Verify(queryable);
+        await Verifier.Verify(queryable);
     }
     #endregion
 
@@ -130,8 +130,10 @@ public class ClassicTests :
             .Options;
     }
 
-    public ClassicTests(ITestOutputHelper output) :
-        base(output)
+    static ClassicTests()
     {
+        #region EnableCore
+        VerifyEntityFramework.Enable();
+        #endregion
     }
 }
