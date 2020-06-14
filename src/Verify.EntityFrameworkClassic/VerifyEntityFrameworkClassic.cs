@@ -1,17 +1,17 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Verify
+namespace VerifyTests
 {
     public static class VerifyEntityFrameworkClassic
     {
         public static void Enable()
         {
-            SharedVerifySettings.RegisterFileConverter(
+            VerifierSettings.RegisterFileConverter(
                 "txt",
                 QueryableToSql,
                 QueryableConverter.IsQueryable);
-            SharedVerifySettings.ModifySerialization(settings =>
+            VerifierSettings.ModifySerialization(settings =>
             {
                 settings.AddExtraSettings(serializer =>
                 {

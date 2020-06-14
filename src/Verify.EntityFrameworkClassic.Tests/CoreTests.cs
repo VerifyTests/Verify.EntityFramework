@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using EfLocalDb;
 using VerifyNUnit;
 using NUnit.Framework;
-using Verify;
+using VerifyTests;
 
 [TestFixture]
 public class CoreTests

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Newtonsoft.Json;
-using Verify;
+using VerifyTests;
 
 class QueryableConverter :
     WriteOnlyJsonConverter

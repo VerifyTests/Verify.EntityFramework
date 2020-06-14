@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-using Verify;
+using VerifyTests;
 
 class DbContextConverter :
     WriteOnlyJsonConverter<DbContext>

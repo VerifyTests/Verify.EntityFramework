@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using Verify;
+using VerifyTests;
 
 class QueryableConverter :
     WriteOnlyJsonConverter

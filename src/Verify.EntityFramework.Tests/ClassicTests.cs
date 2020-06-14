@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VerifyNUnit;
 using NUnit.Framework;
-using Verify;
+using VerifyTests;
 
 [TestFixture]
 public class ClassicTests
