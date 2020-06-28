@@ -8,7 +8,6 @@ namespace VerifyTests
         public static void Enable()
         {
             VerifierSettings.RegisterFileConverter(
-                "txt",
                 QueryableToSql,
                 QueryableConverter.IsQueryable);
             VerifierSettings.ModifySerialization(settings =>
@@ -25,7 +24,12 @@ namespace VerifyTests
         static ConversionResult QueryableToSql(object arg, VerifySettings settings)
         {
             var sql = QueryableConverter.QueryToSql(arg);
-            return new ConversionResult(null, new Stream[] {StringToMemoryStream(sql)});
+            return new ConversionResult(
+                null,
+                new[]
+                {
+                    new ConversionStream("txt", StringToMemoryStream(sql)),
+                });
         }
 
         static MemoryStream StringToMemoryStream(string text)
