@@ -46,7 +46,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.cs#L135-L137' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L144-L146' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -57,7 +57,7 @@ VerifyEntityFramework.Enable();
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.cs#L129-L131' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L129-L131' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -79,11 +79,15 @@ public async Task Added()
     var options = DbContextOptions();
 
     await using var data = new SampleDbContext(options);
-    data.Add(new Company {Content = "before"});
+    var company = new Company
+    {
+        Content = "before"
+    };
+    data.Add(company);
     await Verifier.Verify(data);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.cs#L12-L22' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L26' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -100,7 +104,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.Added.verified.txt#L1-L8' title='File snippet `CoreTests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Added.verified.txt' title='Navigate to start of snippet `CoreTests.Added.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Added.verified.txt#L1-L8' title='File snippet `CoreTests.Added.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Added.verified.txt' title='Navigate to start of snippet `CoreTests.Added.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -125,7 +129,7 @@ public async Task Deleted()
     await Verifier.Verify(data);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.cs#L24-L38' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L28-L42' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -141,7 +145,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.Deleted.verified.txt#L1-L7' title='File snippet `CoreTests.Deleted.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Deleted.verified.txt' title='Navigate to start of snippet `CoreTests.Deleted.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Deleted.verified.txt#L1-L7' title='File snippet `CoreTests.Deleted.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Deleted.verified.txt' title='Navigate to start of snippet `CoreTests.Deleted.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -158,7 +162,10 @@ public async Task Modified()
     var options = DbContextOptions();
 
     await using var data = new SampleDbContext(options);
-    var company = new Company {Content = "before"};
+    var company = new Company
+    {
+        Content = "before"
+    };
     data.Add(company);
     await data.SaveChangesAsync();
 
@@ -166,7 +173,7 @@ public async Task Modified()
     await Verifier.Verify(data);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.cs#L40-L54' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L44-L61' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -186,7 +193,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.Modified.verified.txt#L1-L11' title='File snippet `CoreTests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Modified.verified.txt' title='Navigate to start of snippet `CoreTests.Modified.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Modified.verified.txt#L1-L11' title='File snippet `CoreTests.Modified.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Modified.verified.txt' title='Navigate to start of snippet `CoreTests.Modified.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -202,11 +209,12 @@ public async Task Queryable()
 {
     var database = await DbContextBuilder.GetDatabase("Queryable");
     var data = database.Context;
-    var queryable = data.Companies.Where(x => x.Content == "value");
+    var queryable = data.Companies
+        .Where(x => x.Content == "value");
     await Verifier.Verify(queryable);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.cs#L114-L123' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L122-L132' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -217,13 +225,11 @@ Will result in the following verified file:
 <!-- snippet: CoreTests.Queryable.verified.txt -->
 <a id='snippet-CoreTests.Queryable.verified.txt'/></a>
 ```txt
-SELECT 
-    [Extent1].[Id] AS [Id], 
-    [Extent1].[Content] AS [Content]
-    FROM [dbo].[Companies] AS [Extent1]
-    WHERE N'value' = [Extent1].[Content]
+SELECT [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'value'
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/CoreTests.Queryable.verified.txt#L1-L5' title='File snippet `CoreTests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.txt' title='Navigate to start of snippet `CoreTests.Queryable.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.txt#L1-L3' title='File snippet `CoreTests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.txt' title='Navigate to start of snippet `CoreTests.Queryable.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -232,11 +238,13 @@ SELECT
 <!-- snippet: ClassicTests.Queryable.verified.txt -->
 <a id='snippet-ClassicTests.Queryable.verified.txt'/></a>
 ```txt
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'value'
+SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[Content] AS [Content]
+    FROM [dbo].[Companies] AS [Extent1]
+    WHERE N'value' = [Extent1].[Content]
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ClassicTests.Queryable.verified.txt#L1-L3' title='File snippet `ClassicTests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-ClassicTests.Queryable.verified.txt' title='Navigate to start of snippet `ClassicTests.Queryable.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.Queryable.verified.txt#L1-L5' title='File snippet `ClassicTests.Queryable.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-ClassicTests.Queryable.verified.txt' title='Navigate to start of snippet `ClassicTests.Queryable.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 

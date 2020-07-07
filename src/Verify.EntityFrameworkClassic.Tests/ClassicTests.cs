@@ -6,7 +6,7 @@ using NUnit.Framework;
 using VerifyTests;
 
 [TestFixture]
-public class CoreTests
+public class ClassicTests
 {
     static SqlInstance<SampleDbContext> sqlInstance;
 
@@ -124,7 +124,7 @@ public class CoreTests
     }
     #endregion
 
-    static CoreTests()
+    static ClassicTests()
     {
         #region EnableClassic
         VerifyEntityFrameworkClassic.Enable();

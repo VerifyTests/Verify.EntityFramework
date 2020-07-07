@@ -7,7 +7,7 @@ using NUnit.Framework;
 using VerifyTests;
 
 [TestFixture]
-public class ClassicTests
+public class CoreTests
 {
     #region Added
     [Test]
@@ -16,7 +16,11 @@ public class ClassicTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Company {Content = "before"});
+        var company = new Company
+        {
+            Content = "before"
+        };
+        data.Add(company);
         await Verifier.Verify(data);
     }
     #endregion
@@ -44,7 +48,10 @@ public class ClassicTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        var company = new Company {Content = "before"};
+        var company = new Company
+        {
+            Content = "before"
+        };
         data.Add(company);
         await data.SaveChangesAsync();
 
@@ -83,11 +90,12 @@ public class ClassicTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Employee
+        var employee = new Employee
         {
             Content = "before",
             Age = 10
-        });
+        };
+        data.Add(employee);
         await data.SaveChangesAsync();
 
         data.Employees.Single().Content = "after";
@@ -117,7 +125,8 @@ public class ClassicTests
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
         var data = database.Context;
-        var queryable = data.Companies.Where(x => x.Content == "value");
+        var queryable = data.Companies
+            .Where(x => x.Content == "value");
         await Verifier.Verify(queryable);
     }
     #endregion
@@ -130,7 +139,7 @@ public class ClassicTests
             .Options;
     }
 
-    static ClassicTests()
+    static CoreTests()
     {
         #region EnableCore
         VerifyEntityFramework.Enable();
