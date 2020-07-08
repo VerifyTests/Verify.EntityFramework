@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -21,11 +22,12 @@ class DbContextConverter :
         HandleAdded(entries, writer, serializer);
         HandleModified(entries, writer, serializer);
         HandleDeleted(entries, writer, serializer);
+        HandleLogEntries(data, writer, serializer);
 
         writer.WriteEndObject();
     }
 
-    static void HandleDeleted(List<EntityEntry> entries,JsonWriter writer, JsonSerializer serializer)
+    static void HandleDeleted(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
     {
         var deleted = entries
             .Where(x => x.State == EntityState.Deleted)
@@ -34,6 +36,7 @@ class DbContextConverter :
         {
             return;
         }
+
         writer.WritePropertyName("Deleted");
         writer.WriteStartObject();
         foreach (var entry in deleted)
@@ -43,6 +46,7 @@ class DbContextConverter :
             WriteId(writer, serializer, entry);
             writer.WriteEndObject();
         }
+
         writer.WriteEndObject();
     }
 
@@ -75,7 +79,7 @@ class DbContextConverter :
         writer.WriteEndObject();
     }
 
-    static void HandleModified(List<EntityEntry> entries,JsonWriter writer, JsonSerializer serializer)
+    static void HandleModified(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
     {
         var modified = entries
             .Where(x => x.State == EntityState.Modified)
@@ -84,13 +88,32 @@ class DbContextConverter :
         {
             return;
         }
+
         writer.WritePropertyName("Modified");
         writer.WriteStartObject();
         foreach (var entry in modified)
         {
-            HandleModified(writer, serializer,entry);
+            HandleModified(writer, serializer, entry);
         }
+
         writer.WriteEndObject();
+    }
+
+    static void HandleLogEntries(DbContext data, JsonWriter writer, JsonSerializer serializer)
+    {
+        if (!data.TryReadLogEntries(out var entries))
+        {
+            return;
+        }
+
+        if (!entries.Any())
+        {
+            return;
+        }
+
+        writer.WritePropertyName("Commands");
+        var joined = string.Join("\n\n", entries.Select(x => x.Command.CommandText.Trim()));
+        writer.WriteRawValue($"\n\n{joined}\n");
     }
 
     static void HandleModified(JsonWriter writer, JsonSerializer serializer, EntityEntry entry)
@@ -110,6 +133,7 @@ class DbContextConverter :
                     Current = property.CurrentValue
                 });
         }
+
         writer.WriteEndObject();
     }
 

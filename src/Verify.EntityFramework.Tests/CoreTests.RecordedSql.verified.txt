@@ -1,0 +1,17 @@
+{
+  Commands: 
+
+SET NOCOUNT ON;
+INSERT INTO [Companies] ([Id], [Content])
+VALUES (@p0, @p1);
+
+SELECT TOP(2) [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'before'
+
+SET NOCOUNT ON;
+UPDATE [Companies] SET [Content] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+
+}

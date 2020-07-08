@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using EfLocalDb;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
@@ -103,15 +107,48 @@ public class CoreTests
     }
 
     [Test]
+    public async Task RecordedSql()
+    {
+        var sqlInstance = new SqlInstance<SampleDbContext>(
+            constructInstance: builder =>
+            {
+                builder.RecordSql();
+                return new SampleDbContext(builder.Options);
+            },
+            storage: Storage.FromSuffix<SampleDbContext>("RecordedSql"));
+        await using var database = await sqlInstance.Build();
+        SampleDbContext dbContext = database.Context;
+
+        dbContext.Add(
+            new Company
+            {
+                Content = "before",
+            }
+        );
+
+        await dbContext.SaveChangesAsync();
+
+        var company = await dbContext.Companies
+            .Where(x => x.Content == "before")
+            .SingleAsync();
+        company.Content = "after";
+        await dbContext.SaveChangesAsync();
+
+        await Verifier.Verify(dbContext);
+    }
+
+    [Test]
     public async Task UpdateEntity()
     {
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Employee
-        {
-            Content = "before",
-        });
+        data.Add(
+            new Employee
+            {
+                Content = "before",
+            }
+        );
         await data.SaveChangesAsync();
 
         var employee = data.Employees.Single();
@@ -137,12 +174,5 @@ public class CoreTests
         return new DbContextOptionsBuilder<SampleDbContext>()
             .UseInMemoryDatabase(databaseName)
             .Options;
-    }
-
-    static CoreTests()
-    {
-        #region EnableCore
-        VerifyEntityFramework.Enable();
-        #endregion
     }
 }

@@ -1,10 +1,22 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace VerifyTests
 {
     public static class VerifyEntityFramework
     {
+        public static void RecordSql(this DbContextOptionsBuilder builder)
+        {
+            builder.AddInterceptors(new LogCommandInterceptor());
+        }
+        //internal static bool TryReadLog(
+        //    this DbContext data,
+        //    out LogCommandInterceptor? interceptor)
+        //{
+        //    data.op.AddInterceptors(new LogCommandInterceptor());
+        //}
         public static void Enable()
         {
             VerifierSettings.RegisterFileConverter(
