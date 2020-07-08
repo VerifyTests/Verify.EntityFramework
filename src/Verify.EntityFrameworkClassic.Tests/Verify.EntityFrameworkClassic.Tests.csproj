@@ -8,7 +8,7 @@
     <PackageReference Include="NUnit" Version="3.13.0-dev-06819" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Verify.NUnit" Version="6.3.0" />
-    <PackageReference Include="EfClassicLocalDb" Version="8.3.0" />
+    <PackageReference Include="EfClassicLocalDb" Version="8.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageReference Include="ProjectDefaults" Version="1.0.43" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFrameworkClassic\Verify.EntityFrameworkClassic.csproj" />
