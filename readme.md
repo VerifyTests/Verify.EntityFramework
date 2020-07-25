@@ -13,7 +13,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of EntityFramework bits.
 
-Support is available via a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-verify.entityframework?utm_source=nuget-verify.entityframework&utm_medium=referral&utm_campaign=enterprise).
+Support is available via a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-verify?utm_source=nuget-verify&utm_medium=referral&utm_campaign=enterprise).
 
 <!-- toc -->
 ## Contents
