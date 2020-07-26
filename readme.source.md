@@ -8,6 +8,9 @@ Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of
 
 Support is available via a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-verify?utm_source=nuget-verify&utm_medium=referral&utm_campaign=enterprise).
 
+<a href='https://dotnetfoundation.org' alt='Part of the .NET Foundation'><img src='https://raw.githubusercontent.com/VerifyTests/Verify/master/docs/dotNetFoundation.svg' height='30px'></a><br>
+Part of the <a href='https://dotnetfoundation.org' alt=''>.NET Foundation</a>
+
 toc
 
 
