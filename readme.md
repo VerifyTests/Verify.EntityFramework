@@ -45,7 +45,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ### EF Core
 
 <!-- snippet: EnableCore -->
-<a id='snippet-enablecore'/></a>
+<a id='snippet-enablecore'></a>
 ```cs
 VerifyEntityFramework.Enable();
 ```
@@ -56,7 +56,7 @@ VerifyEntityFramework.Enable();
 ### EF Classic
 
 <!-- snippet: EnableClassic -->
-<a id='snippet-enableclassic'/></a>
+<a id='snippet-enableclassic'></a>
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
@@ -74,7 +74,7 @@ Added, deleted, and Modified entities can be verified by performing changes on a
 This test:
 
 <!-- snippet: Added -->
-<a id='snippet-added'/></a>
+<a id='snippet-added'></a>
 ```cs
 [Test]
 public async Task Added()
@@ -96,7 +96,7 @@ public async Task Added()
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Added.verified.txt -->
-<a id='snippet-CoreTests.Added.verified.txt'/></a>
+<a id='snippet-CoreTests.Added.verified.txt'></a>
 ```txt
 {
   Added: {
@@ -116,7 +116,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Deleted -->
-<a id='snippet-deleted'/></a>
+<a id='snippet-deleted'></a>
 ```cs
 [Test]
 public async Task Deleted()
@@ -138,7 +138,7 @@ public async Task Deleted()
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Deleted.verified.txt -->
-<a id='snippet-CoreTests.Deleted.verified.txt'/></a>
+<a id='snippet-CoreTests.Deleted.verified.txt'></a>
 ```txt
 {
   Deleted: {
@@ -157,7 +157,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Modified -->
-<a id='snippet-modified'/></a>
+<a id='snippet-modified'></a>
 ```cs
 [Test]
 public async Task Modified()
@@ -182,7 +182,7 @@ public async Task Modified()
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Modified.verified.txt -->
-<a id='snippet-CoreTests.Modified.verified.txt'/></a>
+<a id='snippet-CoreTests.Modified.verified.txt'></a>
 ```txt
 {
   Modified: {
@@ -205,7 +205,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Queryable -->
-<a id='snippet-queryable'/></a>
+<a id='snippet-queryable'></a>
 ```cs
 [Test]
 public async Task Queryable()
@@ -226,7 +226,7 @@ Will result in the following verified file:
 ### EF Core
 
 <!-- snippet: CoreTests.Queryable.verified.txt -->
-<a id='snippet-CoreTests.Queryable.verified.txt'/></a>
+<a id='snippet-CoreTests.Queryable.verified.txt'></a>
 ```txt
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
@@ -239,7 +239,7 @@ WHERE [c].[Content] = N'value'
 ### EF Classic
 
 <!-- snippet: ClassicTests.Queryable.verified.txt -->
-<a id='snippet-ClassicTests.Queryable.verified.txt'/></a>
+<a id='snippet-ClassicTests.Queryable.verified.txt'></a>
 ```txt
 SELECT 
     [Extent1].[Id] AS [Id], 
