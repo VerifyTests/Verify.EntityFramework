@@ -35,6 +35,23 @@ snippet: EnableCore
 snippet: EnableClassic
 
 
+### Recording
+
+
+#### Enable
+
+Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
+
+
+#### Usage
+
+snippet: Recording
+
+Will result in the following verified file:
+
+snippet: CoreTests.Recording.verified.txt
+
+
 ### ChangeTracking
 
 Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying the instance of ChangeTracking. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).

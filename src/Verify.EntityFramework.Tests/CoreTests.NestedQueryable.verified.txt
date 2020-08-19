@@ -1,0 +1,5 @@
+{
+  queryable: "SELECT [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'value'"
+}
