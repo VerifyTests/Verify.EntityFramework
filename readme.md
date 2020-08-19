@@ -67,7 +67,7 @@ VerifyEntityFrameworkClassic.Enable();
 
 ### Recording
 
-Recording allows all commands executed by EF to be captured and then (optionally verified).
+Recording allows all commands executed by EF to be captured and then (optionally) verified.
 
 
 #### Enable
