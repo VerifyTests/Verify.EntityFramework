@@ -19,7 +19,7 @@ class LogCommandInterceptor :
     {
         var state = asyncLocal.Value;
         asyncLocal.Value = null;
-        return state!.Datas;
+        return state!.Events;
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
@@ -71,11 +71,11 @@ class LogCommandInterceptor :
 
     class State
     {
-        internal ConcurrentBag<CommandEndEventData> Datas = new ConcurrentBag<CommandEndEventData>();
+        internal ConcurrentBag<CommandEndEventData> Events = new ConcurrentBag<CommandEndEventData>();
 
         public void WriteLine(CommandEndEventData data)
         {
-            Datas.Add(data);
+            Events.Add(data);
         }
     }
 }
