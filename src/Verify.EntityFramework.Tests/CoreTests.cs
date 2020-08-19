@@ -169,7 +169,7 @@ public class CoreTests
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        var eventData = data.FinishRecording().ToList();
+        var eventData = data.FinishRecording();
         await Verifier.Verify(eventData);
     }
 

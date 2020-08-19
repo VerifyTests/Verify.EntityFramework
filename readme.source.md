@@ -37,6 +37,8 @@ snippet: EnableClassic
 
 ### Recording
 
+Recording allows all commands executed by EF to be captured and then (optionally verified).
+
 
 #### Enable
 
@@ -44,6 +46,11 @@ Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
 
 
 #### Usage
+
+On the `DbContext` call
+
+ * `VerifyEntityFramework.StartRecording()` to start recording.
+ * `VerifyEntityFramework.FinishRecording()` to finish recording and get the results.
 
 snippet: Recording
 
