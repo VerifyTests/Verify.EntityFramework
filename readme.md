@@ -66,7 +66,7 @@ VerifyEntityFrameworkClassic.Enable();
 
 ### ChangeTracking
 
-Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying that context. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).
+Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying the instance of ChangeTracking. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).
 
 
 #### Added entity
