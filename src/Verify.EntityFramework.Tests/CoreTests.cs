@@ -21,7 +21,7 @@ public class CoreTests
             Content = "before"
         };
         data.Add(company);
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
     #endregion
 
@@ -37,7 +37,7 @@ public class CoreTests
 
         var company = data.Companies.Single();
         data.Companies.Remove(company);
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
     #endregion
 
@@ -56,7 +56,7 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         data.Companies.Single().Content = "after";
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
     #endregion
 
@@ -81,7 +81,7 @@ public class CoreTests
 
         data.Companies.Single().Content = "companyAfter";
         data.Employees.Single().Content = "employeeAfter";
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         data.Employees.Single().Content = "after";
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
 
     [Test]
@@ -116,7 +116,7 @@ public class CoreTests
 
         var employee = data.Employees.Single();
         data.Update(employee).Entity.Content = "after";
-        await Verifier.Verify(data);
+        await Verifier.Verify(data.ChangeTracker);
     }
 
     #region Queryable

@@ -87,7 +87,7 @@ public async Task Added()
         Content = "before"
     };
     data.Add(company);
-    await Verifier.Verify(data);
+    await Verifier.Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L26' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
@@ -129,7 +129,7 @@ public async Task Deleted()
 
     var company = data.Companies.Single();
     data.Companies.Remove(company);
-    await Verifier.Verify(data);
+    await Verifier.Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L28-L42' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
@@ -173,7 +173,7 @@ public async Task Modified()
     await data.SaveChangesAsync();
 
     data.Companies.Single().Content = "after";
-    await Verifier.Verify(data);
+    await Verifier.Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L44-L61' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
