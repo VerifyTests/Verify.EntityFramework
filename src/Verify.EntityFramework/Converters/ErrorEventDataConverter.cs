@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using VerifyTests;
 
@@ -30,7 +29,7 @@ class ErrorEventDataConverter :
         {
             Command = command;
             Exception = exception;
-            if (parameters.Any())
+            if (parameters.Count > 0)
             {
                 Parameters = parameters;
             }

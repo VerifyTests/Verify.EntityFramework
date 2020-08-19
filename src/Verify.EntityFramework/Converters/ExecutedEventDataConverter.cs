@@ -1,6 +1,5 @@
 ﻿using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using VerifyTests;
 
@@ -27,7 +26,7 @@ class ExecutedEventDataConverter :
         public Wrapper(string command, DbParameterCollection parameters)
         {
             Command = command;
-            if (parameters.Any())
+            if (parameters.Count > 0)
             {
                 Parameters = parameters;
             }
