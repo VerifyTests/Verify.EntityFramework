@@ -11,6 +11,7 @@ public class ClassicTests
     static SqlInstance<SampleDbContext> sqlInstance;
 
     #region AddedClassic
+
     [Test]
     public async Task Added()
     {
@@ -19,9 +20,11 @@ public class ClassicTests
         data.Companies.Add(new Company {Content = "before"});
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     #region DeletedClassic
+
     [Test]
     public async Task Deleted()
     {
@@ -34,9 +37,11 @@ public class ClassicTests
         data.Companies.Remove(company);
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     #region ModifiedClassic
+
     [Test]
     public async Task Modified()
     {
@@ -52,6 +57,7 @@ public class ClassicTests
         data.Companies.Single().Content = "after";
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     [Test]
@@ -114,6 +120,7 @@ public class ClassicTests
     }
 
     #region QueryableClassic
+
     [Test]
     public async Task Queryable()
     {
@@ -122,13 +129,17 @@ public class ClassicTests
         var queryable = data.Companies.Where(x => x.Content == "value");
         await Verifier.Verify(queryable);
     }
+
     #endregion
 
     static ClassicTests()
     {
         #region EnableClassic
+
         VerifyEntityFrameworkClassic.Enable();
+
         #endregion
+
         sqlInstance = new SqlInstance<SampleDbContext>(
             constructInstance: connection => new SampleDbContext(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Tests"));

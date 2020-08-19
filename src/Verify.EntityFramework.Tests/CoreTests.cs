@@ -10,6 +10,7 @@ using VerifyTests;
 public class CoreTests
 {
     #region Added
+
     [Test]
     public async Task Added()
     {
@@ -23,9 +24,11 @@ public class CoreTests
         data.Add(company);
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     #region Deleted
+
     [Test]
     public async Task Deleted()
     {
@@ -39,9 +42,11 @@ public class CoreTests
         data.Companies.Remove(company);
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     #region Modified
+
     [Test]
     public async Task Modified()
     {
@@ -58,6 +63,7 @@ public class CoreTests
         data.Companies.Single().Content = "after";
         await Verifier.Verify(data.ChangeTracker);
     }
+
     #endregion
 
     [Test]
@@ -120,6 +126,7 @@ public class CoreTests
     }
 
     #region Queryable
+
     [Test]
     public async Task Queryable()
     {
@@ -129,6 +136,7 @@ public class CoreTests
             .Where(x => x.Content == "value");
         await Verifier.Verify(queryable);
     }
+
     #endregion
 
     static DbContextOptions<SampleDbContext> DbContextOptions(
@@ -142,7 +150,9 @@ public class CoreTests
     static CoreTests()
     {
         #region EnableCore
+
         VerifyEntityFramework.Enable();
+
         #endregion
     }
 }

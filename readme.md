@@ -49,7 +49,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L144-L146' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L152-L156' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -60,7 +60,7 @@ VerifyEntityFramework.Enable();
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L129-L131' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L137-L141' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -90,7 +90,7 @@ public async Task Added()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L26' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L28' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -132,7 +132,7 @@ public async Task Deleted()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L28-L42' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L30-L46' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -176,7 +176,7 @@ public async Task Modified()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L44-L61' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L48-L67' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -217,7 +217,7 @@ public async Task Queryable()
     await Verifier.Verify(queryable);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L122-L132' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L128-L140' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
