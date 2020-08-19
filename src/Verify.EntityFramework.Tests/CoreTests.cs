@@ -165,17 +165,12 @@ public class CoreTests
 
         data.StartRecording();
 
-        var companies = await data.Companies
+        await data.Companies
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        var eventData = data.FinishRecording();
-        await Verifier.Verify(
-            new
-            {
-                companies,
-                eventData
-            });
+        var eventData = data.FinishRecording().ToList();
+        await Verifier.Verify(eventData);
     }
 
     #endregion

@@ -1,13 +1,8 @@
-{
-  companies: [
-    {
-      Content: 'Title'
-    }
-  ],
-  eventData: [
-    "Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
-SELECT [c].[Id], [c].[Content]
+[
+  {
+    Type: 'Executed',
+    Command: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
-  ]
-}
+  }
+]

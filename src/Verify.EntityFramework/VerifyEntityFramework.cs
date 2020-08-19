@@ -12,8 +12,7 @@ namespace VerifyTests
 {
     public static class VerifyEntityFramework
     {
-        public static void EnableRecording<T>(this DbContextOptionsBuilder<T> builder)
-            where T : DbContext
+        public static void EnableRecording(this DbContextOptionsBuilder builder)
         {
             Guard.AgainstNull(builder, nameof(builder));
             builder.AddInterceptors(new LogCommandInterceptor());
@@ -58,7 +57,8 @@ namespace VerifyTests
                 settings.AddExtraSettings(serializer =>
                 {
                     var converters = serializer.Converters;
-                    converters.Add(new EventDataConverter());
+                    converters.Add(new ExecutedEventDataConverter());
+                    converters.Add(new ErrorEventDataConverter());
                     converters.Add(new TrackerConverter());
                     converters.Add(new QueryableConverter());
                 });

@@ -24,6 +24,7 @@ Part of the <a href='https://dotnetfoundation.org' alt=''>.NET Foundation</a>
   * [Usage](#usage)
     * [EF Core](#ef-core)
     * [EF Classic](#ef-classic)
+    * [Recording](#recording)
     * [ChangeTracking](#changetracking)
     * [Queryable](#queryable)
     * [EF Core](#ef-core-1)
@@ -49,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L195-L199' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L190-L194' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -61,6 +62,67 @@ VerifyEntityFramework.Enable();
 VerifyEntityFrameworkClassic.Enable();
 ```
 <sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L139-L143' title='File snippet `enableclassic` was extracted from'>snippet source</a> | <a href='#snippet-enableclassic' title='Navigate to start of snippet `enableclassic`'>anchor</a></sup>
+<!-- endsnippet -->
+
+
+### Recording
+
+
+#### Enable
+
+Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
+
+
+#### Usage
+
+<!-- snippet: Recording -->
+<a id='snippet-recording'></a>
+```cs
+[Test]
+public async Task Recording()
+{
+    var database = await DbContextBuilder.GetDatabase("Recording");
+    var data = database.Context;
+    var company = new Company
+    {
+        Content = "Title"
+    };
+    data.Add(company);
+    await data.SaveChangesAsync();
+
+    data.StartRecording();
+
+    await data.Companies
+        .Where(x => x.Content == "Title")
+        .ToListAsync();
+
+    var eventData = data.FinishRecording().ToList();
+    await Verifier.Verify(eventData);
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L152-L176' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
+<!-- endsnippet -->
+
+Will result in the following verified file:
+
+<!-- snippet: CoreTests.Recording.verified.txt -->
+<a id='snippet-CoreTests.Recording.verified.txt'></a>
+```txt
+{
+  companies: [
+    {
+      Content: 'Title'
+    }
+  ],
+  eventData: [
+    "Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'Title'"
+  ]
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L13' title='File snippet `CoreTests.Recording.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Navigate to start of snippet `CoreTests.Recording.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
