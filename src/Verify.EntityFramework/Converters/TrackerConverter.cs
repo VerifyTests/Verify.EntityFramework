@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using VerifyTests;
 
-class DbContextConverter :
-    WriteOnlyJsonConverter<DbContext>
+class TrackerConverter :
+    WriteOnlyJsonConverter<ChangeTracker>
 {
-    public override void WriteJson(JsonWriter writer, DbContext? data, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, ChangeTracker? tracker, JsonSerializer serializer)
     {
-        if (data == null)
+        if (tracker == null)
         {
             return;
         }
 
         writer.WriteStartObject();
 
-        var entries = data.ChangeTracker.Entries().ToList();
+        var entries = tracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
         HandleModified(entries, writer, serializer);
         HandleDeleted(entries, writer, serializer);
@@ -25,7 +25,7 @@ class DbContextConverter :
         writer.WriteEndObject();
     }
 
-    static void HandleDeleted(List<EntityEntry> entries,JsonWriter writer, JsonSerializer serializer)
+    static void HandleDeleted(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
     {
         var deleted = entries
             .Where(x => x.State == EntityState.Deleted)
@@ -34,6 +34,7 @@ class DbContextConverter :
         {
             return;
         }
+
         writer.WritePropertyName("Deleted");
         writer.WriteStartObject();
         foreach (var entry in deleted)
@@ -43,6 +44,7 @@ class DbContextConverter :
             WriteId(writer, serializer, entry);
             writer.WriteEndObject();
         }
+
         writer.WriteEndObject();
     }
 
@@ -75,7 +77,7 @@ class DbContextConverter :
         writer.WriteEndObject();
     }
 
-    static void HandleModified(List<EntityEntry> entries,JsonWriter writer, JsonSerializer serializer)
+    static void HandleModified(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
     {
         var modified = entries
             .Where(x => x.State == EntityState.Modified)
@@ -84,12 +86,14 @@ class DbContextConverter :
         {
             return;
         }
+
         writer.WritePropertyName("Modified");
         writer.WriteStartObject();
         foreach (var entry in modified)
         {
-            HandleModified(writer, serializer,entry);
+            HandleModified(writer, serializer, entry);
         }
+
         writer.WriteEndObject();
     }
 
@@ -110,6 +114,7 @@ class DbContextConverter :
                     Current = property.CurrentValue
                 });
         }
+
         writer.WriteEndObject();
     }
 

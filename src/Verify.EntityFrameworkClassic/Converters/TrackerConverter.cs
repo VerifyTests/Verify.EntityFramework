@@ -1,25 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Reflection;
 using Newtonsoft.Json;
 using VerifyTests;
 
-class DbContextConverter :
-    WriteOnlyJsonConverter<DbContext>
+class TrackerConverter :
+    WriteOnlyJsonConverter<DbChangeTracker>
 {
-    public override void WriteJson(JsonWriter writer, DbContext? data, JsonSerializer serializer)
+    static Func<DbChangeTracker, DbContext> func;
+
+    static TrackerConverter()
     {
-        if (data == null)
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        FieldInfo internalContextField = typeof(DbChangeTracker).GetField("_internalContext", flags)!;
+        FieldInfo ownerField = internalContextField.FieldType.GetField("_owner", flags)!;
+
+        func = tracker =>
+        {
+            var value = internalContextField.GetValue(tracker);
+            return (DbContext) ownerField.GetValue(value);
+        };
+    }
+
+    public override void WriteJson(JsonWriter writer, DbChangeTracker? tracker, JsonSerializer serializer)
+    {
+        if (tracker == null)
         {
             return;
         }
 
         writer.WriteStartObject();
-        var entries = data.ChangeTracker.Entries().ToList();
+        var entries = tracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
-        HandleModified(entries, writer, serializer, data);
-        HandleDeleted(entries, writer, serializer, data);
+        var context = func(tracker);
+        HandleModified(entries, writer, serializer, context);
+        HandleDeleted(entries, writer, serializer, context);
 
         writer.WriteEndObject();
     }
@@ -77,7 +95,7 @@ class DbContextConverter :
         writer.WriteEndObject();
     }
 
-    static void HandleModified(List<DbEntityEntry> entries,JsonWriter writer, JsonSerializer serializer, DbContext context)
+    static void HandleModified(List<DbEntityEntry> entries, JsonWriter writer, JsonSerializer serializer, DbContext context)
     {
         var modified = entries
             .Where(x => x.State == EntityState.Modified)
@@ -86,6 +104,7 @@ class DbContextConverter :
         {
             return;
         }
+
         writer.WritePropertyName("Modified");
         writer.WriteStartObject();
         foreach (var entry in modified)
@@ -101,7 +120,7 @@ class DbContextConverter :
         writer.WritePropertyName(entry.Entity.GetType().Name);
         writer.WriteStartObject();
 
-        WriteId(writer, serializer, entry,context);
+        WriteId(writer, serializer, entry, context);
         foreach (var property in entry.ChangedProperties())
         {
             writer.WritePropertyName(property.Key);
@@ -113,6 +132,7 @@ class DbContextConverter :
                     Current = property.Current
                 });
         }
+
         writer.WriteEndObject();
     }
 
