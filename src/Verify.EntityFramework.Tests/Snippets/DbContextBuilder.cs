@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EfLocalDb;
+using VerifyTests;
 
 // LocalDb is used to make the sample simpler.
 // Replace with a real DbContext
@@ -9,7 +10,11 @@ public static class DbContextBuilder
     {
         sqlInstance = new SqlInstance<SampleDbContext>(
             buildTemplate: CreateDb,
-            constructInstance: builder => new SampleDbContext(builder.Options));
+            constructInstance: builder =>
+            {
+                builder.EnableRecording();
+                return new SampleDbContext(builder.Options);
+            });
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;

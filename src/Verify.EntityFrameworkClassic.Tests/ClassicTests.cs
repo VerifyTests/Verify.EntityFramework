@@ -134,6 +134,8 @@ public class ClassicTests
 
     static ClassicTests()
     {
+        VerifierSettings.DisableNewLineEscaping();
+
         #region EnableClassic
 
         VerifyEntityFrameworkClassic.Enable();

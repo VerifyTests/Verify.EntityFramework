@@ -139,6 +139,47 @@ public class CoreTests
 
     #endregion
 
+    [Test]
+    public async Task NestedQueryable()
+    {
+        var database = await DbContextBuilder.GetDatabase("NestedQueryable");
+        var data = database.Context;
+        var queryable = data.Companies
+            .Where(x => x.Content == "value");
+        await Verifier.Verify(new {queryable});
+    }
+
+    #region Recording
+
+    [Test]
+    public async Task Recording()
+    {
+        var database = await DbContextBuilder.GetDatabase("Recording");
+        var data = database.Context;
+        var company = new Company
+        {
+            Content = "Title"
+        };
+        data.Add(company);
+        await data.SaveChangesAsync();
+
+        data.StartRecording();
+
+        var companies = await data.Companies
+            .Where(x => x.Content == "Title")
+            .ToListAsync();
+
+        var eventData = data.FinishRecording();
+        await Verifier.Verify(
+            new
+            {
+                companies,
+                eventData
+            });
+    }
+
+    #endregion
+
     static DbContextOptions<SampleDbContext> DbContextOptions(
         [CallerMemberName] string databaseName = "")
     {
@@ -149,6 +190,8 @@ public class CoreTests
 
     static CoreTests()
     {
+        VerifierSettings.DisableNewLineEscaping();
+
         #region EnableCore
 
         VerifyEntityFramework.Enable();
