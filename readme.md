@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L190-L194' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L202-L206' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -74,6 +74,16 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
 
+<!-- snippet: EnableRecording -->
+<a id='snippet-enablerecording'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseSqlServer(connection);
+builder.EnableRecording();
+var data = new SampleDbContext(builder.Options);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L154-L161' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
+<!-- endsnippet -->
 
 #### Usage
 
@@ -107,7 +117,7 @@ public async Task Recording()
     await Verifier.Verify(eventData);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L152-L176' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L164-L188' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:

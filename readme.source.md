@@ -44,6 +44,7 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
 
+snippet: EnableRecording
 
 #### Usage
 

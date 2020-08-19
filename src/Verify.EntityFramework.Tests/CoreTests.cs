@@ -149,6 +149,18 @@ public class CoreTests
         await Verifier.Verify(new {queryable});
     }
 
+    void Build(string connection)
+    {
+        #region EnableRecording
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseSqlServer(connection);
+        builder.EnableRecording();
+        var data = new SampleDbContext(builder.Options);
+
+        #endregion
+    }
+
     #region Recording
 
     [Test]
