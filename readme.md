@@ -110,7 +110,7 @@ Will result in the following verified file:
 ```txt
 [
   {
-    Type: 'Executed',
+    Type: 'Execute',
     Command: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
