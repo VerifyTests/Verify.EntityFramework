@@ -20,7 +20,7 @@ class ExecutedEventDataConverter :
 
     class Wrapper
     {
-        public string Type { get => "Executed"; }
+        public string Type { get => "Execute"; }
         public string Command { get; }
         public DbParameterCollection? Parameters { get; }
 

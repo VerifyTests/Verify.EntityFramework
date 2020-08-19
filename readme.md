@@ -108,21 +108,16 @@ Will result in the following verified file:
 <!-- snippet: CoreTests.Recording.verified.txt -->
 <a id='snippet-CoreTests.Recording.verified.txt'></a>
 ```txt
-{
-  companies: [
-    {
-      Content: 'Title'
-    }
-  ],
-  eventData: [
-    "Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
-SELECT [c].[Id], [c].[Content]
+[
+  {
+    Type: 'Executed',
+    Command: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
-  ]
-}
+  }
+]
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L13' title='File snippet `CoreTests.Recording.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Navigate to start of snippet `CoreTests.Recording.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L8' title='File snippet `CoreTests.Recording.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Navigate to start of snippet `CoreTests.Recording.verified.txt`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
