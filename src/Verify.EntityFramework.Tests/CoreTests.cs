@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
-using VerifyTests.EntityFramework;
 
 [TestFixture]
 public class CoreTests
