@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -26,6 +27,7 @@ static class Extensions
                 {
                     return true;
                 }
+
                 return !original.Equals(current);
             });
     }
@@ -43,10 +45,17 @@ static class Extensions
 
     public static Dictionary<string, object> ToDictionary(this DbParameterCollection collection)
     {
-        var dictionary = new Dictionary<string,object>();
-        foreach (DbParameter dbParameter in collection)
+        var dictionary = new Dictionary<string, object>();
+        foreach (DbParameter parameter in collection)
         {
-            dictionary[dbParameter.ParameterName] = dbParameter.Value;
+            var direction = parameter.Direction;
+            if (direction == ParameterDirection.Output ||
+                direction == ParameterDirection.ReturnValue)
+            {
+                continue;
+            }
+
+            dictionary[parameter.ParameterName] = parameter.Value;
         }
 
         return dictionary;
