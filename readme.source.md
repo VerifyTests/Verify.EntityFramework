@@ -46,6 +46,7 @@ Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
 
 snippet: EnableRecording
 
+
 #### Usage
 
 On the `DbContext` call
@@ -58,6 +59,15 @@ snippet: Recording
 Will result in the following verified file:
 
 snippet: CoreTests.Recording.verified.txt
+
+
+#### DbContext spanning
+
+`StartRecording` and `FinishRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
+
+snippet: MultiDbContexts
+
+snippet: CoreTests.MultiDbContexts.verified.txt
 
 
 ### ChangeTracking

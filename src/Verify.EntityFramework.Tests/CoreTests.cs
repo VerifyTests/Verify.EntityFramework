@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
+using VerifyTests.EntityFramework;
 
 [TestFixture]
 public class CoreTests
@@ -191,6 +193,39 @@ public class CoreTests
 
         var eventData = data.FinishRecording();
         await Verifier.Verify(eventData);
+    }
+
+    [Test]
+    public async Task MultiDbContexts()
+    {
+        var database = await DbContextBuilder.GetDatabase("MultiDbContexts");
+        var connectionString = database.ConnectionString;
+
+        #region MultiDbContexts
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseSqlServer(connectionString);
+        builder.EnableRecording();
+
+        await using var data1 = new SampleDbContext(builder.Options);
+        data1.StartRecording();
+        var company = new Company
+        {
+            Content = "Title"
+        };
+        data1.Add(company);
+        await data1.SaveChangesAsync();
+
+        await using var data2 = new SampleDbContext(builder.Options);
+        await data2.Companies
+            .Where(x => x.Content == "Title")
+            .ToListAsync();
+
+        var eventData = data2.FinishRecording();
+
+        await Verifier.Verify(eventData);
+
+        #endregion
     }
 
     #region Recording
