@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L269-L273' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L267-L271' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -82,7 +82,7 @@ builder.UseSqlServer(connection);
 builder.EnableRecording();
 var data = new SampleDbContext(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L156-L163' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L154-L161' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -118,7 +118,7 @@ public async Task Recording()
     await Verifier.Verify(eventData);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L231-L255' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L229-L253' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -168,7 +168,7 @@ var eventData = data2.FinishRecording();
 
 await Verifier.Verify(eventData);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L204-L228' title='File snippet `multidbcontexts` was extracted from'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Navigate to start of snippet `multidbcontexts`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L202-L226' title='File snippet `multidbcontexts` was extracted from'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Navigate to start of snippet `multidbcontexts`'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
@@ -224,7 +224,7 @@ public async Task Added()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L14-L30' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L28' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -266,7 +266,7 @@ public async Task Deleted()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L32-L48' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L30-L46' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -310,7 +310,7 @@ public async Task Modified()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L50-L69' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L48-L67' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -351,7 +351,7 @@ public async Task Queryable()
     await Verifier.Verify(queryable);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L130-L142' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L128-L140' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
