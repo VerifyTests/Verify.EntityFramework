@@ -161,6 +161,38 @@ public class CoreTests
         #endregion
     }
 
+    [Test]
+    public async Task MultiRecording()
+    {
+        var database = await DbContextBuilder.GetDatabase("MultiRecording");
+        var data = database.Context;
+        data.StartRecording();
+        var company = new Company
+        {
+            Content = "Title"
+        };
+        data.Add(company);
+        await data.SaveChangesAsync();
+
+        for (var i = 0; i < 100; i++)
+        {
+            var s = i.ToString();
+            await data.Companies
+                .Where(x => x.Content == s)
+                .ToListAsync();
+        }
+        var company2 = new Company
+        {
+            Id = 2,
+            Content = "Title2"
+        };
+        data.Add(company2);
+        await data.SaveChangesAsync();
+
+        var eventData = data.FinishRecording();
+        await Verifier.Verify(eventData);
+    }
+
     #region Recording
 
     [Test]

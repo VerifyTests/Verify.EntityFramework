@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using VerifyTests.EntityFramework;
 
 namespace VerifyTests
 {
@@ -39,7 +39,7 @@ namespace VerifyTests
                 .Single();
         }
 
-        public static IEnumerable<CommandEndEventData> FinishRecording<T>(this T data)
+        public static IEnumerable<LogEntry> FinishRecording<T>(this T data)
             where T : DbContext
         {
             Guard.AgainstNull(data, nameof(data));
@@ -57,8 +57,6 @@ namespace VerifyTests
                 settings.AddExtraSettings(serializer =>
                 {
                     var converters = serializer.Converters;
-                    converters.Add(new ExecutedEventDataConverter());
-                    converters.Add(new ErrorEventDataConverter());
                     converters.Add(new TrackerConverter());
                     converters.Add(new QueryableConverter());
                 });

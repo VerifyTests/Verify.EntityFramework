@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -38,5 +39,16 @@ static class Extensions
             var value = entry.Property(name).CurrentValue;
             yield return (name, value);
         }
+    }
+
+    public static Dictionary<string, object> ToDictionary(this DbParameterCollection collection)
+    {
+        var dictionary = new Dictionary<string,object>();
+        foreach (DbParameter dbParameter in collection)
+        {
+            dictionary[dbParameter.ParameterName] = dbParameter.Value;
+        }
+
+        return dictionary;
     }
 }

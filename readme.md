@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L202-L206' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L234-L238' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -117,7 +117,7 @@ public async Task Recording()
     await Verifier.Verify(eventData);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L164-L188' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L196-L220' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Will result in the following verified file:
@@ -127,8 +127,8 @@ Will result in the following verified file:
 ```txt
 [
   {
-    Type: 'Execute',
-    Command: "SELECT [c].[Id], [c].[Content]
+    Type: 'ReaderExecutedAsync',
+    Text: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
   }
