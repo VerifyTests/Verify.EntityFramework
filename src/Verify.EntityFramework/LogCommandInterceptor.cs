@@ -22,7 +22,11 @@ class LogCommandInterceptor :
     {
         var state = asyncLocal.Value;
         asyncLocal.Value = null;
-        return state!.Events.OrderBy(x=>x.StartTime);
+        if (state != null)
+        {
+            return state.Events.OrderBy(x => x.StartTime);
+        }
+        throw new Exception("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
