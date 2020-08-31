@@ -34,9 +34,15 @@ namespace VerifyTests
                 .Extensions
                 .OfType<CoreOptionsExtension>()
                 .Single();
-            return extension.Interceptors
+            var interceptor = extension.Interceptors
                 .OfType<LogCommandInterceptor>()
-                .Single();
+                .SingleOrDefault();
+            if (interceptor == null)
+            {
+                throw new Exception($"Could not find LogCommandInterceptor in {typeof(T).Name} options. It is possible VerifyEntityFramework.EnableRecording has not been called on the DbContextOptionsBuilder");
+            }
+
+            return interceptor;
         }
 
         public static IEnumerable<LogEntry> FinishRecording<T>(this T data)
