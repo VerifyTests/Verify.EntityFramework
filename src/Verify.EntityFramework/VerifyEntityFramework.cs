@@ -34,6 +34,11 @@ namespace VerifyTests
                 .Extensions
                 .OfType<CoreOptionsExtension>()
                 .Single();
+            if (extension.Interceptors == null)
+            {
+                throw new Exception($"No Interceptors found in {typeof(T).Name} options. It is possible VerifyEntityFramework.EnableRecording has not been called on the DbContextOptionsBuilder");
+            }
+
             var interceptor = extension.Interceptors
                 .OfType<LogCommandInterceptor>()
                 .SingleOrDefault();
