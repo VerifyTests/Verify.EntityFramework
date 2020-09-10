@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
+using VerifyTests.EntityFramework;
 
 [TestFixture]
 public class CoreTests
@@ -166,7 +167,7 @@ public class CoreTests
     {
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
         var data = database.Context;
-        data.StartRecording();
+        SqlRecording.StartRecording();
         var company = new Company
         {
             Content = "Title"
@@ -189,7 +190,7 @@ public class CoreTests
         data.Add(company2);
         await data.SaveChangesAsync();
 
-        var eventData = data.FinishRecording();
+        var eventData = SqlRecording.FinishRecording();
         await Verifier.Verify(eventData);
     }
 
@@ -206,7 +207,7 @@ public class CoreTests
         builder.EnableRecording();
 
         await using var data1 = new SampleDbContext(builder.Options);
-        data1.StartRecording();
+        SqlRecording.StartRecording();
         var company = new Company
         {
             Content = "Title"
@@ -219,9 +220,7 @@ public class CoreTests
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        var eventData = data2.FinishRecording();
-
-        await Verifier.Verify(eventData);
+        await Verifier.Verify(data2.Companies.Count());
 
         #endregion
     }
@@ -240,14 +239,13 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        data.StartRecording();
+        SqlRecording.StartRecording();
 
         await data.Companies
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        var eventData = data.FinishRecording();
-        await Verifier.Verify(eventData);
+        await Verifier.Verify(data.Companies.Count());
     }
 
     #endregion

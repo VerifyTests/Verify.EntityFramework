@@ -11,22 +11,18 @@ using VerifyTests.EntityFramework;
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
-    AsyncLocal<State?> asyncLocal = new AsyncLocal<State?>();
+    static AsyncLocal<State?> asyncLocal = new AsyncLocal<State?>();
 
-    public void Start()
+    public static void Start()
     {
         asyncLocal.Value = new State();
     }
 
-    public IEnumerable<LogEntry> Stop()
+    public static IEnumerable<LogEntry>? Stop()
     {
         var state = asyncLocal.Value;
         asyncLocal.Value = null;
-        if (state != null)
-        {
-            return state.Events.OrderBy(x => x.StartTime);
-        }
-        throw new Exception("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
+        return state?.Events.OrderBy(x => x.StartTime);
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)

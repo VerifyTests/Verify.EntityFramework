@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EfLocalDb;
-using VerifyTests;
+using VerifyTests.EntityFramework;
 
 // LocalDb is used to make the sample simpler.
 // Replace with a real DbContext

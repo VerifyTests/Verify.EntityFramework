@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L267-L271' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L265-L269' title='File snippet `enablecore` was extracted from'>snippet source</a> | <a href='#snippet-enablecore' title='Navigate to start of snippet `enablecore`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -82,7 +82,7 @@ builder.UseSqlServer(connection);
 builder.EnableRecording();
 var data = new SampleDbContext(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L154-L161' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L155-L162' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -108,17 +108,16 @@ public async Task Recording()
     data.Add(company);
     await data.SaveChangesAsync();
 
-    data.StartRecording();
+    SqlRecording.StartRecording();
 
     await data.Companies
         .Where(x => x.Content == "Title")
         .ToListAsync();
 
-    var eventData = data.FinishRecording();
-    await Verifier.Verify(eventData);
+    await Verifier.Verify(data.Companies.Count());
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L229-L253' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L228-L251' title='File snippet `recording` was extracted from'>snippet source</a> | <a href='#snippet-recording' title='Navigate to start of snippet `recording`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -126,16 +125,24 @@ Will result in the following verified file:
 <!-- snippet: CoreTests.Recording.verified.txt -->
 <a id='snippet-CoreTests.Recording.verified.txt'></a>
 ```txt
-[
-  {
-    Type: 'ReaderExecutedAsync',
-    Text: "SELECT [c].[Id], [c].[Content]
+{
+  target: '5',
+  sql: [
+    {
+      Type: 'ReaderExecutedAsync',
+      Text: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
-  }
-]
+    },
+    {
+      Type: 'ReaderExecuted',
+      Text: 'SELECT COUNT(*)
+FROM [Companies] AS [c]'
+    }
+  ]
+}
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L8' title='File snippet `CoreTests.Recording.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Navigate to start of snippet `CoreTests.Recording.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L16' title='File snippet `CoreTests.Recording.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Navigate to start of snippet `CoreTests.Recording.verified.txt`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -151,7 +158,7 @@ builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
 await using var data1 = new SampleDbContext(builder.Options);
-data1.StartRecording();
+SqlRecording.StartRecording();
 var company = new Company
 {
     Content = "Title"
@@ -164,37 +171,43 @@ await data2.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
 
-var eventData = data2.FinishRecording();
-
-await Verifier.Verify(eventData);
+await Verifier.Verify(data2.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L202-L226' title='File snippet `multidbcontexts` was extracted from'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Navigate to start of snippet `multidbcontexts`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L203-L225' title='File snippet `multidbcontexts` was extracted from'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Navigate to start of snippet `multidbcontexts`'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
 <a id='snippet-CoreTests.MultiDbContexts.verified.txt'></a>
 ```txt
-[
-  {
-    Type: 'ReaderExecutedAsync',
-    HasTransaction: true,
-    Parameters: {
-      @p0: 0,
-      @p1: 'Title'
-    },
-    Text: 'SET NOCOUNT ON;
+{
+  target: '5',
+  sql: [
+    {
+      Type: 'ReaderExecutedAsync',
+      HasTransaction: true,
+      Parameters: {
+        @p0: 0,
+        @p1: 'Title'
+      },
+      Text: 'SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);'
-  },
-  {
-    Type: 'ReaderExecutedAsync',
-    Text: "SELECT [c].[Id], [c].[Content]
+    },
+    {
+      Type: 'ReaderExecutedAsync',
+      Text: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
-  }
-]
+    },
+    {
+      Type: 'ReaderExecuted',
+      Text: 'SELECT COUNT(*)
+FROM [Companies] AS [c]'
+    }
+  ]
+}
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L19' title='File snippet `CoreTests.MultiDbContexts.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Navigate to start of snippet `CoreTests.MultiDbContexts.verified.txt`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L27' title='File snippet `CoreTests.MultiDbContexts.verified.txt` was extracted from'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Navigate to start of snippet `CoreTests.MultiDbContexts.verified.txt`'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -224,7 +237,7 @@ public async Task Added()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L12-L28' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L13-L29' title='File snippet `added` was extracted from'>snippet source</a> | <a href='#snippet-added' title='Navigate to start of snippet `added`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -266,7 +279,7 @@ public async Task Deleted()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L30-L46' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L31-L47' title='File snippet `deleted` was extracted from'>snippet source</a> | <a href='#snippet-deleted' title='Navigate to start of snippet `deleted`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -310,7 +323,7 @@ public async Task Modified()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L48-L67' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L49-L68' title='File snippet `modified` was extracted from'>snippet source</a> | <a href='#snippet-modified' title='Navigate to start of snippet `modified`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -351,7 +364,7 @@ public async Task Queryable()
     await Verifier.Verify(queryable);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L128-L140' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L129-L141' title='File snippet `queryable` was extracted from'>snippet source</a> | <a href='#snippet-queryable' title='Navigate to start of snippet `queryable`'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:

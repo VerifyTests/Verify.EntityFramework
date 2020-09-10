@@ -1,8 +1,16 @@
-[
-  {
-    Type: 'ReaderExecutedAsync',
-    Text: "SELECT [c].[Id], [c].[Content]
+{
+  target: '5',
+  sql: [
+    {
+      Type: 'ReaderExecutedAsync',
+      Text: "SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'"
-  }
-]
+    },
+    {
+      Type: 'ReaderExecuted',
+      Text: 'SELECT COUNT(*)
+FROM [Companies] AS [c]'
+    }
+  ]
+}
