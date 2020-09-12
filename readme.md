@@ -72,7 +72,7 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 #### Enable
 
-Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
+Call `SqlRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 
 <!-- snippet: EnableRecording -->
 <a id='snippet-enablerecording'></a>
@@ -85,13 +85,12 @@ var data = new SampleDbContext(builder.Options);
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L155-L162' title='File snippet `enablerecording` was extracted from'>snippet source</a> | <a href='#snippet-enablerecording' title='Navigate to start of snippet `enablerecording`'>anchor</a></sup>
 <!-- endSnippet -->
 
+`EnableRecording` should only be called in the test context.
+
 
 #### Usage
 
-On the `DbContext` call
-
- * `VerifyEntityFramework.StartRecording()` to start recording.
- * `VerifyEntityFramework.FinishRecording()` to finish recording and get the results.
+On the `DbContext` call `SqlRecording.StartRecording()` to start recording.
 
 <!-- snippet: Recording -->
 <a id='snippet-recording'></a>
@@ -148,7 +147,7 @@ FROM [Companies] AS [c]'
 
 #### DbContext spanning
 
-`StartRecording` and `FinishRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
+`StartRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
 
 <!-- snippet: MultiDbContexts -->
 <a id='snippet-multidbcontexts'></a>
