@@ -42,17 +42,16 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 #### Enable
 
-Call `VerifyEntityFramework.EnableRecording()` on `DbContextOptionsBuilder`.
+Call `SqlRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 
 snippet: EnableRecording
+
+`EnableRecording` should only be called in the test context.
 
 
 #### Usage
 
-On the `DbContext` call
-
- * `VerifyEntityFramework.StartRecording()` to start recording.
- * `VerifyEntityFramework.FinishRecording()` to finish recording and get the results.
+On the `DbContext` call `SqlRecording.StartRecording()` to start recording.
 
 snippet: Recording
 
@@ -63,7 +62,7 @@ snippet: CoreTests.Recording.verified.txt
 
 #### DbContext spanning
 
-`StartRecording` and `FinishRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
+`StartRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
 
 snippet: MultiDbContexts
 
