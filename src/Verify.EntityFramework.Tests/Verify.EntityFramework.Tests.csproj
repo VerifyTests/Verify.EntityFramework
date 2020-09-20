@@ -6,7 +6,7 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.0.1" PrivateAssets="all" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.0.6" PrivateAssets="all" />
     <PackageReference Include="NUnit" Version="3.13.0-dev-06859" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Verify.NUnit" Version="6.15.3" />
