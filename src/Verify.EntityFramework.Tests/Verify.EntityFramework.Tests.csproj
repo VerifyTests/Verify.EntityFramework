@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.1.20451.13" />
     <PackageReference Include="EfLocalDb" Version="9.0.0-beta.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.45" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.46" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0-rc.1.20451.13" />
   </ItemGroup>
