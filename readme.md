@@ -39,22 +39,22 @@ Enable VerifyEntityFramewok once at assembly load time:
 ### EF Core
 
 <!-- snippet: EnableCore -->
-<a id='enablecore'></a>
+<a id='snippet-enablecore'></a>
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L265-L269' title='Snippet source file'>snippet source</a> | <a href='#enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L265-L269' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
 ### EF Classic
 
 <!-- snippet: EnableClassic -->
-<a id='enableclassic'></a>
+<a id='snippet-enableclassic'></a>
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L139-L143' title='Snippet source file'>snippet source</a> | <a href='#enableclassic' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L139-L143' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -68,14 +68,14 @@ Recording allows all commands executed by EF to be captured and then (optionally
 Call `SqlRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 
 <!-- snippet: EnableRecording -->
-<a id='enablerecording'></a>
+<a id='snippet-enablerecording'></a>
 ```cs
 var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseSqlServer(connection);
 builder.EnableRecording();
 var data = new SampleDbContext(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L155-L162' title='Snippet source file'>snippet source</a> | <a href='#enablerecording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L155-L162' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `EnableRecording` should only be called in the test context.
@@ -86,7 +86,7 @@ var data = new SampleDbContext(builder.Options);
 On the `DbContext` call `SqlRecording.StartRecording()` to start recording.
 
 <!-- snippet: Recording -->
-<a id='recording'></a>
+<a id='snippet-recording'></a>
 ```cs
 [Test]
 public async Task Recording()
@@ -109,13 +109,13 @@ public async Task Recording()
     await Verifier.Verify(data.Companies.Count());
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L228-L251' title='Snippet source file'>snippet source</a> | <a href='#recording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L228-L251' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Recording.verified.txt -->
-<a id='CoreTests.Recording.verified.txt'></a>
+<a id='snippet-CoreTests.Recording.verified.txt'></a>
 ```txt
 {
   target: '5',
@@ -134,7 +134,7 @@ FROM [Companies] AS [c]'
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -143,7 +143,7 @@ FROM [Companies] AS [c]'
 `StartRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
 
 <!-- snippet: MultiDbContexts -->
-<a id='multidbcontexts'></a>
+<a id='snippet-multidbcontexts'></a>
 ```cs
 var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseSqlServer(connectionString);
@@ -165,11 +165,11 @@ await data2.Companies
 
 await Verifier.Verify(data2.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L203-L225' title='Snippet source file'>snippet source</a> | <a href='#multidbcontexts' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L203-L225' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
-<a id='CoreTests.MultiDbContexts.verified.txt'></a>
+<a id='snippet-CoreTests.MultiDbContexts.verified.txt'></a>
 ```txt
 {
   target: '5',
@@ -199,7 +199,7 @@ FROM [Companies] AS [c]'
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -213,7 +213,7 @@ Added, deleted, and Modified entities can be verified by performing changes on a
 This test:
 
 <!-- snippet: Added -->
-<a id='added'></a>
+<a id='snippet-added'></a>
 ```cs
 [Test]
 public async Task Added()
@@ -229,13 +229,13 @@ public async Task Added()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L13-L29' title='Snippet source file'>snippet source</a> | <a href='#added' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L13-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-added' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Added.verified.txt -->
-<a id='CoreTests.Added.verified.txt'></a>
+<a id='snippet-CoreTests.Added.verified.txt'></a>
 ```txt
 {
   Added: {
@@ -246,7 +246,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Added.verified.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.Added.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Added.verified.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Added.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -255,7 +255,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Deleted -->
-<a id='deleted'></a>
+<a id='snippet-deleted'></a>
 ```cs
 [Test]
 public async Task Deleted()
@@ -271,13 +271,13 @@ public async Task Deleted()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L31-L47' title='Snippet source file'>snippet source</a> | <a href='#deleted' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L31-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-deleted' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Deleted.verified.txt -->
-<a id='CoreTests.Deleted.verified.txt'></a>
+<a id='snippet-CoreTests.Deleted.verified.txt'></a>
 ```txt
 {
   Deleted: {
@@ -287,7 +287,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Deleted.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.Deleted.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Deleted.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Deleted.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -296,7 +296,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Modified -->
-<a id='modified'></a>
+<a id='snippet-modified'></a>
 ```cs
 [Test]
 public async Task Modified()
@@ -315,13 +315,13 @@ public async Task Modified()
     await Verifier.Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L49-L68' title='Snippet source file'>snippet source</a> | <a href='#modified' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L49-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-modified' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
 
 <!-- snippet: CoreTests.Modified.verified.txt -->
-<a id='CoreTests.Modified.verified.txt'></a>
+<a id='snippet-CoreTests.Modified.verified.txt'></a>
 ```txt
 {
   Modified: {
@@ -335,7 +335,7 @@ Will result in the following verified file:
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Modified.verified.txt#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.Modified.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Modified.verified.txt#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Modified.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -344,7 +344,7 @@ Will result in the following verified file:
 This test:
 
 <!-- snippet: Queryable -->
-<a id='queryable'></a>
+<a id='snippet-queryable'></a>
 ```cs
 [Test]
 public async Task Queryable()
@@ -356,7 +356,7 @@ public async Task Queryable()
     await Verifier.Verify(queryable);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L129-L141' title='Snippet source file'>snippet source</a> | <a href='#queryable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L129-L141' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -365,20 +365,20 @@ Will result in the following verified file:
 ### EF Core
 
 <!-- snippet: CoreTests.Queryable.verified.txt -->
-<a id='CoreTests.Queryable.verified.txt'></a>
+<a id='snippet-CoreTests.Queryable.verified.txt'></a>
 ```txt
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'value'
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.txt#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#CoreTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.txt#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
 ### EF Classic
 
 <!-- snippet: ClassicTests.Queryable.verified.txt -->
-<a id='ClassicTests.Queryable.verified.txt'></a>
+<a id='snippet-ClassicTests.Queryable.verified.txt'></a>
 ```txt
 SELECT 
     [Extent1].[Id] AS [Id], 
@@ -386,7 +386,7 @@ SELECT
     FROM [dbo].[Companies] AS [Extent1]
     WHERE N'value' = [Extent1].[Content]
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.Queryable.verified.txt#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#ClassicTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.Queryable.verified.txt#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-ClassicTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
