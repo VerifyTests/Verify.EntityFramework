@@ -6,10 +6,10 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.6.0" PrivateAssets="all" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.6.1" PrivateAssets="all" />
     <PackageReference Include="NUnit" Version="3.13.0-dev-06881" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.6.0" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.6.1" />
     <PackageReference Include="Verify.NUnit" Version="6.25.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.1.20451.13" />
     <PackageReference Include="EfLocalDb" Version="9.0.0-beta.2" />
