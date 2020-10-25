@@ -408,54 +408,51 @@ Will result in the following verified file with all data in the database:
 <!-- snippet: CoreTests.AllData.verified.txt -->
 <a id='snippet-CoreTests.AllData.verified.txt'></a>
 ```txt
-{
-  $id: '1',
-  $values: [
-    {
-      $id: '2',
-      Id: 1,
-      Content: 'Company1'
-    },
-    {
-      $id: '3',
-      Id: 4,
-      Content: 'Company2'
-    },
-    {
-      $id: '4',
-      Id: 6,
-      Content: 'Company3'
-    },
-    {
-      $id: '5',
-      Id: 7,
-      Content: 'Company4'
-    },
-    {
-      $id: '6',
-      Id: 2,
-      CompanyId: 1,
-      Content: 'Employee1',
-      Age: 25
-    },
-    {
-      $id: '7',
-      Id: 3,
-      CompanyId: 1,
-      Content: 'Employee2',
-      Age: 31
-    },
-    {
-      $id: '8',
-      Id: 5,
-      CompanyId: 4,
-      Content: 'Employee4',
-      Age: 34
-    }
-  ]
-}
+[
+  {
+    $type: 'Company',
+    Id: 1,
+    Content: 'Company1'
+  },
+  {
+    $type: 'Company',
+    Id: 4,
+    Content: 'Company2'
+  },
+  {
+    $type: 'Company',
+    Id: 6,
+    Content: 'Company3'
+  },
+  {
+    $type: 'Company',
+    Id: 7,
+    Content: 'Company4'
+  },
+  {
+    $type: 'Employee',
+    Id: 2,
+    CompanyId: 1,
+    Content: 'Employee1',
+    Age: 25
+  },
+  {
+    $type: 'Employee',
+    Id: 3,
+    CompanyId: 1,
+    Content: 'Employee2',
+    Age: 31
+  },
+  {
+    $type: 'Employee',
+    Id: 5,
+    CompanyId: 4,
+    Content: 'Employee4',
+    Age: 34
+  }
+]
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.AllData.verified.txt#L1-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.AllData.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.AllData.verified.txt#L1-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.AllData.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
