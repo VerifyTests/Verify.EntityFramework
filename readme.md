@@ -388,6 +388,8 @@ SELECT
 
 ## AllData
 
+`PreserveReferencesHandling.All` is required to prevent duplication of nodes in navigation properties.
+
 This test:
 
 <!-- snippet: AllData -->
