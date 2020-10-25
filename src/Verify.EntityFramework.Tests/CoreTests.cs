@@ -132,11 +132,18 @@ public class CoreTests
     {
         var database = await DbContextBuilder.GetDatabase("AllData");
         var data = database.Context;
+
+        #region AllData
+
         var settings = new VerifySettings();
-        settings.ModifySerialization(serialization =>
-            serialization.AddExtraSettings(serializer =>
-                serializer.PreserveReferencesHandling = PreserveReferencesHandling.All));
+        settings.ModifySerialization(
+            serialization =>
+                serialization.AddExtraSettings(
+                    serializer =>
+                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.All));
         await Verifier.Verify(data.AllData(), settings);
+
+        #endregion
     }
 
 
