@@ -1,11 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 static class Extensions
 {
+    static MethodInfo setMethod;
+
+    static Extensions()
+    {
+        setMethod = typeof(DbContext)
+            .GetMethod("Set", Array.Empty<Type>())!;
+    }
+
+    public static IQueryable<object> Set(this DbContext data, Type t)
+    {
+        return (IQueryable<object>) setMethod.MakeGenericMethod(t)
+            .Invoke(data, null)!;
+    }
+
+    public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data)
+    {
+        return data.Model
+            .GetEntityTypes()
+            .OrderBy(x => x.Name);
+    }
+
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry)
     {
         return entry.Properties

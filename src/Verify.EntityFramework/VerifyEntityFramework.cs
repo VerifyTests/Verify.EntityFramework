@@ -1,10 +1,25 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace VerifyTests
 {
     public static class VerifyEntityFramework
     {
+        public static async IAsyncEnumerable<object> AllData(this DbContext data)
+        {
+            Guard.AgainstNull(data, nameof(data));
+            foreach (var entityType in data.EntityTypes())
+            {
+                var queryable = data.Set(entityType.ClrType);
+                foreach (var entity in await queryable.ToListAsync())
+                {
+                    yield return entity;
+                }
+            }
+        }
+
         public static void Enable()
         {
             VerifierSettings.RegisterJsonAppender(_ =>

@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
@@ -126,19 +127,34 @@ public class CoreTests
         await Verifier.Verify(data.ChangeTracker);
     }
 
-    #region Queryable
+    [Test]
+    public async Task AllData()
+    {
+        var database = await DbContextBuilder.GetDatabase("AllData");
+        var data = database.Context;
+        var settings = new VerifySettings();
+        settings.ModifySerialization(serialization =>
+            serialization.AddExtraSettings(serializer =>
+                serializer.PreserveReferencesHandling = PreserveReferencesHandling.All));
+        await Verifier.Verify(data.AllData(), settings);
+    }
+
 
     [Test]
     public async Task Queryable()
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
         var data = database.Context;
+
+        #region Queryable
+
         var queryable = data.Companies
             .Where(x => x.Content == "value");
         await Verifier.Verify(queryable);
+
+        #endregion
     }
 
-    #endregion
 
     [Test]
     public async Task NestedQueryable()
@@ -225,13 +241,15 @@ public class CoreTests
         #endregion
     }
 
-    #region Recording
 
     [Test]
     public async Task Recording()
     {
         var database = await DbContextBuilder.GetDatabase("Recording");
         var data = database.Context;
+
+        #region Recording
+
         var company = new Company
         {
             Content = "Title"
@@ -246,9 +264,10 @@ public class CoreTests
             .ToListAsync();
 
         await Verifier.Verify(data.Companies.Count());
+
+        #endregion
     }
 
-    #endregion
 
     static DbContextOptions<SampleDbContext> DbContextOptions(
         [CallerMemberName] string databaseName = "")
