@@ -7,7 +7,7 @@ namespace VerifyTests
     {
         public static void Enable()
         {
-            VerifierSettings.RegisterJsonAppender(settings =>
+            VerifierSettings.RegisterJsonAppender(_ =>
             {
                 var entries = LogCommandInterceptor.Stop();
                 if (entries == null)
@@ -20,7 +20,7 @@ namespace VerifyTests
 
             VerifierSettings.RegisterFileConverter(
                 QueryableToSql,
-                (target, settings) => QueryableConverter.IsQueryable(target));
+                (target, _) => QueryableConverter.IsQueryable(target));
 
             VerifierSettings.ModifySerialization(settings =>
             {
