@@ -10,9 +10,12 @@ namespace VerifyTests
         public static async IAsyncEnumerable<object> AllData(this DbContext data)
         {
             Guard.AgainstNull(data, nameof(data));
+
             foreach (var entityType in data.EntityTypes())
             {
-                var queryable = data.Set(entityType.ClrType);
+                var clrType = entityType.ClrType;
+                var set = data.Set(clrType);
+                var queryable = set.AsNoTracking(clrType);
                 foreach (var entity in await queryable.ToListAsync())
                 {
                     yield return entity;

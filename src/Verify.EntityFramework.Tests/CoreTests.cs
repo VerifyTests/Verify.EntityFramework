@@ -140,7 +140,7 @@ public class CoreTests
             serialization =>
                 serialization.AddExtraSettings(
                     serializer =>
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.All));
+                        serializer.TypeNameHandling = TypeNameHandling.Objects));
         await Verifier.Verify(data.AllData(), settings);
 
         #endregion

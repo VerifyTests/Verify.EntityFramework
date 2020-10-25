@@ -10,12 +10,15 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 static class Extensions
 {
-    static MethodInfo setMethod;
+    static MethodInfo setMethod= typeof(DbContext)
+        .GetMethod("Set", Array.Empty<Type>())!;
 
-    static Extensions()
+    static MethodInfo asNoTracking = typeof(EntityFrameworkQueryableExtensions).GetMethod("AsNoTracking")!;
+
+    public static IQueryable<object> AsNoTracking(this IQueryable<object> set, Type clrType)
     {
-        setMethod = typeof(DbContext)
-            .GetMethod("Set", Array.Empty<Type>())!;
+        var genericNoTracking = asNoTracking.MakeGenericMethod(clrType);
+        return (IQueryable<object>) genericNoTracking.Invoke(null, new object[] {set});
     }
 
     public static IQueryable<object> Set(this DbContext data, Type t)

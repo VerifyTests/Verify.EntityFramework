@@ -385,10 +385,7 @@ SELECT
 <!-- endSnippet -->
 
 
-
 ## AllData
-
-`PreserveReferencesHandling.All` is required to prevent duplication of nodes in navigation properties.
 
 This test:
 
@@ -400,7 +397,7 @@ settings.ModifySerialization(
     serialization =>
         serialization.AddExtraSettings(
             serializer =>
-                serializer.PreserveReferencesHandling = PreserveReferencesHandling.All));
+                serializer.TypeNameHandling = TypeNameHandling.Objects));
 await Verifier.Verify(data.AllData(), settings);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L136-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-alldata' title='Start of snippet'>anchor</a></sup>
@@ -417,76 +414,48 @@ Will result in the following verified file with all data in the database:
     {
       $id: '2',
       Id: 1,
-      Content: 'Company1',
-      Employees: {
-        $id: '3',
-        $values: [
-          {
-            $id: '4',
-            Id: 2,
-            CompanyId: 1,
-            Company: {
-              $ref: '2'
-            },
-            Content: 'Employee1',
-            Age: 25
-          },
-          {
-            $id: '5',
-            Id: 3,
-            CompanyId: 1,
-            Company: {
-              $ref: '2'
-            },
-            Content: 'Employee2',
-            Age: 31
-          }
-        ]
-      }
+      Content: 'Company1'
     },
     {
-      $id: '6',
+      $id: '3',
       Id: 4,
-      Content: 'Company2',
-      Employees: {
-        $id: '7',
-        $values: [
-          {
-            $id: '8',
-            Id: 5,
-            CompanyId: 4,
-            Company: {
-              $ref: '6'
-            },
-            Content: 'Employee4',
-            Age: 34
-          }
-        ]
-      }
+      Content: 'Company2'
     },
     {
-      $id: '9',
+      $id: '4',
       Id: 6,
       Content: 'Company3'
     },
     {
-      $id: '10',
+      $id: '5',
       Id: 7,
       Content: 'Company4'
     },
     {
-      $ref: '4'
+      $id: '6',
+      Id: 2,
+      CompanyId: 1,
+      Content: 'Employee1',
+      Age: 25
     },
     {
-      $ref: '5'
+      $id: '7',
+      Id: 3,
+      CompanyId: 1,
+      Content: 'Employee2',
+      Age: 31
     },
     {
-      $ref: '8'
+      $id: '8',
+      Id: 5,
+      CompanyId: 4,
+      Content: 'Employee4',
+      Age: 34
     }
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.AllData.verified.txt#L1-L74' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.AllData.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.AllData.verified.txt#L1-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.AllData.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
