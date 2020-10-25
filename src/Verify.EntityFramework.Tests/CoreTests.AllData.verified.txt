@@ -1,0 +1,74 @@
+{
+  $id: '1',
+  $values: [
+    {
+      $id: '2',
+      Id: 1,
+      Content: 'Company1',
+      Employees: {
+        $id: '3',
+        $values: [
+          {
+            $id: '4',
+            Id: 2,
+            CompanyId: 1,
+            Company: {
+              $ref: '2'
+            },
+            Content: 'Employee1',
+            Age: 25
+          },
+          {
+            $id: '5',
+            Id: 3,
+            CompanyId: 1,
+            Company: {
+              $ref: '2'
+            },
+            Content: 'Employee2',
+            Age: 31
+          }
+        ]
+      }
+    },
+    {
+      $id: '6',
+      Id: 4,
+      Content: 'Company2',
+      Employees: {
+        $id: '7',
+        $values: [
+          {
+            $id: '8',
+            Id: 5,
+            CompanyId: 4,
+            Company: {
+              $ref: '6'
+            },
+            Content: 'Employee4',
+            Age: 34
+          }
+        ]
+      }
+    },
+    {
+      $id: '9',
+      Id: 6,
+      Content: 'Company3'
+    },
+    {
+      $id: '10',
+      Id: 7,
+      Content: 'Company4'
+    },
+    {
+      $ref: '4'
+    },
+    {
+      $ref: '5'
+    },
+    {
+      $ref: '8'
+    }
+  ]
+}
