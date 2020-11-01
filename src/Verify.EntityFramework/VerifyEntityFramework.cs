@@ -51,7 +51,7 @@ namespace VerifyTests
             });
         }
 
-        static ConversionResult QueryableToSql(object arg, VerifySettings settings)
+        static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
         {
             var sql = QueryableConverter.QueryToSql(arg);
             return new ConversionResult(

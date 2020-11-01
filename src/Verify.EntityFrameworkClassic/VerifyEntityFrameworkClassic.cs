@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace VerifyTests
@@ -21,7 +22,7 @@ namespace VerifyTests
             });
         }
 
-        static ConversionResult QueryableToSql(object arg, VerifySettings settings)
+        static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
         {
             var sql = QueryableConverter.QueryToSql(arg);
             return new ConversionResult(null, "txt", StringToMemoryStream(sql));
