@@ -10,7 +10,7 @@ namespace VerifyTests
         {
             VerifierSettings.RegisterFileConverter(
                 QueryableToSql,
-                (target, _) => QueryableConverter.IsQueryable(target));
+                (target, _, _) => QueryableConverter.IsQueryable(target));
             VerifierSettings.ModifySerialization(settings =>
             {
                 settings.AddExtraSettings(serializer =>
