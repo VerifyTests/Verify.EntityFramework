@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -7,7 +8,11 @@ using VerifyTests;
 class QueryableConverter :
     WriteOnlyJsonConverter
 {
-    public override void WriteJson(JsonWriter writer, object? data, JsonSerializer serializer)
+    public override void WriteJson(
+        JsonWriter writer,
+        object? data,
+        JsonSerializer serializer,
+        IReadOnlyDictionary<string, object> context)
     {
         if (data == null)
         {

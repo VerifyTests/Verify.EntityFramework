@@ -3,8 +3,8 @@
     Employee: {
       Id: 0,
       Content: {
-        Original: 'before',
-        Current: 'after'
+        Original: before,
+        Current: after
       }
     }
   }

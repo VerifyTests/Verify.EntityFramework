@@ -8,7 +8,11 @@ using VerifyTests;
 class TrackerConverter :
     WriteOnlyJsonConverter<ChangeTracker>
 {
-    public override void WriteJson(JsonWriter writer, ChangeTracker? tracker, JsonSerializer serializer)
+    public override void WriteJson(
+        JsonWriter writer,
+        ChangeTracker? tracker,
+        JsonSerializer serializer,
+        IReadOnlyDictionary<string, object> context)
     {
         if (tracker == null)
         {

@@ -1,43 +1,43 @@
 [
   {
-    $type: 'Company',
+    $type: Company,
     Id: 1,
-    Content: 'Company1'
+    Content: Company1
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 4,
-    Content: 'Company2'
+    Content: Company2
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 6,
-    Content: 'Company3'
+    Content: Company3
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 7,
-    Content: 'Company4'
+    Content: Company4
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 2,
     CompanyId: 1,
-    Content: 'Employee1',
+    Content: Employee1,
     Age: 25
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 3,
     CompanyId: 1,
-    Content: 'Employee2',
+    Content: Employee2,
     Age: 31
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 5,
     CompanyId: 4,
-    Content: 'Employee4',
+    Content: Employee4,
     Age: 34
   }
 ]

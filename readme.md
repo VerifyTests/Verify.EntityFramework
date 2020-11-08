@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L291-L295' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L289-L293' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -61,7 +61,7 @@ VerifyEntityFramework.Enable();
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L139-L143' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L137-L141' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -119,23 +119,25 @@ Will result in the following verified file:
 <a id='snippet-CoreTests.Recording.verified.txt'></a>
 ```txt
 {
-  target: '5',
+  target: 5,
   sql: [
     {
-      Type: 'ReaderExecutedAsync',
-      Text: "SELECT [c].[Id], [c].[Content]
+      Type: ReaderExecutedAsync,
+      Text: 
+SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'"
+WHERE [c].[Content] = N'Title'
     },
     {
-      Type: 'ReaderExecuted',
-      Text: 'SELECT COUNT(*)
-FROM [Companies] AS [c]'
+      Type: ReaderExecuted,
+      Text: 
+SELECT COUNT(*)
+FROM [Companies] AS [c]
     }
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -173,34 +175,37 @@ await Verifier.Verify(data2.Companies.Count());
 <a id='snippet-CoreTests.MultiDbContexts.verified.txt'></a>
 ```txt
 {
-  target: '5',
+  target: 5,
   sql: [
     {
-      Type: 'ReaderExecutedAsync',
+      Type: ReaderExecutedAsync,
       HasTransaction: true,
       Parameters: {
         @p0: 0,
-        @p1: 'Title'
+        @p1: Title
       },
-      Text: 'SET NOCOUNT ON;
+      Text: 
+SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
-VALUES (@p0, @p1);'
+VALUES (@p0, @p1);
     },
     {
-      Type: 'ReaderExecutedAsync',
-      Text: "SELECT [c].[Id], [c].[Content]
+      Type: ReaderExecutedAsync,
+      Text: 
+SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'"
+WHERE [c].[Content] = N'Title'
     },
     {
-      Type: 'ReaderExecuted',
-      Text: 'SELECT COUNT(*)
-FROM [Companies] AS [c]'
+      Type: ReaderExecuted,
+      Text: 
+SELECT COUNT(*)
+FROM [Companies] AS [c]
     }
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -242,7 +247,7 @@ Will result in the following verified file:
   Added: {
     Company: {
       Id: 0,
-      Content: 'before'
+      Content: before
     }
   }
 }
@@ -329,8 +334,8 @@ Will result in the following verified file:
     Company: {
       Id: 0,
       Content: {
-        Original: 'before',
-        Current: 'after'
+        Original: before,
+        Current: after
       }
     }
   }
@@ -410,44 +415,44 @@ Will result in the following verified file with all data in the database:
 ```txt
 [
   {
-    $type: 'Company',
+    $type: Company,
     Id: 1,
-    Content: 'Company1'
+    Content: Company1
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 4,
-    Content: 'Company2'
+    Content: Company2
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 6,
-    Content: 'Company3'
+    Content: Company3
   },
   {
-    $type: 'Company',
+    $type: Company,
     Id: 7,
-    Content: 'Company4'
+    Content: Company4
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 2,
     CompanyId: 1,
-    Content: 'Employee1',
+    Content: Employee1,
     Age: 25
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 3,
     CompanyId: 1,
-    Content: 'Employee2',
+    Content: Employee2,
     Age: 31
   },
   {
-    $type: 'Employee',
+    $type: Employee,
     Id: 5,
     CompanyId: 4,
-    Content: 'Employee4',
+    Content: Employee4,
     Age: 34
   }
 ]

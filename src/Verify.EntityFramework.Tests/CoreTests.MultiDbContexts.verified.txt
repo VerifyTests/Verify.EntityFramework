@@ -1,27 +1,30 @@
 {
-  target: '5',
+  target: 5,
   sql: [
     {
-      Type: 'ReaderExecutedAsync',
+      Type: ReaderExecutedAsync,
       HasTransaction: true,
       Parameters: {
         @p0: 0,
-        @p1: 'Title'
+        @p1: Title
       },
-      Text: 'SET NOCOUNT ON;
+      Text: 
+SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
-VALUES (@p0, @p1);'
+VALUES (@p0, @p1);
     },
     {
-      Type: 'ReaderExecutedAsync',
-      Text: "SELECT [c].[Id], [c].[Content]
+      Type: ReaderExecutedAsync,
+      Text: 
+SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'"
+WHERE [c].[Content] = N'Title'
     },
     {
-      Type: 'ReaderExecuted',
-      Text: 'SELECT COUNT(*)
-FROM [Companies] AS [c]'
+      Type: ReaderExecuted,
+      Text: 
+SELECT COUNT(*)
+FROM [Companies] AS [c]
     }
   ]
 }

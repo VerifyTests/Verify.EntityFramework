@@ -286,8 +286,6 @@ public class CoreTests
 
     static CoreTests()
     {
-        VerifierSettings.DisableNewLineEscaping();
-
         #region EnableCore
 
         VerifyEntityFramework.Enable();

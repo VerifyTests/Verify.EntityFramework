@@ -15,8 +15,8 @@ class TrackerConverter :
     static TrackerConverter()
     {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-        FieldInfo internalContextField = typeof(DbChangeTracker).GetField("_internalContext", flags)!;
-        FieldInfo ownerField = internalContextField.FieldType.GetField("_owner", flags)!;
+        var internalContextField = typeof(DbChangeTracker).GetField("_internalContext", flags)!;
+        var ownerField = internalContextField.FieldType.GetField("_owner", flags)!;
 
         func = tracker =>
         {
@@ -25,7 +25,11 @@ class TrackerConverter :
         };
     }
 
-    public override void WriteJson(JsonWriter writer, DbChangeTracker? tracker, JsonSerializer serializer)
+    public override void WriteJson(
+        JsonWriter writer,
+        DbChangeTracker? tracker,
+        JsonSerializer serializer,
+        IReadOnlyDictionary<string, object> context)
     {
         if (tracker == null)
         {
@@ -35,9 +39,9 @@ class TrackerConverter :
         writer.WriteStartObject();
         var entries = tracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
-        var context = func(tracker);
-        HandleModified(entries, writer, serializer, context);
-        HandleDeleted(entries, writer, serializer, context);
+        var data = func(tracker);
+        HandleModified(entries, writer, serializer, data);
+        HandleDeleted(entries, writer, serializer, data);
 
         writer.WriteEndObject();
     }

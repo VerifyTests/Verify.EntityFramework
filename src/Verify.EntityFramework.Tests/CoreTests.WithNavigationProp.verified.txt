@@ -3,15 +3,15 @@
     Company: {
       Id: 0,
       Content: {
-        Original: 'companyBefore',
-        Current: 'companyAfter'
+        Original: companyBefore,
+        Current: companyAfter
       }
     },
     Employee: {
       Id: 0,
       Content: {
-        Original: 'employeeBefore',
-        Current: 'employeeAfter'
+        Original: employeeBefore,
+        Current: employeeAfter
       }
     }
   }
