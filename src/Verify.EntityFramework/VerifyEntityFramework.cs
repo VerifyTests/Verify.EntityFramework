@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ namespace VerifyTests
         {
             Guard.AgainstNull(data, nameof(data));
 
-            foreach (var entityType in data.EntityTypes())
+            foreach (var entityType in data.EntityTypes().Where(p => !p.IsOwned()))
             {
                 var clrType = entityType.ClrType;
                 var set = data.Set(clrType);
