@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 static class Extensions
 {
-    static MethodInfo setMethod= typeof(DbContext)
+    static MethodInfo setMethod = typeof(DbContext)
         .GetMethod("Set", Array.Empty<Type>())!;
 
     static MethodInfo asNoTracking = typeof(EntityFrameworkQueryableExtensions).GetMethod("AsNoTracking")!;
