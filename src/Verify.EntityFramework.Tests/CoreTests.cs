@@ -276,7 +276,7 @@ public class CoreTests
     [Test]
     public async Task RecordingSpecific()
     {
-        var database = await DbContextBuilder.GetDatabase("Recording");
+        var database = await DbContextBuilder.GetDatabase("RecordingSpecific");
         var data = database.Context;
 
         #region RecordingSpecific
