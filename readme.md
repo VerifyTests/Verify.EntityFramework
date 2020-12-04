@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L288-L292' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L319-L323' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -110,7 +110,7 @@ await data.Companies
 
 await Verifier.Verify(data.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L257-L274' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L256-L273' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -138,6 +138,36 @@ FROM [Companies] AS [c]
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+Sql entries can be explicitly read using `SqlRecording.FinishRecording`, optionally filtered, and passed to Verify:
+
+<!-- snippet: RecordingSpecific -->
+<a id='snippet-recordingspecific'></a>
+```cs
+Company company = new()
+{
+    Content = "Title"
+};
+data.Add(company);
+await data.SaveChangesAsync();
+
+SqlRecording.StartRecording();
+
+await data.Companies
+    .Where(x => x.Content == "Title")
+    .ToListAsync();
+
+var entries = SqlRecording.FinishRecording();
+//TODO: optionally filter the results
+await Verifier.Verify(new
+{
+    target = data.Companies.Count(),
+    sql = entries
+});
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L282-L305' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

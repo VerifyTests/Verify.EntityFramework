@@ -247,7 +247,6 @@ public class CoreTests
         #endregion
     }
 
-
     [Test]
     public async Task Recording()
     {
@@ -270,6 +269,38 @@ public class CoreTests
             .ToListAsync();
 
         await Verifier.Verify(data.Companies.Count());
+
+        #endregion
+    }
+
+    [Test]
+    public async Task RecordingSpecific()
+    {
+        var database = await DbContextBuilder.GetDatabase("Recording");
+        var data = database.Context;
+
+        #region RecordingSpecific
+
+        Company company = new()
+        {
+            Content = "Title"
+        };
+        data.Add(company);
+        await data.SaveChangesAsync();
+
+        SqlRecording.StartRecording();
+
+        await data.Companies
+            .Where(x => x.Content == "Title")
+            .ToListAsync();
+
+        var entries = SqlRecording.FinishRecording();
+        //TODO: optionally filter the results
+        await Verifier.Verify(new
+        {
+            target = data.Companies.Count(),
+            sql = entries
+        });
 
         #endregion
     }
