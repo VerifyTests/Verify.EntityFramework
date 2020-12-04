@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace VerifyTests.EntityFramework
@@ -24,7 +23,7 @@ namespace VerifyTests.EntityFramework
             {
                 return entries;
             }
-            throw new Exception("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
+            throw new("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
         }
     }
 }

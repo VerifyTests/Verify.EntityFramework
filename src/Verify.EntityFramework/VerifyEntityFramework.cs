@@ -34,7 +34,7 @@ namespace VerifyTests
                     return null;
                 }
 
-                return new ToAppend("sql", entries);
+                return new("sql", entries);
             });
 
             VerifierSettings.RegisterFileConverter(
@@ -55,7 +55,7 @@ namespace VerifyTests
         static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
         {
             var sql = QueryableConverter.QueryToSql(arg);
-            return new ConversionResult(
+            return new(
                 null,
                 new[]
                 {
@@ -66,7 +66,7 @@ namespace VerifyTests
         static MemoryStream StringToMemoryStream(string text)
         {
             var bytes = Encoding.UTF8.GetBytes(text.Replace("\r\n", "\n"));
-            return new MemoryStream(bytes);
+            return new(bytes);
         }
     }
 }

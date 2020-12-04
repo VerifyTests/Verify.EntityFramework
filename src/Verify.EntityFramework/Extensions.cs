@@ -73,7 +73,7 @@ static class Extensions
 
     public static Dictionary<string, object> ToDictionary(this DbParameterCollection collection)
     {
-        var dictionary = new Dictionary<string, object>();
+        Dictionary<string, object> dictionary = new();
         foreach (DbParameter parameter in collection)
         {
             var direction = parameter.Direction;

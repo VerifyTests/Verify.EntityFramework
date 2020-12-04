@@ -7,9 +7,9 @@ public static class DbContextBuilder
 {
     static DbContextBuilder()
     {
-        sqlInstance = new SqlInstance<SampleDbContext>(
+        sqlInstance = new(
             buildTemplate: CreateDb,
-            constructInstance: connection => new SampleDbContext(connection),
+            constructInstance: connection => new(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Classic"));
     }
 
@@ -19,43 +19,43 @@ public static class DbContextBuilder
     {
         await data.CreateOnExistingDb();
 
-        var company1 = new Company
+        Company company1 = new()
         {
             Id = 1,
             Content = "Company1"
         };
-        var employee1 = new Employee
+        Employee employee1 = new()
         {
             Id = 2,
             CompanyId = company1.Id,
             Content = "Employee1",
             Age = 25
         };
-        var employee2 = new Employee
+        Employee employee2 = new()
         {
             Id = 3,
             CompanyId = company1.Id,
             Content = "Employee2",
             Age = 31
         };
-        var company2 = new Company
+        Company company2 = new()
         {
             Id = 4,
             Content = "Company2"
         };
-        var employee4 = new Employee
+        Employee employee4 = new()
         {
             Id = 5,
             CompanyId = company2.Id,
             Content = "Employee4",
             Age = 34
         };
-        var company3 = new Company
+        Company company3 = new()
         {
             Id = 6,
             Content = "Company3"
         };
-        var company4 = new Company
+        Company company4 = new()
         {
             Id = 7,
             Content = "Company4"

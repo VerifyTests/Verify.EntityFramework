@@ -18,8 +18,8 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
-        var company = new Company
+        await using SampleDbContext data = new(options);
+        Company company = new()
         {
             Content = "before"
         };
@@ -36,7 +36,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
+        await using SampleDbContext data = new(options);
         data.Add(new Company {Content = "before"});
         await data.SaveChangesAsync();
 
@@ -54,8 +54,8 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
-        var company = new Company
+        await using SampleDbContext data = new(options);
+        Company company = new()
         {
             Content = "before"
         };
@@ -73,13 +73,13 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
-        var company = new Company
+        await using SampleDbContext data = new(options);
+        Company company = new()
         {
             Content = "companyBefore"
         };
         data.Add(company);
-        var employee = new Employee
+        Employee employee = new()
         {
             Content = "employeeBefore",
             Company = company
@@ -97,8 +97,8 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
-        var employee = new Employee
+        await using SampleDbContext data = new(options);
+        Employee employee = new()
         {
             Content = "before",
             Age = 10
@@ -115,10 +115,10 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using var data = new SampleDbContext(options);
+        await using SampleDbContext data = new(options);
         data.Add(new Employee
         {
-            Content = "before",
+            Content = "before"
         });
         await data.SaveChangesAsync();
 
@@ -135,13 +135,12 @@ public class CoreTests
 
         #region AllData
 
-        var settings = new VerifySettings();
-        settings.ModifySerialization(
-            serialization =>
-                serialization.AddExtraSettings(
-                    serializer =>
-                        serializer.TypeNameHandling = TypeNameHandling.Objects));
-        await Verifier.Verify(data.AllData(), settings);
+        await Verifier.Verify(data.AllData())
+            .ModifySerialization(
+                serialization =>
+                    serialization.AddExtraSettings(
+                        serializer =>
+                            serializer.TypeNameHandling = TypeNameHandling.Objects));
 
         #endregion
     }
@@ -170,17 +169,17 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verifier.Verify(new {queryable});
+        await Verifier.Verify(new{queryable});
     }
 
     void Build(string connection)
     {
         #region EnableRecording
 
-        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        DbContextOptionsBuilder<SampleDbContext> builder = new();
         builder.UseSqlServer(connection);
         builder.EnableRecording();
-        var data = new SampleDbContext(builder.Options);
+        SampleDbContext data = new(builder.Options);
 
         #endregion
     }
@@ -191,7 +190,7 @@ public class CoreTests
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
         var data = database.Context;
         SqlRecording.StartRecording();
-        var company = new Company
+        Company company = new()
         {
             Content = "Title"
         };
@@ -205,7 +204,7 @@ public class CoreTests
                 .Where(x => x.Content == s)
                 .ToListAsync();
         }
-        var company2 = new Company
+        Company company2 = new()
         {
             Id = 2,
             Content = "Title2"
@@ -225,20 +224,20 @@ public class CoreTests
 
         #region MultiDbContexts
 
-        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        DbContextOptionsBuilder<SampleDbContext> builder = new();
         builder.UseSqlServer(connectionString);
         builder.EnableRecording();
 
-        await using var data1 = new SampleDbContext(builder.Options);
+        await using SampleDbContext data1 = new(builder.Options);
         SqlRecording.StartRecording();
-        var company = new Company
+        Company company = new()
         {
             Content = "Title"
         };
         data1.Add(company);
         await data1.SaveChangesAsync();
 
-        await using var data2 = new SampleDbContext(builder.Options);
+        await using SampleDbContext data2 = new(builder.Options);
         await data2.Companies
             .Where(x => x.Content == "Title")
             .ToListAsync();
@@ -257,7 +256,7 @@ public class CoreTests
 
         #region Recording
 
-        var company = new Company
+        Company company = new()
         {
             Content = "Title"
         };

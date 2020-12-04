@@ -50,7 +50,7 @@ Enable VerifyEntityFramewok once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L289-L293' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L288-L292' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -77,12 +77,12 @@ Call `SqlRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 <!-- snippet: EnableRecording -->
 <a id='snippet-enablerecording'></a>
 ```cs
-var builder = new DbContextOptionsBuilder<SampleDbContext>();
+DbContextOptionsBuilder<SampleDbContext> builder = new();
 builder.UseSqlServer(connection);
 builder.EnableRecording();
-var data = new SampleDbContext(builder.Options);
+SampleDbContext data = new(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L178-L185' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L177-L184' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `EnableRecording` should only be called in the test context.
@@ -90,12 +90,12 @@ var data = new SampleDbContext(builder.Options);
 
 ### Usage
 
-On the `DbContext` call `SqlRecording.StartRecording()` to start recording.
+To start recording call `SqlRecording.StartRecording()`. The results will be automatically included in verified file.
 
 <!-- snippet: Recording -->
 <a id='snippet-recording'></a>
 ```cs
-var company = new Company
+Company company = new()
 {
     Content = "Title"
 };
@@ -110,7 +110,7 @@ await data.Companies
 
 await Verifier.Verify(data.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L258-L275' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L257-L274' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -148,27 +148,27 @@ FROM [Companies] AS [c]
 <!-- snippet: MultiDbContexts -->
 <a id='snippet-multidbcontexts'></a>
 ```cs
-var builder = new DbContextOptionsBuilder<SampleDbContext>();
+DbContextOptionsBuilder<SampleDbContext> builder = new();
 builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
-await using var data1 = new SampleDbContext(builder.Options);
+await using SampleDbContext data1 = new(builder.Options);
 SqlRecording.StartRecording();
-var company = new Company
+Company company = new()
 {
     Content = "Title"
 };
 data1.Add(company);
 await data1.SaveChangesAsync();
 
-await using var data2 = new SampleDbContext(builder.Options);
+await using SampleDbContext data2 = new(builder.Options);
 await data2.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
 
 await Verifier.Verify(data2.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L226-L248' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L225-L247' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
@@ -226,8 +226,8 @@ public async Task Added()
 {
     var options = DbContextOptions();
 
-    await using var data = new SampleDbContext(options);
-    var company = new Company
+    await using SampleDbContext data = new(options);
+    Company company = new()
     {
         Content = "before"
     };
@@ -268,7 +268,7 @@ public async Task Deleted()
 {
     var options = DbContextOptions();
 
-    await using var data = new SampleDbContext(options);
+    await using SampleDbContext data = new(options);
     data.Add(new Company {Content = "before"});
     await data.SaveChangesAsync();
 
@@ -309,8 +309,8 @@ public async Task Modified()
 {
     var options = DbContextOptions();
 
-    await using var data = new SampleDbContext(options);
-    var company = new Company
+    await using SampleDbContext data = new(options);
+    Company company = new()
     {
         Content = "before"
     };
@@ -356,7 +356,7 @@ var queryable = data.Companies
     .Where(x => x.Content == "value");
 await Verifier.Verify(queryable);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L156-L162' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L155-L161' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -397,15 +397,14 @@ This test:
 <!-- snippet: AllData -->
 <a id='snippet-alldata'></a>
 ```cs
-var settings = new VerifySettings();
-settings.ModifySerialization(
-    serialization =>
-        serialization.AddExtraSettings(
-            serializer =>
-                serializer.TypeNameHandling = TypeNameHandling.Objects));
-await Verifier.Verify(data.AllData(), settings);
+await Verifier.Verify(data.AllData())
+    .ModifySerialization(
+        serialization =>
+            serialization.AddExtraSettings(
+                serializer =>
+                    serializer.TypeNameHandling = TypeNameHandling.Objects));
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L136-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-alldata' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L136-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-alldata' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file with all data in the database:
