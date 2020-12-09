@@ -72,7 +72,7 @@ class LogCommandInterceptor :
         return new(result);
     }
 
-    void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
+    static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
         asyncLocal.Value?.WriteLine(new(type, command, data, exception));
     }
