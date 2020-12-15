@@ -9,7 +9,7 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="21.7.1" />
-    <PackageReference Include="Verify.NUnit" Version="8.12.1" />
+    <PackageReference Include="Verify.NUnit" Version="8.12.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="EfLocalDb" Version="9.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
