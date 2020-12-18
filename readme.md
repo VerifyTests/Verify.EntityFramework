@@ -211,8 +211,8 @@ await Verifier.Verify(data2.Companies.Count());
       Type: ReaderExecutedAsync,
       HasTransaction: true,
       Parameters: {
-        @p0: 0,
-        @p1: Title
+        @p0 (Int32): 0,
+        @p1 (String?): Title
       },
       Text: 
 SET NOCOUNT ON;

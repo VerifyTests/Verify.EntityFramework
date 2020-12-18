@@ -83,7 +83,13 @@ static class Extensions
                 continue;
             }
 
-            dictionary[parameter.ParameterName] = parameter.Value;
+            var nullChar = "";
+            if (parameter.IsNullable)
+            {
+                nullChar = "?";
+            }
+            var key = $"{parameter.ParameterName} ({parameter.DbType}{nullChar})";
+            dictionary[key] = parameter.Value;
         }
 
         return dictionary;
