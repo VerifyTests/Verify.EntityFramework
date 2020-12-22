@@ -4,7 +4,7 @@
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg)](https://www.nuget.org/packages/Verify.EntityFramework/)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFrameworkClassic.svg)](https://www.nuget.org/packages/Verify.EntityFrameworkClassic/)
 
-Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of EntityFramework bits.
+Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testing with EntityFramework.
 
 Support is available via a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-verify?utm_source=nuget-verify&utm_medium=referral&utm_campaign=enterprise).
 
