@@ -15,6 +15,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="ProjectDefaults" Version="1.0.52" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
   </ItemGroup>
 </Project>
