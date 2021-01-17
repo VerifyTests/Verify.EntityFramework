@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 
 namespace VerifyTests
@@ -55,18 +53,7 @@ namespace VerifyTests
         static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
         {
             var sql = QueryableConverter.QueryToSql(arg);
-            return new(
-                null,
-                new[]
-                {
-                    new ConversionStream("txt", StringToMemoryStream(sql)),
-                });
-        }
-
-        static MemoryStream StringToMemoryStream(string text)
-        {
-            var bytes = Encoding.UTF8.GetBytes(text.Replace("\r\n", "\n"));
-            return new(bytes);
+            return new(null, "txt", sql);
         }
     }
 }

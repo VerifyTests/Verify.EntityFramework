@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace VerifyTests
 {
@@ -25,13 +23,7 @@ namespace VerifyTests
         static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
         {
             var sql = QueryableConverter.QueryToSql(arg);
-            return new(null, "txt", StringToMemoryStream(sql));
-        }
-
-        static MemoryStream StringToMemoryStream(string text)
-        {
-            var bytes = Encoding.UTF8.GetBytes(text.Replace("\r\n", "\n"));
-            return new(bytes);
+            return new(null, "txt", sql);
         }
     }
 }

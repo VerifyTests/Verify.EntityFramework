@@ -15,12 +15,12 @@ static class QueryableSerializer<TEntity>
 
     static object Private(object obj, string privateField)
     {
-        return obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj);
+        return obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj);
     }
 
     static T Private<T>(object obj, string privateField)
     {
-        return (T) obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj);
+        return (T) obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj);
     }
 
     public static ObjectQuery<T1> GetObjectQuery<T1>(DbQuery<T1> query)
