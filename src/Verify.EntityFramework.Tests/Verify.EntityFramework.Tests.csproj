@@ -12,7 +12,7 @@
     <PackageReference Include="Verify.NUnit" Version="11.0.0-beta.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="EfLocalDb" Version="9.2.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
     <PackageReference Include="ProjectDefaults" Version="1.0.54" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.3" />
