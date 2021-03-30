@@ -68,6 +68,31 @@ public class CoreTests
 
     #endregion
 
+    #region IgnoreNavigationProperties
+
+    [Test]
+    public async Task IgnoreNavigationProperties()
+    {
+        var options = DbContextOptions();
+
+        await using SampleDbContext data = new(options);
+
+        Company company = new()
+        {
+            Content = "company"
+        };
+        Employee employee = new()
+        {
+            Content = "employee",
+            Company = company
+        };
+        await Verifier.Verify(employee)
+            .ModifySerialization(
+                x => x.IgnoreNavigationProperties(data));
+    }
+
+    #endregion
+
     [Test]
     public async Task WithNavigationProp()
     {
@@ -169,7 +194,7 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verifier.Verify(new{queryable});
+        await Verifier.Verify(new {queryable});
     }
 
     void Build(string connection)
@@ -204,6 +229,7 @@ public class CoreTests
                 .Where(x => x.Content == s)
                 .ToListAsync();
         }
+
         Company company2 = new()
         {
             Id = 2,

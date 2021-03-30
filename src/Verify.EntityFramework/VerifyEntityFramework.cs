@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace VerifyTests
 {
@@ -18,6 +20,22 @@ namespace VerifyTests
                 foreach (var entity in await queryable.ToListAsync())
                 {
                     yield return entity;
+                }
+            }
+        }
+
+        public static void IgnoreNavigationProperties(this SerializationSettings settings, IDbContextDependencies context)
+        {
+            IgnoreNavigationProperties(settings, context.Model);
+        }
+
+        public static void IgnoreNavigationProperties(this SerializationSettings settings, IModel model)
+        {
+            foreach (var type in model.GetEntityTypes())
+            {
+                foreach (var navigation in type.GetNavigations())
+                {
+                    settings.IgnoreMember(type.ClrType, navigation.Name);
                 }
             }
         }
