@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Verify
+    versions:
+    - 10.8.0
+    - 10.9.0
+  - dependency-name: Verify.NUnit
+    versions:
+    - 10.8.0
+  - dependency-name: Microsoft.EntityFrameworkCore.Relational
+    versions:
+    - 5.0.3
+  - dependency-name: Microsoft.EntityFrameworkCore.InMemory
+    versions:
+    - 5.0.3
