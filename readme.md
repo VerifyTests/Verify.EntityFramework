@@ -6,31 +6,8 @@
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testing with EntityFramework.
 
-Support is available via a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-verify?utm_source=nuget-verify&utm_medium=referral&utm_campaign=enterprise).
-
 <a href='https://dotnetfoundation.org' alt='Part of the .NET Foundation'><img src='https://raw.githubusercontent.com/VerifyTests/Verify/master/docs/dotNetFoundation.svg' height='30px'></a><br>
 Part of the <a href='https://dotnetfoundation.org' alt=''>.NET Foundation</a>
-
-<!-- toc -->
-## Contents
-
-  * [Enable](#enable)
-    * [EF Core](#ef-core)
-    * [EF Classic](#ef-classic)
-  * [Recording](#recording)
-    * [Enable](#enable-1)
-    * [Usage](#usage)
-    * [DbContext spanning](#dbcontext-spanning)
-  * [ChangeTracking](#changetracking)
-    * [Added entity](#added-entity)
-    * [Deleted entity](#deleted-entity)
-    * [Modified entity](#modified-entity)
-  * [Queryable](#queryable)
-    * [EF Core](#ef-core-1)
-    * [EF Classic](#ef-classic-1)
-  * [AllData](#alldata)
-  * [IgnoreNavigationProperties](#ignorenavigationproperties)
-  * [Security contact information](#security-contact-information)<!-- endToc -->
 
 
 ## NuGet package
@@ -522,10 +499,6 @@ public async Task IgnoreNavigationProperties()
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L71-L94' title='Snippet source file'>snippet source</a> | <a href='#snippet-ignorenavigationproperties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-
-## Security contact information
-
-To report a security vulnerability, use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
 
 
 ## Icon
