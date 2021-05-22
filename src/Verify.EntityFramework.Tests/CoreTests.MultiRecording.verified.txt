@@ -1,4 +1,4 @@
-[
+﻿[
   {
     Type: ReaderExecutedAsync,
     HasTransaction: true,
@@ -6,7 +6,7 @@
       @p0 (Int32): 0,
       @p1 (String?): Title
     },
-    Text: 
+    Text:
 SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
@@ -16,7 +16,7 @@ VALUES (@p0, @p1);
     Parameters: {
       @__s_0 (String?): 0
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -26,7 +26,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 1
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -36,7 +36,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 2
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -46,7 +46,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 3
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -56,7 +56,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 4
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -66,7 +66,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 5
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -76,7 +76,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 6
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -86,7 +86,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 7
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -96,7 +96,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 8
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -106,7 +106,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 9
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -116,7 +116,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 10
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -126,7 +126,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 11
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -136,7 +136,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 12
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -146,7 +146,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 13
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -156,7 +156,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 14
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -166,7 +166,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 15
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -176,7 +176,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 16
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -186,7 +186,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 17
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -196,7 +196,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 18
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -206,7 +206,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 19
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -216,7 +216,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 20
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -226,7 +226,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 21
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -236,7 +236,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 22
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -246,7 +246,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 23
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -256,7 +256,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 24
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -266,7 +266,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 25
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -276,7 +276,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 26
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -286,7 +286,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 27
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -296,7 +296,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 28
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -306,7 +306,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 29
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -316,7 +316,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 30
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -326,7 +326,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 31
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -336,7 +336,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 32
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -346,7 +346,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 33
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -356,7 +356,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 34
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -366,7 +366,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 35
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -376,7 +376,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 36
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -386,7 +386,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 37
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -396,7 +396,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 38
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -406,7 +406,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 39
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -416,7 +416,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 40
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -426,7 +426,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 41
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -436,7 +436,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 42
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -446,7 +446,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 43
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -456,7 +456,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 44
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -466,7 +466,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 45
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -476,7 +476,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 46
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -486,7 +486,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 47
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -496,7 +496,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 48
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -506,7 +506,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 49
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -516,7 +516,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 50
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -526,7 +526,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 51
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -536,7 +536,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 52
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -546,7 +546,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 53
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -556,7 +556,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 54
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -566,7 +566,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 55
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -576,7 +576,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 56
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -586,7 +586,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 57
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -596,7 +596,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 58
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -606,7 +606,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 59
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -616,7 +616,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 60
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -626,7 +626,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 61
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -636,7 +636,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 62
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -646,7 +646,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 63
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -656,7 +656,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 64
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -666,7 +666,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 65
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -676,7 +676,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 66
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -686,7 +686,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 67
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -696,7 +696,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 68
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -706,7 +706,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 69
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -716,7 +716,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 70
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -726,7 +726,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 71
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -736,7 +736,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 72
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -746,7 +746,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 73
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -756,7 +756,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 74
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -766,7 +766,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 75
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -776,7 +776,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 76
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -786,7 +786,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 77
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -796,7 +796,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 78
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -806,7 +806,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 79
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -816,7 +816,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 80
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -826,7 +826,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 81
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -836,7 +836,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 82
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -846,7 +846,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 83
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -856,7 +856,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 84
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -866,7 +866,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 85
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -876,7 +876,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 86
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -886,7 +886,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 87
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -896,7 +896,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 88
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -906,7 +906,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 89
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -916,7 +916,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 90
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -926,7 +926,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 91
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -936,7 +936,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 92
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -946,7 +946,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 93
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -956,7 +956,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 94
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -966,7 +966,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 95
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -976,7 +976,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 96
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -986,7 +986,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 97
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -996,7 +996,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 98
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -1006,7 +1006,7 @@ WHERE [c].[Content] = @__s_0
     Parameters: {
       @__s_0 (String?): 99
     },
-    Text: 
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
@@ -1018,7 +1018,7 @@ WHERE [c].[Content] = @__s_0
       @p0 (Int32): 2,
       @p1 (String?): Title2
     },
-    Text: 
+    Text:
 SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);

@@ -1,42 +1,42 @@
-[
+﻿[
   {
     $type: Company,
-    Id: 1,
+    Id: Id_1,
     Content: Company1
   },
   {
     $type: Company,
-    Id: 4,
+    Id: Id_2,
     Content: Company2
   },
   {
     $type: Company,
-    Id: 6,
+    Id: Id_3,
     Content: Company3
   },
   {
     $type: Company,
-    Id: 7,
+    Id: Id_4,
     Content: Company4
   },
   {
     $type: Employee,
-    Id: 2,
-    CompanyId: 1,
+    Id: Id_5,
+    CompanyId: Id_1,
     Content: Employee1,
     Age: 25
   },
   {
     $type: Employee,
-    Id: 3,
-    CompanyId: 1,
+    Id: Id_6,
+    CompanyId: Id_1,
     Content: Employee2,
     Age: 31
   },
   {
     $type: Employee,
-    Id: 5,
-    CompanyId: 4,
+    Id: Id_7,
+    CompanyId: Id_2,
     Content: Employee4,
     Age: 34
   }

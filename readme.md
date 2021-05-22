@@ -101,14 +101,14 @@ Will result in the following verified file:
   sql: [
     {
       Type: ReaderExecutedAsync,
-      Text: 
+      Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
-      Text: 
+      Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
     }
@@ -192,21 +192,21 @@ await Verifier.Verify(data2.Companies.Count());
         @p0 (Int32): 0,
         @p1 (String?): Title
       },
-      Text: 
+      Text:
 SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
     },
     {
       Type: ReaderExecutedAsync,
-      Text: 
+      Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
-      Text: 
+      Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
     }
@@ -423,42 +423,42 @@ Will result in the following verified file with all data in the database:
 [
   {
     $type: Company,
-    Id: 1,
+    Id: Id_1,
     Content: Company1
   },
   {
     $type: Company,
-    Id: 4,
+    Id: Id_2,
     Content: Company2
   },
   {
     $type: Company,
-    Id: 6,
+    Id: Id_3,
     Content: Company3
   },
   {
     $type: Company,
-    Id: 7,
+    Id: Id_4,
     Content: Company4
   },
   {
     $type: Employee,
-    Id: 2,
-    CompanyId: 1,
+    Id: Id_5,
+    CompanyId: Id_1,
     Content: Employee1,
     Age: 25
   },
   {
     $type: Employee,
-    Id: 3,
-    CompanyId: 1,
+    Id: Id_6,
+    CompanyId: Id_1,
     Content: Employee2,
     Age: 31
   },
   {
     $type: Employee,
-    Id: 5,
-    CompanyId: 4,
+    Id: Id_7,
+    CompanyId: Id_2,
     Content: Employee4,
     Age: 34
   }

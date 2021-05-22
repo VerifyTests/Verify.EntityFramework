@@ -1,9 +1,9 @@
-{
+﻿{
   target: 5,
   sql: [
     {
       Type: ReaderExecutedAsync,
-      Text: 
+      Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
