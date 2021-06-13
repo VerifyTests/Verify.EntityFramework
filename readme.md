@@ -18,7 +18,7 @@ Part of the <a href='https://dotnetfoundation.org' alt=''>.NET Foundation</a>
 
 ## Enable
 
-Enable VerifyEntityFramewok once at assembly load time:
+Enable VerifyEntityFramework once at assembly load time:
 
 
 ### EF Core
