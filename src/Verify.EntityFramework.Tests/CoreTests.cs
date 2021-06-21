@@ -214,7 +214,7 @@ public class CoreTests
     {
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
         var data = database.Context;
-        SqlRecording.StartRecording();
+        EfRecording.StartRecording();
         Company company = new()
         {
             Content = "Title"
@@ -238,7 +238,7 @@ public class CoreTests
         data.Add(company2);
         await data.SaveChangesAsync();
 
-        var eventData = SqlRecording.FinishRecording();
+        var eventData = EfRecording.FinishRecording();
         await Verifier.Verify(eventData);
     }
 
@@ -255,7 +255,7 @@ public class CoreTests
         builder.EnableRecording();
 
         await using SampleDbContext data1 = new(builder.Options);
-        SqlRecording.StartRecording();
+        EfRecording.StartRecording();
         Company company = new()
         {
             Content = "Title"
@@ -288,7 +288,7 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        SqlRecording.StartRecording();
+        EfRecording.StartRecording();
 
         await data.Companies
             .Where(x => x.Content == "Title")
@@ -314,13 +314,13 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        SqlRecording.StartRecording();
+        EfRecording.StartRecording();
 
         await data.Companies
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        var entries = SqlRecording.FinishRecording();
+        var entries = EfRecording.FinishRecording();
         //TODO: optionally filter the results
         await Verifier.Verify(new
         {

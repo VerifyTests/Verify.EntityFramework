@@ -50,7 +50,7 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 ### Enable
 
-Call `SqlRecording.EnableRecording()` on `DbContextOptionsBuilder`.
+Call `EfRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 
 <!-- snippet: EnableRecording -->
 <a id='snippet-enablerecording'></a>
@@ -68,7 +68,7 @@ SampleDbContext data = new(builder.Options);
 
 ### Usage
 
-To start recording call `SqlRecording.StartRecording()`. The results will be automatically included in verified file.
+To start recording call `EfRecording.StartRecording()`. The results will be automatically included in verified file.
 
 <!-- snippet: Recording -->
 <a id='snippet-recording'></a>
@@ -80,7 +80,7 @@ Company company = new()
 data.Add(company);
 await data.SaveChangesAsync();
 
-SqlRecording.StartRecording();
+EfRecording.StartRecording();
 
 await data.Companies
     .Where(x => x.Content == "Title")
@@ -119,7 +119,7 @@ FROM [Companies] AS [c]
 <!-- endSnippet -->
 
 
-Sql entries can be explicitly read using `SqlRecording.FinishRecording`, optionally filtered, and passed to Verify:
+Sql entries can be explicitly read using `EfRecording.FinishRecording`, optionally filtered, and passed to Verify:
 
 <!-- snippet: RecordingSpecific -->
 <a id='snippet-recordingspecific'></a>
@@ -131,13 +131,13 @@ Company company = new()
 data.Add(company);
 await data.SaveChangesAsync();
 
-SqlRecording.StartRecording();
+EfRecording.StartRecording();
 
 await data.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
 
-var entries = SqlRecording.FinishRecording();
+var entries = EfRecording.FinishRecording();
 //TODO: optionally filter the results
 await Verifier.Verify(new
 {
@@ -161,7 +161,7 @@ builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
 await using SampleDbContext data1 = new(builder.Options);
-SqlRecording.StartRecording();
+EfRecording.StartRecording();
 Company company = new()
 {
     Content = "Title"

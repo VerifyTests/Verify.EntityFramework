@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VerifyTests.EntityFramework
 {
-    public static class SqlRecording
+    public static class EfRecording
     {
         public static void EnableRecording(this DbContextOptionsBuilder builder)
         {
