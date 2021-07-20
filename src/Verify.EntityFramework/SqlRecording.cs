@@ -7,7 +7,6 @@ namespace VerifyTests.EntityFramework
     {
         public static void EnableRecording(this DbContextOptionsBuilder builder)
         {
-            Guard.AgainstNull(builder, nameof(builder));
             builder.AddInterceptors(new LogCommandInterceptor());
         }
 

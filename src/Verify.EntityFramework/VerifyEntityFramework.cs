@@ -10,8 +10,6 @@ namespace VerifyTests
     {
         public static async IAsyncEnumerable<object> AllData(this DbContext data)
         {
-            Guard.AgainstNull(data, nameof(data));
-
             foreach (var entityType in data.EntityTypes().Where(p => !p.IsOwned()))
             {
                 var clrType = entityType.ClrType;
