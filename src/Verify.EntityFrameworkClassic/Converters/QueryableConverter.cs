@@ -14,7 +14,7 @@ class QueryableConverter :
         JsonSerializer serializer,
         IReadOnlyDictionary<string, object> context)
     {
-        if (data == null)
+        if (data is null)
         {
             return;
         }

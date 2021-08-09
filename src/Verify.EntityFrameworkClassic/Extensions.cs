@@ -16,7 +16,7 @@ static class Extensions
                 continue;
             }
 
-            if (original != null)
+            if (original is not null)
             {
                 if (original.Equals(current))
                 {

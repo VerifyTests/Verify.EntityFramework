@@ -51,7 +51,7 @@ static class Extensions
                     return false;
                 }
 
-                if (original == null)
+                if (original is null)
                 {
                     return true;
                 }

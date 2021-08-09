@@ -14,7 +14,7 @@ class TrackerConverter :
         JsonSerializer serializer,
         IReadOnlyDictionary<string, object> context)
     {
-        if (tracker == null)
+        if (tracker is null)
         {
             return;
         }

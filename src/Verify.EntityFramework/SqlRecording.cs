@@ -18,7 +18,7 @@ namespace VerifyTests.EntityFramework
         public static IEnumerable<LogEntry> FinishRecording()
         {
             var entries = LogCommandInterceptor.Stop();
-            if (entries != null)
+            if (entries is not null)
             {
                 return entries;
             }

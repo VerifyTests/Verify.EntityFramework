@@ -43,7 +43,7 @@ namespace VerifyTests
             VerifierSettings.RegisterJsonAppender(_ =>
             {
                 var entries = LogCommandInterceptor.Stop();
-                if (entries == null)
+                if (entries is null)
                 {
                     return null;
                 }
