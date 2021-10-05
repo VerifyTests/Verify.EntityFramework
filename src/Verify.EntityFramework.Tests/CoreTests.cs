@@ -19,7 +19,7 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using SampleDbContext data = new(options);
-        Company company = new()
+        var company = new Company
         {
             Content = "before"
         };
@@ -77,11 +77,11 @@ public class CoreTests
 
         await using SampleDbContext data = new(options);
 
-        Company company = new()
+        var company = new Company
         {
             Content = "company"
         };
-        Employee employee = new()
+        var employee = new Employee
         {
             Content = "employee",
             Company = company
@@ -99,12 +99,12 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using SampleDbContext data = new(options);
-        Company company = new()
+        var company = new Company
         {
             Content = "companyBefore"
         };
         data.Add(company);
-        Employee employee = new()
+        var employee = new Employee
         {
             Content = "employeeBefore",
             Company = company
@@ -123,7 +123,7 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using SampleDbContext data = new(options);
-        Employee employee = new()
+        var employee = new Employee
         {
             Content = "before",
             Age = 10
@@ -215,7 +215,7 @@ public class CoreTests
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
         var data = database.Context;
         EfRecording.StartRecording();
-        Company company = new()
+        var company = new Company
         {
             Content = "Title"
         };
@@ -230,7 +230,7 @@ public class CoreTests
                 .ToListAsync();
         }
 
-        Company company2 = new()
+        var company2 = new Company
         {
             Id = 2,
             Content = "Title2"
@@ -250,13 +250,13 @@ public class CoreTests
 
         #region MultiDbContexts
 
-        DbContextOptionsBuilder<SampleDbContext> builder = new();
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseSqlServer(connectionString);
         builder.EnableRecording();
 
         await using SampleDbContext data1 = new(builder.Options);
         EfRecording.StartRecording();
-        Company company = new()
+        var company = new Company
         {
             Content = "Title"
         };
@@ -281,7 +281,7 @@ public class CoreTests
 
         #region Recording
 
-        Company company = new()
+        var company = new Company
         {
             Content = "Title"
         };
@@ -307,7 +307,7 @@ public class CoreTests
 
         #region RecordingSpecific
 
-        Company company = new()
+        var company = new Company
         {
             Content = "Title"
         };

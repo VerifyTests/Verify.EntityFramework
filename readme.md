@@ -73,7 +73,7 @@ To start recording call `EfRecording.StartRecording()`. The results will be auto
 <!-- snippet: Recording -->
 <a id='snippet-recording'></a>
 ```cs
-Company company = new()
+var company = new Company
 {
     Content = "Title"
 };
@@ -124,7 +124,7 @@ Sql entries can be explicitly read using `EfRecording.FinishRecording`, optional
 <!-- snippet: RecordingSpecific -->
 <a id='snippet-recordingspecific'></a>
 ```cs
-Company company = new()
+var company = new Company
 {
     Content = "Title"
 };
@@ -156,13 +156,13 @@ await Verifier.Verify(new
 <!-- snippet: MultiDbContexts -->
 <a id='snippet-multidbcontexts'></a>
 ```cs
-DbContextOptionsBuilder<SampleDbContext> builder = new();
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
 await using SampleDbContext data1 = new(builder.Options);
 EfRecording.StartRecording();
-Company company = new()
+var company = new Company
 {
     Content = "Title"
 };
@@ -235,7 +235,7 @@ public async Task Added()
     var options = DbContextOptions();
 
     await using SampleDbContext data = new(options);
-    Company company = new()
+    var company = new Company
     {
         Content = "before"
     };
@@ -482,11 +482,11 @@ public async Task IgnoreNavigationProperties()
 
     await using SampleDbContext data = new(options);
 
-    Company company = new()
+    var company = new Company
     {
         Content = "company"
     };
-    Employee employee = new()
+    var employee = new Employee
     {
         Content = "employee",
         Company = company

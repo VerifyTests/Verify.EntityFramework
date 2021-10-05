@@ -47,7 +47,7 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        Company company = new()
+        var company = new Company
         {
             Content = "before"
         };
@@ -65,12 +65,12 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        Company company = new()
+        var company = new Company
         {
             Content = "companyBefore"
         };
         data.Companies.Add(company);
-        Employee employee = new()
+        var employee = new Employee
         {
             Content = "employeeBefore",
             Company = company
