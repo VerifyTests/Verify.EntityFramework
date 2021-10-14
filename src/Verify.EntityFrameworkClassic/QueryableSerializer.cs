@@ -1,7 +1,5 @@
 ﻿using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Reflection;
 
 static class QueryableSerializer<TEntity>
     where TEntity : class

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using VerifyTests.EntityFramework;
 

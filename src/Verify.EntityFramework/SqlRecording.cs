@@ -1,28 +1,26 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace VerifyTests.EntityFramework
+namespace VerifyTests.EntityFramework;
+
+public static class EfRecording
 {
-    public static class EfRecording
+    public static void EnableRecording(this DbContextOptionsBuilder builder)
     {
-        public static void EnableRecording(this DbContextOptionsBuilder builder)
-        {
-            builder.AddInterceptors(new LogCommandInterceptor());
-        }
+        builder.AddInterceptors(new LogCommandInterceptor());
+    }
 
-        public static void StartRecording()
-        {
-            LogCommandInterceptor.Start();
-        }
+    public static void StartRecording()
+    {
+        LogCommandInterceptor.Start();
+    }
 
-        public static IEnumerable<LogEntry> FinishRecording()
+    public static IEnumerable<LogEntry> FinishRecording()
+    {
+        var entries = LogCommandInterceptor.Stop();
+        if (entries is not null)
         {
-            var entries = LogCommandInterceptor.Stop();
-            if (entries is not null)
-            {
-                return entries;
-            }
-            throw new("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
+            return entries;
         }
+        throw new("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
     }
 }
