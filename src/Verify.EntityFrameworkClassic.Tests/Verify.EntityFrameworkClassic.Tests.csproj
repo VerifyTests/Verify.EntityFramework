@@ -10,7 +10,7 @@
     <PackageReference Include="Verify.NUnit" Version="13.1.0" />
     <PackageReference Include="EfClassicLocalDb" Version="10.7.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.58" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.60" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFrameworkClassic\Verify.EntityFrameworkClassic.csproj" />
   </ItemGroup>
 </Project>
