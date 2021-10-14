@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using EfLocalDb;
+﻿using EfLocalDb;
 using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;

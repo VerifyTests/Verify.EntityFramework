@@ -1,29 +1,26 @@
-﻿using System.Collections.Generic;
+﻿namespace VerifyTests;
 
-namespace VerifyTests
+public static class VerifyEntityFrameworkClassic
 {
-    public static class VerifyEntityFrameworkClassic
+    public static void Enable()
     {
-        public static void Enable()
+        VerifierSettings.RegisterFileConverter(
+            QueryableToSql,
+            (target, _, _) => QueryableConverter.IsQueryable(target));
+        VerifierSettings.ModifySerialization(settings =>
         {
-            VerifierSettings.RegisterFileConverter(
-                QueryableToSql,
-                (target, _, _) => QueryableConverter.IsQueryable(target));
-            VerifierSettings.ModifySerialization(settings =>
+            settings.AddExtraSettings(serializer =>
             {
-                settings.AddExtraSettings(serializer =>
-                {
-                    var converters = serializer.Converters;
-                    converters.Add(new TrackerConverter());
-                    converters.Add(new QueryableConverter());
-                });
+                var converters = serializer.Converters;
+                converters.Add(new TrackerConverter());
+                converters.Add(new QueryableConverter());
             });
-        }
+        });
+    }
 
-        static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
-        {
-            var sql = QueryableConverter.QueryToSql(arg);
-            return new(null, "txt", sql);
-        }
+    static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
+    {
+        var sql = QueryableConverter.QueryToSql(arg);
+        return new(null, "txt", sql);
     }
 }
