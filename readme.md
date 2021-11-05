@@ -1,8 +1,8 @@
 # <img src="/src/icon.png" height="30px"> Verify.EntityFramework
 
 [![Build status](https://ci.appveyor.com/api/projects/status/g6njwv0aox62atu0?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-entityframework)
-[![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg?label=Verify.Verify.EntityFramework)](https://www.nuget.org/packages/Verify.EntityFramework/)
-[![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFrameworkClassic.svg?label=Verify.Verify.EntityFrameworkClassic)](https://www.nuget.org/packages/Verify.EntityFrameworkClassic/)
+[![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFramework.svg?label=Verify.EntityFramework)](https://www.nuget.org/packages/Verify.EntityFramework/)
+[![NuGet Status](https://img.shields.io/nuget/v/Verify.EntityFrameworkClassic.svg?label=Verify.EntityFrameworkClassic)](https://www.nuget.org/packages/Verify.EntityFrameworkClassic/)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testing with EntityFramework.
 
