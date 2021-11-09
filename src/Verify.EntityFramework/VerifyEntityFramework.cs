@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace VerifyTests;
@@ -20,7 +19,7 @@ public static class VerifyEntityFramework
         }
     }
 
-    public static void IgnoreNavigationProperties(this SerializationSettings settings, IDbContextDependencies context)
+    public static void IgnoreNavigationProperties(this SerializationSettings settings, DbContext context)
     {
         IgnoreNavigationProperties(settings, context.Model);
     }

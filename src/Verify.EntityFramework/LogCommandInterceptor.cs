@@ -24,7 +24,7 @@ class LogCommandInterceptor :
         Add("CommandFailed", command, data, data.Exception);
     }
 
-    public override Task CommandFailedAsync(DbCommand command, CommandErrorEventData data, CancellationToken cancellation)
+    public override Task CommandFailedAsync(DbCommand command, CommandErrorEventData data, CancellationToken cancellation = default)
     {
         Add("CommandFailedAsync", command, data, data.Exception);
         return Task.CompletedTask;
@@ -36,7 +36,7 @@ class LogCommandInterceptor :
         return result;
     }
 
-    public override object ScalarExecuted(DbCommand command, CommandExecutedEventData data, object result)
+    public override object? ScalarExecuted(DbCommand command, CommandExecutedEventData data, object? result)
     {
         Add("ScalarExecuted", command, data);
         return result;
@@ -48,19 +48,19 @@ class LogCommandInterceptor :
         return result;
     }
 
-    public override ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData data, DbDataReader result, CancellationToken cancellation)
+    public override ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData data, DbDataReader result, CancellationToken cancellation = default)
     {
         Add("ReaderExecutedAsync", command, data);
         return new(result);
     }
 
-    public override ValueTask<object> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData data, object result, CancellationToken cancellation)
+    public override ValueTask<object?> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData data, object? result, CancellationToken cancellation = default)
     {
         Add("ScalarExecutedAsync", command, data);
         return new(result);
     }
 
-    public override ValueTask<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData data, int result, CancellationToken cancellation)
+    public override ValueTask<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData data, int result, CancellationToken cancellation = default)
     {
         Add("NonQueryExecutedAsync", command, data);
         return new(result);

@@ -14,7 +14,7 @@ static class Extensions
     public static IQueryable<object> AsNoTracking(this IQueryable<object> set, Type clrType)
     {
         var genericNoTracking = asNoTracking.MakeGenericMethod(clrType);
-        return (IQueryable<object>) genericNoTracking.Invoke(null, new object[] {set});
+        return (IQueryable<object>) genericNoTracking.Invoke(null, new object[] {set})!;
     }
 
     public static IQueryable<object> Set(this DbContext data, Type t)
@@ -56,9 +56,14 @@ static class Extensions
             });
     }
 
-    public static IEnumerable<(string name, object value)> FindPrimaryKeyValues(this EntityEntry entry)
+    public static IEnumerable<(string name, object? value)> FindPrimaryKeyValues(this EntityEntry entry)
     {
         var primaryKey = entry.Metadata.FindPrimaryKey();
+        if (primaryKey == null)
+        {
+            yield break;
+        }
+
         foreach (var property in primaryKey.Properties)
         {
             var name = property.Name;
@@ -85,7 +90,7 @@ static class Extensions
                 nullChar = "?";
             }
             var key = $"{parameter.ParameterName} ({parameter.DbType}{nullChar})";
-            dictionary[key] = parameter.Value;
+            dictionary[key] = parameter.Value!;
         }
 
         return dictionary;
