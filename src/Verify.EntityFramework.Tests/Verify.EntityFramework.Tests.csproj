@@ -8,10 +8,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.2.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="14.2.0" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.2.1" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="14.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
-    <PackageReference Include="EfLocalDb" Version="10.8.0" />
+    <PackageReference Include="EfLocalDb" Version="10.8.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.61" PrivateAssets="All" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
