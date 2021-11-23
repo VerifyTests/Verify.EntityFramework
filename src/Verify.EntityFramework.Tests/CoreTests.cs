@@ -15,7 +15,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
         var company = new Company
         {
             Content = "before"
@@ -33,7 +33,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
         data.Add(new Company {Content = "before"});
         await data.SaveChangesAsync();
 
@@ -51,8 +51,8 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
-        Company company = new()
+        await using var data = new SampleDbContext(options);
+        var company = new Company
         {
             Content = "before"
         };
@@ -72,7 +72,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
 
         var company = new Company
         {
@@ -95,7 +95,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
         var company = new Company
         {
             Content = "companyBefore"
@@ -119,7 +119,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
         var employee = new Employee
         {
             Content = "before",
@@ -137,7 +137,7 @@ public class CoreTests
     {
         var options = DbContextOptions();
 
-        await using SampleDbContext data = new(options);
+        await using var data = new SampleDbContext(options);
         data.Add(new Employee
         {
             Content = "before"
@@ -198,10 +198,10 @@ public class CoreTests
     {
         #region EnableRecording
 
-        DbContextOptionsBuilder<SampleDbContext> builder = new();
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseSqlServer(connection);
         builder.EnableRecording();
-        SampleDbContext data = new(builder.Options);
+        var data = new SampleDbContext(builder.Options);
 
         #endregion
     }
@@ -251,7 +251,7 @@ public class CoreTests
         builder.UseSqlServer(connectionString);
         builder.EnableRecording();
 
-        await using SampleDbContext data1 = new(builder.Options);
+        await using var data1 = new SampleDbContext(builder.Options);
         EfRecording.StartRecording();
         var company = new Company
         {
@@ -260,7 +260,7 @@ public class CoreTests
         data1.Add(company);
         await data1.SaveChangesAsync();
 
-        await using SampleDbContext data2 = new(builder.Options);
+        await using var data2 = new SampleDbContext(builder.Options);
         await data2.Companies
             .Where(x => x.Content == "Title")
             .ToListAsync();

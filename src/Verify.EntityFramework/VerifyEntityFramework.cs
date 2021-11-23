@@ -45,7 +45,7 @@ public static class VerifyEntityFramework
                 return null;
             }
 
-            return new("sql", entries);
+            return new ToAppend("sql", entries);
         });
 
         VerifierSettings.RegisterFileConverter(
@@ -66,6 +66,6 @@ public static class VerifyEntityFramework
     static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
     {
         var sql = QueryableConverter.QueryToSql(arg);
-        return new(null, "txt", sql);
+        return new ConversionResult(null, "txt", sql);
     }
 }

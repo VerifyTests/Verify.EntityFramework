@@ -5,11 +5,11 @@ using VerifyTests.EntityFramework;
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
-    static AsyncLocal<State?> asyncLocal = new();
+    static AsyncLocal<State?> asyncLocal = new AsyncLocal<State?>();
 
     public static void Start()
     {
-        asyncLocal.Value = new();
+        asyncLocal.Value = new State();
     }
 
     public static IEnumerable<LogEntry>? Stop()
@@ -51,29 +51,29 @@ class LogCommandInterceptor :
     public override ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData data, DbDataReader result, CancellationToken cancellation = default)
     {
         Add("ReaderExecutedAsync", command, data);
-        return new(result);
+        return new ValueTask<DbDataReader>(result);
     }
 
     public override ValueTask<object?> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData data, object? result, CancellationToken cancellation = default)
     {
         Add("ScalarExecutedAsync", command, data);
-        return new(result);
+        return new ValueTask<object?>(result);
     }
 
     public override ValueTask<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData data, int result, CancellationToken cancellation = default)
     {
         Add("NonQueryExecutedAsync", command, data);
-        return new(result);
+        return new ValueTask<int>(result);
     }
 
     static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
-        asyncLocal.Value?.WriteLine(new(type, command, data, exception));
+        asyncLocal.Value?.WriteLine(new LogEntry(type, command, data, exception));
     }
 
     class State
     {
-        internal ConcurrentBag<LogEntry> Events = new();
+        internal ConcurrentBag<LogEntry> Events = new ConcurrentBag<LogEntry>();
 
         public void WriteLine(LogEntry entry)
         {

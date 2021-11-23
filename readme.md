@@ -55,10 +55,10 @@ Call `EfRecording.EnableRecording()` on `DbContextOptionsBuilder`.
 <!-- snippet: EnableRecording -->
 <a id='snippet-enablerecording'></a>
 ```cs
-DbContextOptionsBuilder<SampleDbContext> builder = new();
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseSqlServer(connection);
 builder.EnableRecording();
-SampleDbContext data = new(builder.Options);
+var data = new SampleDbContext(builder.Options);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L199-L206' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -160,7 +160,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
-await using SampleDbContext data1 = new(builder.Options);
+await using var data1 = new SampleDbContext(builder.Options);
 EfRecording.StartRecording();
 var company = new Company
 {
@@ -169,7 +169,7 @@ var company = new Company
 data1.Add(company);
 await data1.SaveChangesAsync();
 
-await using SampleDbContext data2 = new(builder.Options);
+await using var data2 = new SampleDbContext(builder.Options);
 await data2.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
@@ -234,7 +234,7 @@ public async Task Added()
 {
     var options = DbContextOptions();
 
-    await using SampleDbContext data = new(options);
+    await using var data = new SampleDbContext(options);
     var company = new Company
     {
         Content = "before"
@@ -276,7 +276,7 @@ public async Task Deleted()
 {
     var options = DbContextOptions();
 
-    await using SampleDbContext data = new(options);
+    await using var data = new SampleDbContext(options);
     data.Add(new Company {Content = "before"});
     await data.SaveChangesAsync();
 
@@ -317,8 +317,8 @@ public async Task Modified()
 {
     var options = DbContextOptions();
 
-    await using SampleDbContext data = new(options);
-    Company company = new()
+    await using var data = new SampleDbContext(options);
+    var company = new Company
     {
         Content = "before"
     };
@@ -480,7 +480,7 @@ public async Task IgnoreNavigationProperties()
 {
     var options = DbContextOptions();
 
-    await using SampleDbContext data = new(options);
+    await using var data = new SampleDbContext(options);
 
     var company = new Company
     {

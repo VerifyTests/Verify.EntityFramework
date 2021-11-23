@@ -7,12 +7,12 @@ public static class DbContextBuilder
 {
     static DbContextBuilder()
     {
-        sqlInstance = new(
+        sqlInstance = new SqlInstance<SampleDbContext>(
             buildTemplate: CreateDb,
             constructInstance: builder =>
             {
                 builder.EnableRecording();
-                return new(builder.Options);
+                return new SampleDbContext(builder.Options);
             });
     }
 
@@ -22,43 +22,43 @@ public static class DbContextBuilder
     {
         await data.Database.EnsureCreatedAsync();
 
-        Company company1 = new()
+        var company1 = new Company
         {
             Id = 1,
             Content = "Company1"
         };
-        Employee employee1 = new()
+        var employee1 = new Employee
         {
             Id = 2,
             CompanyId = company1.Id,
             Content = "Employee1",
             Age = 25
         };
-        Employee employee2 = new()
+        var employee2 = new Employee
         {
             Id = 3,
             CompanyId = company1.Id,
             Content = "Employee2",
             Age = 31
         };
-        Company company2 = new()
+        var company2 = new Company
         {
             Id = 4,
             Content = "Company2"
         };
-        Employee employee4 = new()
+        var employee4 = new Employee
         {
             Id = 5,
             CompanyId = company2.Id,
             Content = "Employee4",
             Age = 34
         };
-        Company company3 = new()
+        var company3 = new Company
         {
             Id = 6,
             Content = "Company3"
         };
-        Company company4 = new()
+        var company4 = new Company
         {
             Id = 7,
             Content = "Company4"
