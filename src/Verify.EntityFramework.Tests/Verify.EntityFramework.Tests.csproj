@@ -9,11 +9,11 @@
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.2.2" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="14.6.6" />
+    <PackageReference Include="Verify.NUnit" Version="14.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="EfLocalDb" Version="12.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.61" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.62" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0" />
   </ItemGroup>
