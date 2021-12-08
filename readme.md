@@ -39,7 +39,7 @@ VerifyEntityFramework.Enable();
 ```cs
 VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L135-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L132-L136' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

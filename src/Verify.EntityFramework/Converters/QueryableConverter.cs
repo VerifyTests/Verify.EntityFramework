@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Query.Internal;
 using Newtonsoft.Json;
-using VerifyTests;
 
 class QueryableConverter :
     WriteOnlyJsonConverter

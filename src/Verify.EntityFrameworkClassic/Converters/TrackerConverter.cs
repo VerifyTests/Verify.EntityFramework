@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Newtonsoft.Json;
-using VerifyTests;
 
 class TrackerConverter :
     WriteOnlyJsonConverter<DbChangeTracker>

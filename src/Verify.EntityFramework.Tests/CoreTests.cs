@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using VerifyNUnit;
-using NUnit.Framework;
-using VerifyTests;
 using VerifyTests.EntityFramework;
 
 [TestFixture]

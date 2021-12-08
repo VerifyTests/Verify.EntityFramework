@@ -1,7 +1,4 @@
 ﻿using EfLocalDb;
-using VerifyNUnit;
-using NUnit.Framework;
-using VerifyTests;
 
 [TestFixture]
 public class ClassicTests

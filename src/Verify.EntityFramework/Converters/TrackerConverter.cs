@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-using VerifyTests;
 
 class TrackerConverter :
     WriteOnlyJsonConverter<ChangeTracker>
