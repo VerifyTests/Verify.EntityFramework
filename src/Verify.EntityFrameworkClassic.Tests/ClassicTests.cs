@@ -13,7 +13,7 @@ public class ClassicTests
         using var database = await sqlInstance.Build();
         var data = database.Context;
         data.Companies.Add(new Company {Content = "before"});
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -30,7 +30,7 @@ public class ClassicTests
 
         var company = data.Companies.Single();
         data.Companies.Remove(company);
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -50,7 +50,7 @@ public class ClassicTests
         await data.SaveChangesAsync();
 
         data.Companies.Single().Content = "after";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -75,7 +75,7 @@ public class ClassicTests
 
         data.Companies.Single().Content = "companyAfter";
         data.Employees.Single().Content = "employeeAfter";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     [Test, Explicit]
@@ -94,7 +94,7 @@ public class ClassicTests
         data.Entry(entity).Property(_ => _.Content).IsModified = true;
         data.Configuration.ValidateOnSaveEnabled = false;
         await data.SaveChangesAsync();
-        await Verifier.Verify(data);
+        await Verify(data);
     }
 
     [Test]
@@ -111,7 +111,7 @@ public class ClassicTests
 
         var company = data.Companies.Single();
         company.Content = "after";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #region QueryableClassic
@@ -122,7 +122,7 @@ public class ClassicTests
         var database = await DbContextBuilder.GetDatabase("Queryable");
         var data = database.Context;
         var queryable = data.Companies.Where(x => x.Content == "value");
-        await Verifier.Verify(queryable);
+        await Verify(queryable);
     }
 
     #endregion

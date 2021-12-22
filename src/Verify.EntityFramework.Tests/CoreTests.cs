@@ -18,7 +18,7 @@ public class CoreTests
             Content = "before"
         };
         data.Add(company);
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -36,7 +36,7 @@ public class CoreTests
 
         var company = data.Companies.Single();
         data.Companies.Remove(company);
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -57,7 +57,7 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         data.Companies.Single().Content = "after";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     #endregion
@@ -80,7 +80,7 @@ public class CoreTests
             Content = "employee",
             Company = company
         };
-        await Verifier.Verify(employee)
+        await Verify(employee)
             .ModifySerialization(
                 x => x.IgnoreNavigationProperties(data));
     }
@@ -108,7 +108,7 @@ public class CoreTests
 
         data.Companies.Single().Content = "companyAfter";
         data.Employees.Single().Content = "employeeAfter";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     [Test]
@@ -126,7 +126,7 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         data.Employees.Single().Content = "after";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     [Test]
@@ -143,7 +143,7 @@ public class CoreTests
 
         var employee = data.Employees.Single();
         data.Update(employee).Entity.Content = "after";
-        await Verifier.Verify(data.ChangeTracker);
+        await Verify(data.ChangeTracker);
     }
 
     [Test]
@@ -154,7 +154,7 @@ public class CoreTests
 
         #region AllData
 
-        await Verifier.Verify(data.AllData())
+        await Verify(data.AllData())
             .ModifySerialization(
                 serialization =>
                     serialization.AddExtraSettings(
@@ -175,7 +175,7 @@ public class CoreTests
 
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verifier.Verify(queryable);
+        await Verify(queryable);
 
         #endregion
     }
@@ -188,7 +188,7 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verifier.Verify(new {queryable});
+        await Verify(new {queryable});
     }
 
     void Build(string connection)
@@ -233,7 +233,7 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         var eventData = EfRecording.FinishRecording();
-        await Verifier.Verify(eventData);
+        await Verify(eventData);
     }
 
     [Test]
@@ -262,7 +262,7 @@ public class CoreTests
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        await Verifier.Verify(data2.Companies.Count());
+        await Verify(data2.Companies.Count());
 
         #endregion
     }
@@ -288,7 +288,7 @@ public class CoreTests
             .Where(x => x.Content == "Title")
             .ToListAsync();
 
-        await Verifier.Verify(data.Companies.Count());
+        await Verify(data.Companies.Count());
 
         #endregion
     }
@@ -316,7 +316,7 @@ public class CoreTests
 
         var entries = EfRecording.FinishRecording();
         //TODO: optionally filter the results
-        await Verifier.Verify(new
+        await Verify(new
         {
             target = data.Companies.Count(),
             sql = entries
