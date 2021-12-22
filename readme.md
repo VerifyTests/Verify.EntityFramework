@@ -86,7 +86,7 @@ await data.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
 
-await Verifier.Verify(data.Companies.Count());
+await Verify(data.Companies.Count());
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L276-L293' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -139,7 +139,7 @@ await data.Companies
 
 var entries = EfRecording.FinishRecording();
 //TODO: optionally filter the results
-await Verifier.Verify(new
+await Verify(new
 {
     target = data.Companies.Count(),
     sql = entries
@@ -174,7 +174,7 @@ await data2.Companies
     .Where(x => x.Content == "Title")
     .ToListAsync();
 
-await Verifier.Verify(data2.Companies.Count());
+await Verify(data2.Companies.Count());
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L245-L267' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -240,7 +240,7 @@ public async Task Added()
         Content = "before"
     };
     data.Add(company);
-    await Verifier.Verify(data.ChangeTracker);
+    await Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-added' title='Start of snippet'>anchor</a></sup>
@@ -282,7 +282,7 @@ public async Task Deleted()
 
     var company = data.Companies.Single();
     data.Companies.Remove(company);
-    await Verifier.Verify(data.ChangeTracker);
+    await Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L26-L42' title='Snippet source file'>snippet source</a> | <a href='#snippet-deleted' title='Start of snippet'>anchor</a></sup>
@@ -326,7 +326,7 @@ public async Task Modified()
     await data.SaveChangesAsync();
 
     data.Companies.Single().Content = "after";
-    await Verifier.Verify(data.ChangeTracker);
+    await Verify(data.ChangeTracker);
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L44-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-modified' title='Start of snippet'>anchor</a></sup>
@@ -362,7 +362,7 @@ This test:
 ```cs
 var queryable = data.Companies
     .Where(x => x.Content == "value");
-await Verifier.Verify(queryable);
+await Verify(queryable);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L174-L180' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -405,7 +405,7 @@ This test:
 <!-- snippet: AllData -->
 <a id='snippet-alldata'></a>
 ```cs
-await Verifier.Verify(data.AllData())
+await Verify(data.AllData())
     .ModifySerialization(
         serialization =>
             serialization.AddExtraSettings(
@@ -491,7 +491,7 @@ public async Task IgnoreNavigationProperties()
         Content = "employee",
         Company = company
     };
-    await Verifier.Verify(employee)
+    await Verify(employee)
         .ModifySerialization(
             x => x.IgnoreNavigationProperties(data));
 }
