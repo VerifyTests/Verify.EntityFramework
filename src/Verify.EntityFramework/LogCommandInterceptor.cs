@@ -5,7 +5,7 @@ using VerifyTests.EntityFramework;
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
-    static AsyncLocal<State?> asyncLocal = new AsyncLocal<State?>();
+    static AsyncLocal<State?> asyncLocal = new();
 
     public static void Start()
     {
@@ -73,7 +73,7 @@ class LogCommandInterceptor :
 
     class State
     {
-        internal ConcurrentBag<LogEntry> Events = new ConcurrentBag<LogEntry>();
+        internal ConcurrentBag<LogEntry> Events = new();
 
         public void WriteLine(LogEntry entry)
         {
