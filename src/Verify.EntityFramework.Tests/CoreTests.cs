@@ -180,7 +180,6 @@ public class CoreTests
         #endregion
     }
 
-
     [Test]
     public async Task NestedQueryable()
     {
