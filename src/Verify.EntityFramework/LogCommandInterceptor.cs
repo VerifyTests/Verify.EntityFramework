@@ -9,7 +9,7 @@ class LogCommandInterceptor :
 
     public static void Start()
     {
-        asyncLocal.Value = new State();
+        asyncLocal.Value = new();
     }
 
     public static IEnumerable<LogEntry>? Stop()
@@ -51,24 +51,24 @@ class LogCommandInterceptor :
     public override ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData data, DbDataReader result, CancellationToken cancellation = default)
     {
         Add("ReaderExecutedAsync", command, data);
-        return new ValueTask<DbDataReader>(result);
+        return new(result);
     }
 
     public override ValueTask<object?> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData data, object? result, CancellationToken cancellation = default)
     {
         Add("ScalarExecutedAsync", command, data);
-        return new ValueTask<object?>(result);
+        return new(result);
     }
 
     public override ValueTask<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData data, int result, CancellationToken cancellation = default)
     {
         Add("NonQueryExecutedAsync", command, data);
-        return new ValueTask<int>(result);
+        return new(result);
     }
 
     static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
-        asyncLocal.Value?.WriteLine(new LogEntry(type, command, data, exception));
+        asyncLocal.Value?.WriteLine(new(type, command, data, exception));
     }
 
     class State

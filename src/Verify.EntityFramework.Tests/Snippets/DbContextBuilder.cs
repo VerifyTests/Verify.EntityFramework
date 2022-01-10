@@ -7,12 +7,12 @@ public static class DbContextBuilder
 {
     static DbContextBuilder()
     {
-        sqlInstance = new SqlInstance<SampleDbContext>(
+        sqlInstance = new(
             buildTemplate: CreateDb,
             constructInstance: builder =>
             {
                 builder.EnableRecording();
-                return new SampleDbContext(builder.Options);
+                return new(builder.Options);
             });
     }
 

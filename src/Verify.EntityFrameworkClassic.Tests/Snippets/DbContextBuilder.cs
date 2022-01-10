@@ -6,9 +6,9 @@ public static class DbContextBuilder
 {
     static DbContextBuilder()
     {
-        sqlInstance = new SqlInstance<SampleDbContext>(
+        sqlInstance = new(
             buildTemplate: CreateDb,
-            constructInstance: connection => new SampleDbContext(connection),
+            constructInstance: connection => new(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Classic"));
     }
 

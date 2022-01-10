@@ -66,6 +66,6 @@ public static class VerifyEntityFramework
     static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
     {
         var sql = QueryableConverter.QueryToSql(arg);
-        return new ConversionResult(null, "txt", sql);
+        return new(null, "txt", sql);
     }
 }

@@ -23,7 +23,7 @@ static class Extensions
                 }
             }
 
-            yield return new ChangePair(name, original, current);
+            yield return new(name, original, current);
         }
     }
 

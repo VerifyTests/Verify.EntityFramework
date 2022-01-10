@@ -12,7 +12,7 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        data.Companies.Add(new Company {Content = "before"});
+        data.Companies.Add(new() {Content = "before"});
         await Verify(data.ChangeTracker);
     }
 
@@ -25,7 +25,7 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        data.Companies.Add(new Company {Content = "before"});
+        data.Companies.Add(new() {Content = "before"});
         await data.SaveChangesAsync();
 
         var company = data.Companies.Single();
@@ -89,7 +89,7 @@ public class ClassicTests
         };
         data.Companies.Add(company);
         await data.SaveChangesAsync();
-        var entity = data.Companies.Attach(new Company {Id = company.Id});
+        var entity = data.Companies.Attach(new() {Id = company.Id});
         entity.Content = "after";
         data.Entry(entity).Property(_ => _.Content).IsModified = true;
         data.Configuration.ValidateOnSaveEnabled = false;
@@ -103,7 +103,7 @@ public class ClassicTests
         using var database = await sqlInstance.Build();
         var data = database.Context;
 
-        data.Companies.Add(new Company
+        data.Companies.Add(new()
         {
             Content = "before"
         });
@@ -135,8 +135,8 @@ public class ClassicTests
 
         #endregion
 
-        sqlInstance = new SqlInstance<SampleDbContext>(
-            constructInstance: connection => new SampleDbContext(connection),
+        sqlInstance = new(
+            constructInstance: connection => new(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Tests"));
     }
 }
