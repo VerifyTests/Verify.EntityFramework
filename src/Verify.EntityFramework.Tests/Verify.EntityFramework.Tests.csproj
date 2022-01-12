@@ -11,7 +11,7 @@
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.2.2" PrivateAssets="all" />
     <PackageReference Include="Verify.NUnit" Version="14.13.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
-    <PackageReference Include="EfLocalDb" Version="13.1.0" />
+    <PackageReference Include="EfLocalDb" Version="13.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.63" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
