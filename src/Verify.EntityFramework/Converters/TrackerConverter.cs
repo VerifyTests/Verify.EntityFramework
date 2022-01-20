@@ -5,17 +5,8 @@ using Newtonsoft.Json;
 class TrackerConverter :
     WriteOnlyJsonConverter<ChangeTracker>
 {
-    public override void WriteJson(
-        JsonWriter writer,
-        ChangeTracker? tracker,
-        JsonSerializer serializer,
-        IReadOnlyDictionary<string, object> context)
+    public override void Write(VerifyJsonWriter writer, ChangeTracker tracker, JsonSerializer serializer)
     {
-        if (tracker is null)
-        {
-            return;
-        }
-
         writer.WriteStartObject();
 
         var entries = tracker.Entries().ToList();

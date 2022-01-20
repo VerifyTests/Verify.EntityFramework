@@ -3,17 +3,8 @@
 class QueryableConverter :
     WriteOnlyJsonConverter
 {
-    public override void WriteJson(
-        JsonWriter writer,
-        object? data,
-        JsonSerializer serializer,
-        IReadOnlyDictionary<string, object> context)
+    public override void Write(VerifyJsonWriter writer, object data, JsonSerializer serializer)
     {
-        if (data is null)
-        {
-            return;
-        }
-
         var sql = QueryToSql(data);
         serializer.Serialize(writer, sql);
     }

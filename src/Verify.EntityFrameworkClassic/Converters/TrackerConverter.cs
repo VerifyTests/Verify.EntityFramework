@@ -20,17 +20,8 @@ class TrackerConverter :
         };
     }
 
-    public override void WriteJson(
-        JsonWriter writer,
-        DbChangeTracker? tracker,
-        JsonSerializer serializer,
-        IReadOnlyDictionary<string, object> context)
+    public override void Write(VerifyJsonWriter writer, DbChangeTracker tracker, JsonSerializer serializer)
     {
-        if (tracker is null)
-        {
-            return;
-        }
-
         writer.WriteStartObject();
         var entries = tracker.Entries().ToList();
         HandleAdded(entries, writer, serializer);
