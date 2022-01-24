@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
-
+﻿
 class QueryableConverter :
     WriteOnlyJsonConverter
 {
-    public override void Write(VerifyJsonWriter writer, object data, JsonSerializer serializer)
+    public override void Write(VerifyJsonWriter writer, object data)
     {
         var sql = QueryToSql(data);
-        serializer.Serialize(writer, sql);
+        writer.Serialize(sql);
     }
 
     public static string QueryToSql(object data)

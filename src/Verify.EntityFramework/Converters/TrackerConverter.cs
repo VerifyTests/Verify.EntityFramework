@@ -1,23 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Newtonsoft.Json;
 
 class TrackerConverter :
     WriteOnlyJsonConverter<ChangeTracker>
 {
-    public override void Write(VerifyJsonWriter writer, ChangeTracker tracker, JsonSerializer serializer)
+    public override void Write(VerifyJsonWriter writer, ChangeTracker tracker)
     {
         writer.WriteStartObject();
 
         var entries = tracker.Entries().ToList();
-        HandleAdded(entries, writer, serializer);
-        HandleModified(entries, writer, serializer);
-        HandleDeleted(entries, writer, serializer);
+        HandleAdded(entries, writer);
+        HandleModified(entries, writer);
+        HandleDeleted(entries, writer);
 
         writer.WriteEndObject();
     }
 
-    static void HandleDeleted(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
+    static void HandleDeleted(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var deleted = entries
             .Where(x => x.State == EntityState.Deleted)
@@ -33,14 +32,14 @@ class TrackerConverter :
         {
             writer.WritePropertyName(entry.Metadata.DisplayName());
             writer.WriteStartObject();
-            WriteId(writer, serializer, entry);
+            WriteId(writer, entry);
             writer.WriteEndObject();
         }
 
         writer.WriteEndObject();
     }
 
-    static void HandleAdded(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
+    static void HandleAdded(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var added = entries
             .Where(x => x.State == EntityState.Added)
@@ -59,8 +58,7 @@ class TrackerConverter :
 
             foreach (var property in entry.Properties)
             {
-                writer.WritePropertyName(property.Metadata.Name);
-                serializer.Serialize(writer, property.OriginalValue);
+                writer.WriteProperty(entry, property.OriginalValue, property.Metadata.Name);
             }
 
             writer.WriteEndObject();
@@ -69,7 +67,7 @@ class TrackerConverter :
         writer.WriteEndObject();
     }
 
-    static void HandleModified(List<EntityEntry> entries, JsonWriter writer, JsonSerializer serializer)
+    static void HandleModified(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var modified = entries
             .Where(x => x.State == EntityState.Modified)
@@ -83,23 +81,22 @@ class TrackerConverter :
         writer.WriteStartObject();
         foreach (var entry in modified)
         {
-            HandleModified(writer, serializer, entry);
+            HandleModified(writer, entry);
         }
 
         writer.WriteEndObject();
     }
 
-    static void HandleModified(JsonWriter writer, JsonSerializer serializer, EntityEntry entry)
+    static void HandleModified(VerifyJsonWriter writer, EntityEntry entry)
     {
         writer.WritePropertyName(entry.Metadata.DisplayName());
         writer.WriteStartObject();
 
-        WriteId(writer, serializer, entry);
+        WriteId(writer, entry);
         foreach (var property in entry.ChangedProperties())
         {
             writer.WritePropertyName(property.Metadata.Name);
-            serializer.Serialize(
-                writer,
+            writer.Serialize(
                 new
                 {
                     Original = property.OriginalValue,
@@ -110,7 +107,7 @@ class TrackerConverter :
         writer.WriteEndObject();
     }
 
-    static void WriteId(JsonWriter writer, JsonSerializer serializer, EntityEntry entry)
+    static void WriteId(VerifyJsonWriter writer, EntityEntry entry)
     {
         var ids = entry.FindPrimaryKeyValues().ToList();
         if (!ids.Any())
@@ -121,13 +118,11 @@ class TrackerConverter :
         if (ids.Count == 1)
         {
             var (name, value) = ids.Single();
-            writer.WritePropertyName(name);
-            serializer.Serialize(writer, value);
+            writer.WriteProperty(entry, value, name);
         }
         else
         {
-            writer.WritePropertyName("Ids");
-            serializer.Serialize(writer, ids);
+            writer.WriteProperty(entry, ids, "Ids");
         }
     }
 }
