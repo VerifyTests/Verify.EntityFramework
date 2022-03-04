@@ -7,10 +7,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-    <PackageReference Include="Verify.NUnit" Version="16.3.2" />
+    <PackageReference Include="Verify.NUnit" Version="16.3.4" />
     <PackageReference Include="EfClassicLocalDb" Version="13.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.68" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.77" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFrameworkClassic\Verify.EntityFrameworkClassic.csproj" />
   </ItemGroup>
 </Project>
