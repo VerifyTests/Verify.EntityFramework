@@ -20,9 +20,7 @@ public static class VerifyEntityFramework
     }
 
     public static void IgnoreNavigationProperties(this SerializationSettings settings, DbContext context)
-    {
-        IgnoreNavigationProperties(settings, context.Model);
-    }
+        => IgnoreNavigationProperties(settings, context.Model);
 
     public static void IgnoreNavigationProperties(this SerializationSettings settings, IModel model)
     {

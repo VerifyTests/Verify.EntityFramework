@@ -5,14 +5,10 @@ namespace VerifyTests.EntityFramework;
 public static class EfRecording
 {
     public static void EnableRecording(this DbContextOptionsBuilder builder)
-    {
-        builder.AddInterceptors(new LogCommandInterceptor());
-    }
+        => builder.AddInterceptors(new LogCommandInterceptor());
 
     public static void StartRecording()
-    {
-        LogCommandInterceptor.Start();
-    }
+        => LogCommandInterceptor.Start();
 
     public static IEnumerable<LogEntry> FinishRecording()
     {

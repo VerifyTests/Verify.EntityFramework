@@ -7,10 +7,7 @@ class LogCommandInterceptor :
 {
     static AsyncLocal<State?> asyncLocal = new();
 
-    public static void Start()
-    {
-        asyncLocal.Value = new();
-    }
+    public static void Start() => asyncLocal.Value = new();
 
     public static IEnumerable<LogEntry>? Stop()
     {
@@ -20,9 +17,7 @@ class LogCommandInterceptor :
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
-    {
-        Add("CommandFailed", command, data, data.Exception);
-    }
+        => Add("CommandFailed", command, data, data.Exception);
 
     public override Task CommandFailedAsync(DbCommand command, CommandErrorEventData data, CancellationToken cancellation = default)
     {
@@ -67,17 +62,13 @@ class LogCommandInterceptor :
     }
 
     static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
-    {
-        asyncLocal.Value?.WriteLine(new(type, command, data, exception));
-    }
+        => asyncLocal.Value?.WriteLine(new(type, command, data, exception));
 
     class State
     {
         internal ConcurrentBag<LogEntry> Events = new();
 
         public void WriteLine(LogEntry entry)
-        {
-            Events.Add(entry);
-        }
+            => Events.Add(entry);
     }
 }

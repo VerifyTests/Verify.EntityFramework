@@ -325,12 +325,10 @@ public class CoreTests
     }
 
     static DbContextOptions<SampleDbContext> DbContextOptions(
-        [CallerMemberName] string databaseName = "")
-    {
-        return new DbContextOptionsBuilder<SampleDbContext>()
+        [CallerMemberName] string databaseName = "") =>
+        new DbContextOptionsBuilder<SampleDbContext>()
             .UseInMemoryDatabase(databaseName)
             .Options;
-    }
 
     static CoreTests()
     {

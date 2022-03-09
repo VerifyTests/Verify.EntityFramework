@@ -17,22 +17,17 @@ static class Extensions
         return (IQueryable<object>) genericNoTracking.Invoke(null, new object[] {set})!;
     }
 
-    public static IQueryable<object> Set(this DbContext data, Type t)
-    {
-        return (IQueryable<object>) setMethod.MakeGenericMethod(t)
+    public static IQueryable<object> Set(this DbContext data, Type t) =>
+        (IQueryable<object>) setMethod.MakeGenericMethod(t)
             .Invoke(data, null)!;
-    }
 
-    public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data)
-    {
-        return data.Model
+    public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data) =>
+        data.Model
             .GetEntityTypes()
             .OrderBy(x => x.Name);
-    }
 
-    public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry)
-    {
-        return entry.Properties
+    public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry) =>
+        entry.Properties
             .Where(x =>
             {
                 if (!x.IsModified)
@@ -54,7 +49,6 @@ static class Extensions
 
                 return !original.Equals(current);
             });
-    }
 
     public static IEnumerable<(string name, object? value)> FindPrimaryKeyValues(this EntityEntry entry)
     {

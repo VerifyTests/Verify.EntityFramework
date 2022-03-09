@@ -4,13 +4,11 @@
 // Replace with a real DbContext
 public static class DbContextBuilder
 {
-    static DbContextBuilder()
-    {
+    static DbContextBuilder() =>
         sqlInstance = new(
             buildTemplate: CreateDb,
             constructInstance: connection => new(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Classic"));
-    }
 
     static SqlInstance<SampleDbContext> sqlInstance;
 
@@ -70,7 +68,5 @@ public static class DbContextBuilder
     }
 
     public static Task<SqlDatabase<SampleDbContext>> GetDatabase(string suffix)
-    {
-        return sqlInstance.Build(suffix);
-    }
+        => sqlInstance.Build(suffix);
 }

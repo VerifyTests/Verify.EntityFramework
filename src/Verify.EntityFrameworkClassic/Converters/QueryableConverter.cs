@@ -21,12 +21,8 @@ class QueryableConverter :
     }
 
     public override bool CanConvert(Type type)
-    {
-        return IsQueryable(type);
-    }
+        => IsQueryable(type);
 
     public static bool IsQueryable(object target)
-    {
-        return target is IQueryable;
-    }
+        => target is IQueryable;
 }
