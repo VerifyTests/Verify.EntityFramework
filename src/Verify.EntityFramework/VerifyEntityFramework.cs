@@ -52,6 +52,8 @@ public static class VerifyEntityFramework
 
         VerifierSettings.ModifySerialization(settings =>
         {
+            settings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
+            settings.IgnoreMembersWithType<DbContext>();
             settings.AddExtraSettings(serializer =>
             {
                 var converters = serializer.Converters;

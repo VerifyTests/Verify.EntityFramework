@@ -5,7 +5,7 @@
   <ItemGroup>
     <Using Remove="System.Net.Http" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Verify" Version="16.3.6" />
+    <PackageReference Include="Verify" Version="16.4.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
     <PackageReference Include="ProjectDefaults" Version="1.0.78" PrivateAssets="all" />

@@ -130,6 +130,26 @@ public class CoreTests
     }
 
     [Test]
+    public Task ShouldIgnoreDbFactory() =>
+        Verify(new
+        {
+            Factory = new MyDbContextFactory()
+        });
+
+    [Test]
+    public Task ShouldIgnoreDbContext() =>
+        Verify(new
+        {
+            Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
+        });
+
+    class MyDbContextFactory: IDbContextFactory<SampleDbContext>
+    {
+        public SampleDbContext CreateDbContext() =>
+            throw new NotImplementedException();
+    }
+
+    [Test]
     public async Task UpdateEntity()
     {
         var options = DbContextOptions();
