@@ -137,6 +137,21 @@ public class CoreTests
         });
 
     [Test]
+    public Task ShouldIgnoreDbFactoryInterface()
+    {
+        var target = new TargetWithFactoryInterface
+        {
+            Factory = new MyDbContextFactory()
+        };
+        return Verify(target);
+    }
+
+    class TargetWithFactoryInterface
+    {
+        public IDbContextFactory<SampleDbContext> Factory { get; set; } = null!;
+    }
+
+    [Test]
     public Task ShouldIgnoreDbContext() =>
         Verify(new
         {
