@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -342,11 +343,9 @@ public class CoreTests
 
         EfRecording.StartRecording();
 
-        _ = await httpClient.GetAsync("/companies");
+        var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
-        var eventData = EfRecording.FinishRecording();
-
-        await Verify(eventData);
+        await Verify(companies!.Length);
     }
 
     class CustomWebApplicationFactory : WebApplicationFactory<Startup>
@@ -372,13 +371,8 @@ public class CoreTests
         {
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/companies", async (SampleDbContext data) =>
-                {
-                    return await data.Companies.ToListAsync();
-                });
-            });
+            app.UseEndpoints(endpoints
+                => endpoints.MapGet("/companies", async (SampleDbContext data) => await data.Companies.ToListAsync()));
         }
     }
 

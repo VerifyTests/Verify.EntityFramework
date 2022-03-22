@@ -1,8 +1,11 @@
-﻿[
-  {
-    Type: ReaderExecutedAsync,
-    Text:
+﻿{
+  target: 4,
+  sql: [
+    {
+      Type: ReaderExecutedAsync,
+      Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
-  }
-]
+    }
+  ]
+}
