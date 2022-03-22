@@ -1,19 +1,19 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using VerifyTests.EntityFramework;
 
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
-    static AsyncLocal<State?> asyncLocal = new();
+    static ConcurrentBag<LogEntry>? events = null;
 
-    public static void Start() => asyncLocal.Value = new();
+    public static void Start() => events = new();
 
     public static IEnumerable<LogEntry>? Stop()
     {
-        var state = asyncLocal.Value;
-        asyncLocal.Value = null;
-        return state?.Events.OrderBy(x => x.StartTime);
+        var state = events?.ToArray();
+        events = null;
+        return state?.OrderBy(x => x.StartTime);
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
@@ -62,13 +62,5 @@ class LogCommandInterceptor :
     }
 
     static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
-        => asyncLocal.Value?.WriteLine(new(type, command, data, exception));
-
-    class State
-    {
-        internal ConcurrentBag<LogEntry> Events = new();
-
-        public void WriteLine(LogEntry entry)
-            => Events.Add(entry);
-    }
+        => events?.Add(new(type, command, data, exception));
 }
