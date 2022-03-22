@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using VerifyTests.EntityFramework;
 
@@ -31,7 +37,7 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Company {Content = "before"});
+        data.Add(new Company { Content = "before" });
         await data.SaveChangesAsync();
 
         var company = data.Companies.Single();
@@ -158,7 +164,7 @@ public class CoreTests
             Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
         });
 
-    class MyDbContextFactory: IDbContextFactory<SampleDbContext>
+    class MyDbContextFactory : IDbContextFactory<SampleDbContext>
     {
         public SampleDbContext CreateDbContext() =>
             throw new NotImplementedException();
@@ -222,7 +228,7 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verify(new {queryable});
+        await Verify(new { queryable });
     }
 
     void Build(string connection)
@@ -325,6 +331,55 @@ public class CoreTests
         await Verify(data.Companies.Count());
 
         #endregion
+    }
+
+    [Test]
+    public async Task RecordingWebApplicationFactory()
+    {
+        var factory = new CustomWebApplicationFactory();
+
+        var httpClient = factory.CreateClient();
+
+        EfRecording.StartRecording();
+
+        _ = await httpClient.GetAsync("/companies");
+
+        var sql = EfRecording.FinishRecording();
+
+        await Verify(sql);
+    }
+
+    class CustomWebApplicationFactory : WebApplicationFactory<Startup>
+    {
+        protected override void ConfigureWebHost(IWebHostBuilder builder) =>
+            builder
+                .ConfigureTestServices(services =>
+                {
+                    var database = DbContextBuilder.GetDatabase("RecordingWebApplicationFactory").GetAwaiter().GetResult();
+                    var data = database.Context;
+
+                    services.AddScoped(_ => data);
+                });
+
+        protected override IHostBuilder CreateHostBuilder() =>
+            Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+    }
+
+    public class Startup
+    {
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/companies", async (SampleDbContext data) =>
+                {
+                    return await data.Companies.ToListAsync();
+                });
+            });
+        }
     }
 
     [Test]
