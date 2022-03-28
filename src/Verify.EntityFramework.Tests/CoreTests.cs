@@ -336,10 +336,13 @@ public class CoreTests
         #endregion
     }
 
-    [Test]
-    public async Task RecordingWebApplicationFactory()
+    [DatapointSource]
+    public int[] run = new[] { 0, 1, 2, 3, 4 };
+
+    [Theory]
+    public async Task RecordingWebApplicationFactory(int run)
     {
-        var dbName = nameof(RecordingWebApplicationFactory);
+        var dbName = nameof(RecordingWebApplicationFactory) + run;
         using var connection = new SqliteConnection($"Data Source={dbName};Mode=Memory;Cache=Shared");
         await connection.OpenAsync();
 
