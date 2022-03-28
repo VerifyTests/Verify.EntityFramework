@@ -5,14 +5,23 @@ using VerifyTests.EntityFramework;
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
-    static ConcurrentBag<LogEntry>? events = null;
+    static AsyncLocal<State?> asyncLocal = new();
+    static ConcurrentDictionary<string, ConcurrentBag<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
 
-    public static void Start() => events = new();
+    public static void Start() => asyncLocal.Value = new();
+    public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
 
     public static IEnumerable<LogEntry>? Stop()
     {
-        var state = events?.ToArray();
-        events = null;
+        var state = asyncLocal.Value;
+        asyncLocal.Value = null;
+        return state?.Events.OrderBy(x => x.StartTime);
+    }
+
+    public static IEnumerable<LogEntry>? Stop(string identifier)
+    {
+        namedEvents.TryRemove(identifier, out var state);
+
         return state?.OrderBy(x => x.StartTime);
     }
 
@@ -62,5 +71,24 @@ class LogCommandInterceptor :
     }
 
     static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
-        => events?.Add(new(type, command, data, exception));
+    {
+        var annotation = data.Context?.Model.FindRuntimeAnnotationValue("Verify:EntityFramework:Instance");
+
+        if (annotation is null)
+        {
+            asyncLocal.Value?.WriteLine(new(type, command, data, exception));
+        }
+        else if (annotation is string identifier && namedEvents.ContainsKey(identifier))
+        {
+            namedEvents[identifier].Add(new(type, command, data, exception));
+        }
+    }
+
+    class State
+    {
+        internal ConcurrentBag<LogEntry> Events = new();
+
+        public void WriteLine(LogEntry entry)
+            => Events.Add(entry);
+    }
 }
