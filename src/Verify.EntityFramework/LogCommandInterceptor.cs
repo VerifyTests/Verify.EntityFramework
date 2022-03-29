@@ -7,6 +7,7 @@ class LogCommandInterceptor :
 {
     static AsyncLocal<State?> asyncLocal = new();
     static ConcurrentDictionary<string, ConcurrentBag<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
+    readonly string? identifier;
 
     public static void Start() => asyncLocal.Value = new();
     public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
@@ -23,6 +24,11 @@ class LogCommandInterceptor :
         namedEvents.TryRemove(identifier, out var state);
 
         return state?.OrderBy(x => x.StartTime);
+    }
+
+    public LogCommandInterceptor(string? identifier)
+    {
+        this.identifier = identifier;
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
@@ -70,15 +76,13 @@ class LogCommandInterceptor :
         return new(result);
     }
 
-    static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
+    void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
-        var annotation = data.Context?.Model.FindRuntimeAnnotationValue("Verify:EntityFramework:Instance");
-
-        if (annotation is null)
+        if (identifier is null)
         {
             asyncLocal.Value?.WriteLine(new(type, command, data, exception));
         }
-        else if (annotation is string identifier && namedEvents.ContainsKey(identifier))
+        else if (namedEvents.ContainsKey(identifier))
         {
             namedEvents[identifier].Add(new(type, command, data, exception));
         }

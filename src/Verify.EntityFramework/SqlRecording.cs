@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace VerifyTests.EntityFramework;
 
@@ -7,22 +6,11 @@ public static class EfRecording
 {
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext
-        => builder.AddInterceptors(new LogCommandInterceptor());
+        => builder.EnableRecording(null);
 
-    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string instanceName)
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
         where TContext : DbContext
-    {
-        ((IDbContextOptionsBuilderInfrastructure)builder)
-            .AddOrUpdateExtension(
-                GetOrCreateExtension(builder, instanceName)
-                    .WithInstanceName(instanceName));
-
-        return builder.EnableRecording();
-
-        static VerifyEfOptionsExtension GetOrCreateExtension(DbContextOptionsBuilder optionsBuilder, string instanceName)
-            => optionsBuilder.Options.FindExtension<VerifyEfOptionsExtension>()
-                ?? new VerifyEfOptionsExtension();
-    }
+        => builder.AddInterceptors(new LogCommandInterceptor(identifier));
 
     public static void StartRecording()
         => LogCommandInterceptor.Start();
