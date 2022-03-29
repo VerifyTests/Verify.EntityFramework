@@ -337,7 +337,7 @@ public class CoreTests
     }
 
     [DatapointSource]
-    public int[] run = new[] { 0, 1, 2, 3, 4 };
+    public IEnumerable<int> runs = Enumerable.Range(0, 5);
 
     [Theory]
     public async Task RecordingWebApplicationFactory(int run)
