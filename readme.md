@@ -26,7 +26,7 @@ Enable VerifyEntityFramework once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L464-L468' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L472-L476' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -143,7 +143,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L430-L453' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L438-L461' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -497,6 +497,57 @@ public async Task IgnoreNavigationProperties()
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L74-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-ignorenavigationproperties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+## WebApplicationFactory
+
+To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.testing.webapplicationfactory-1) for [integration testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests)
+an identifier must be used to be able to retrive the recorded commands. Start by enable recording with a unique identifier, for example the test name or a GUID:
+
+<!-- snippet: EnableRecordingWithIdentifier -->
+<a id='snippet-enablerecordingwithidentifier'></a>
+```cs
+.ConfigureTestServices(services =>
+{
+    services.AddScoped<DbContextOptions<SampleDbContext>>(_ =>
+    {
+        return new DbContextOptionsBuilder<SampleDbContext>()
+            .EnableRecording(testName)
+            .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
+            .Options;
+    });
+});
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L394-L405' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Then use the same identifer for recording:
+
+<!-- snippet: RecordWithIdentifier -->
+<a id='snippet-recordwithidentifier'></a>
+```cs
+var httpClient = factory.CreateClient();
+
+EfRecording.StartRecording(testName);
+
+var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
+
+var entries = EfRecording.FinishRecording(testName);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L364-L372' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The results will not be automatically included in verified file so it will have to be verified manually:
+
+<!-- snippet: VerifyRecordedCommandsWithIdentifier -->
+<a id='snippet-verifyrecordedcommandswithidentifier'></a>
+```cs
+await Verify(new
+{
+    target = companies!.Length,
+    sql = entries
+});
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L374-L380' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Icon
 

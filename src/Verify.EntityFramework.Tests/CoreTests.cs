@@ -342,11 +342,13 @@ public class CoreTests
     [Theory]
     public async Task RecordingWebApplicationFactory(int run)
     {
-        var dbName = nameof(RecordingWebApplicationFactory) + run;
-        using var connection = new SqliteConnection($"Data Source={dbName};Mode=Memory;Cache=Shared");
+        // Not actually the test name, the variable name is for README.md to make sense
+        var testName = nameof(RecordingWebApplicationFactory) + run;
+
+        using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
         await connection.OpenAsync();
 
-        var factory = new CustomWebApplicationFactory(dbName);
+        var factory = new CustomWebApplicationFactory(testName);
 
         using (var scope = factory.Services.CreateScope())
         {
@@ -359,42 +361,48 @@ public class CoreTests
             await context.SaveChangesAsync();
         }
 
+        #region RecordWithIdentifier
         var httpClient = factory.CreateClient();
 
-        EfRecording.StartRecording(dbName);
+        EfRecording.StartRecording(testName);
 
         var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
-        var entries = EfRecording.FinishRecording(dbName);
+        var entries = EfRecording.FinishRecording(testName);
+        #endregion
 
+        #region VerifyRecordedCommandsWithIdentifier
         await Verify(new
         {
             target = companies!.Length,
             sql = entries
         });
+        #endregion
     }
 
     class CustomWebApplicationFactory : WebApplicationFactory<Startup>
     {
-        readonly string _dbName;
+        readonly string testName;
 
-        public CustomWebApplicationFactory(string dbName)
+        public CustomWebApplicationFactory(string testName)
         {
-            _dbName = dbName;
+            this.testName = testName;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder) =>
             builder
+        #region EnableRecordingWithIdentifier
                 .ConfigureTestServices(services =>
                 {
                     services.AddScoped<DbContextOptions<SampleDbContext>>(_ =>
                     {
                         return new DbContextOptionsBuilder<SampleDbContext>()
-                            .EnableRecording(_dbName)
-                            .UseSqlite($"Data Source={_dbName};Mode=Memory;Cache=Shared")
+                            .EnableRecording(testName)
+                            .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
                             .Options;
                     });
                 });
+        #endregion
 
         protected override IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
