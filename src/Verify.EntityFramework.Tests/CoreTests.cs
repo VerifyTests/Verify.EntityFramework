@@ -162,7 +162,10 @@ public class CoreTests
 
     [Test]
     public Task ShouldIgnoreDbContext() =>
-        Verify(new SampleDbContext(new DbContextOptions<SampleDbContext>()));
+        Verify(new
+        {
+            Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
+        });
 
     class MyDbContextFactory : IDbContextFactory<SampleDbContext>
     {
