@@ -40,7 +40,10 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Company { Content = "before" });
+        data.Add(new Company
+        {
+            Content = "before"
+        });
         await data.SaveChangesAsync();
 
         var company = data.Companies.Single();
@@ -140,10 +143,7 @@ public class CoreTests
 
     [Test]
     public Task ShouldIgnoreDbFactory() =>
-        Verify(new
-        {
-            Factory = new MyDbContextFactory()
-        });
+        Verify(new MyDbContextFactory());
 
     [Test]
     public Task ShouldIgnoreDbFactoryInterface()
@@ -162,10 +162,7 @@ public class CoreTests
 
     [Test]
     public Task ShouldIgnoreDbContext() =>
-        Verify(new
-        {
-            Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
-        });
+        Verify(new SampleDbContext(new DbContextOptions<SampleDbContext>()));
 
     class MyDbContextFactory : IDbContextFactory<SampleDbContext>
     {
@@ -208,7 +205,6 @@ public class CoreTests
         #endregion
     }
 
-
     [Test]
     public async Task Queryable()
     {
@@ -231,7 +227,7 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verify(new { queryable });
+        await Verify(queryable);
     }
 
     void Build(string connection)
@@ -356,12 +352,17 @@ public class CoreTests
 
             await context.Database.EnsureCreatedAsync();
 
-            context.Add(new Company { Id = 1, Content = "Foo" });
+            context.Add(new Company
+            {
+                Id = 1,
+                Content = "Foo"
+            });
 
             await context.SaveChangesAsync();
         }
 
         #region RecordWithIdentifier
+
         var httpClient = factory.CreateClient();
 
         EfRecording.StartRecording(testName);
@@ -369,14 +370,17 @@ public class CoreTests
         var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
         var entries = EfRecording.FinishRecording(testName);
+
         #endregion
 
         #region VerifyRecordedCommandsWithIdentifier
+
         await Verify(new
         {
             target = companies!.Length,
             sql = entries
         });
+
         #endregion
     }
 
@@ -384,24 +388,23 @@ public class CoreTests
     {
         readonly string testName;
 
-        public CustomWebApplicationFactory(string testName)
-        {
+        public CustomWebApplicationFactory(string testName) =>
             this.testName = testName;
-        }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder) =>
             builder
-        #region EnableRecordingWithIdentifier
+
+                #region EnableRecordingWithIdentifier
+
                 .ConfigureTestServices(services =>
                 {
-                    services.AddScoped<DbContextOptions<SampleDbContext>>(_ =>
-                    {
-                        return new DbContextOptionsBuilder<SampleDbContext>()
+                    services.AddScoped(_ =>
+                        new DbContextOptionsBuilder<SampleDbContext>()
                             .EnableRecording(testName)
                             .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
-                            .Options;
-                    });
+                            .Options);
                 });
+
         #endregion
 
         protected override IHostBuilder CreateHostBuilder() =>
@@ -411,14 +414,12 @@ public class CoreTests
 
     public class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) =>
             services
                 .AddDbContext<SampleDbContext>(builder =>
                 {
                     builder.UseInMemoryDatabase("");
                 });
-        }
 
         public void Configure(IApplicationBuilder app)
         {

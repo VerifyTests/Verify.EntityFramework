@@ -26,10 +26,8 @@ class LogCommandInterceptor :
         return state?.OrderBy(x => x.StartTime);
     }
 
-    public LogCommandInterceptor(string? identifier)
-    {
+    public LogCommandInterceptor(string? identifier) =>
         this.identifier = identifier;
-    }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
         => Add("CommandFailed", command, data, data.Exception);

@@ -7,8 +7,7 @@
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testing with EntityFramework.
 
 
-
-## NuGet package
+## NuGet packages
 
  * https://nuget.org/packages/Verify.EntityFramework/
  * https://nuget.org/packages/Verify.EntityFrameworkClassic/
@@ -26,7 +25,7 @@ Enable VerifyEntityFramework once at assembly load time:
 ```cs
 VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L472-L476' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L473-L477' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -58,7 +57,7 @@ builder.UseSqlServer(connection);
 builder.EnableRecording();
 var data = new SampleDbContext(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L239-L246' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L235-L242' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `EnableRecording` should only be called in the test context.
@@ -86,7 +85,7 @@ await data.Companies
 
 await Verify(data.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L319-L336' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L315-L332' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -143,7 +142,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L438-L461' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L439-L462' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -174,7 +173,7 @@ await data2.Companies
 
 await Verify(data2.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L288-L310' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L284-L306' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
@@ -275,7 +274,10 @@ public async Task Deleted()
     var options = DbContextOptions();
 
     await using var data = new SampleDbContext(options);
-    data.Add(new Company { Content = "before" });
+    data.Add(new Company
+    {
+        Content = "before"
+    });
     await data.SaveChangesAsync();
 
     var company = data.Companies.Single();
@@ -283,7 +285,7 @@ public async Task Deleted()
     await Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L35-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-deleted' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L35-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-deleted' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -327,7 +329,7 @@ public async Task Modified()
     await Verify(data.ChangeTracker);
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L53-L72' title='Snippet source file'>snippet source</a> | <a href='#snippet-modified' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L56-L75' title='Snippet source file'>snippet source</a> | <a href='#snippet-modified' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -362,7 +364,7 @@ var queryable = data.Companies
     .Where(x => x.Content == "value");
 await Verify(queryable);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L218-L224' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L214-L220' title='Snippet source file'>snippet source</a> | <a href='#snippet-queryable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -410,7 +412,7 @@ await Verify(data.AllData())
                 serializer =>
                     serializer.TypeNameHandling = TypeNameHandling.Objects));
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L199-L208' title='Snippet source file'>snippet source</a> | <a href='#snippet-alldata' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L196-L205' title='Snippet source file'>snippet source</a> | <a href='#snippet-alldata' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file with all data in the database:
@@ -494,32 +496,30 @@ public async Task IgnoreNavigationProperties()
             x => x.IgnoreNavigationProperties(data));
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L74-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-ignorenavigationproperties' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L77-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-ignorenavigationproperties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
 
 ## WebApplicationFactory
 
-To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.testing.webapplicationfactory-1) for [integration testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests)
-an identifier must be used to be able to retrive the recorded commands. Start by enable recording with a unique identifier, for example the test name or a GUID:
+To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.testing.webapplicationfactory-1) for [integration testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests)an identifier must be used to be able to retrieve the recorded commands. Start by enable recording with a unique identifier, for example the test name or a GUID:
 
 <!-- snippet: EnableRecordingWithIdentifier -->
 <a id='snippet-enablerecordingwithidentifier'></a>
 ```cs
 .ConfigureTestServices(services =>
 {
-    services.AddScoped<DbContextOptions<SampleDbContext>>(_ =>
-    {
-        return new DbContextOptionsBuilder<SampleDbContext>()
+    services.AddScoped(_ =>
+        new DbContextOptionsBuilder<SampleDbContext>()
             .EnableRecording(testName)
             .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
-            .Options;
-    });
+            .Options);
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L394-L405' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L397-L408' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Then use the same identifer for recording:
+Then use the same identifier for recording:
 
 <!-- snippet: RecordWithIdentifier -->
 <a id='snippet-recordwithidentifier'></a>
@@ -532,7 +532,7 @@ var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
 var entries = EfRecording.FinishRecording(testName);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L364-L372' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L364-L374' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The results will not be automatically included in verified file so it will have to be verified manually:
@@ -546,8 +546,9 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L374-L380' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L376-L384' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
 
 ## Icon
 
