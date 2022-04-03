@@ -1,0 +1,11 @@
+﻿{
+  target: 1,
+  sql: [
+    {
+      Type: ReaderExecutedAsync,
+      Text:
+SELECT "c"."Id", "c"."Content"
+FROM "Companies" AS "c"
+    }
+  ]
+}

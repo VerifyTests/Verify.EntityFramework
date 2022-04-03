@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using VerifyTests.EntityFramework;
 
@@ -6,14 +6,29 @@ class LogCommandInterceptor :
     DbCommandInterceptor
 {
     static AsyncLocal<State?> asyncLocal = new();
+    static ConcurrentDictionary<string, ConcurrentBag<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
+    readonly string? identifier;
 
     public static void Start() => asyncLocal.Value = new();
+    public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
 
     public static IEnumerable<LogEntry>? Stop()
     {
         var state = asyncLocal.Value;
         asyncLocal.Value = null;
         return state?.Events.OrderBy(x => x.StartTime);
+    }
+
+    public static IEnumerable<LogEntry>? Stop(string identifier)
+    {
+        namedEvents.TryRemove(identifier, out var state);
+
+        return state?.OrderBy(x => x.StartTime);
+    }
+
+    public LogCommandInterceptor(string? identifier)
+    {
+        this.identifier = identifier;
     }
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
@@ -61,8 +76,17 @@ class LogCommandInterceptor :
         return new(result);
     }
 
-    static void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
-        => asyncLocal.Value?.WriteLine(new(type, command, data, exception));
+    void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
+    {
+        if (identifier is null)
+        {
+            asyncLocal.Value?.WriteLine(new(type, command, data, exception));
+        }
+        else if (namedEvents.ContainsKey(identifier))
+        {
+            namedEvents[identifier].Add(new(type, command, data, exception));
+        }
+    }
 
     class State
     {

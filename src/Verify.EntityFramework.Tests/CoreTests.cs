@@ -1,8 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using VerifyTests.EntityFramework;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class CoreTests
 {
     #region Added
@@ -31,7 +40,7 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Company {Content = "before"});
+        data.Add(new Company { Content = "before" });
         await data.SaveChangesAsync();
 
         var company = data.Companies.Single();
@@ -158,7 +167,7 @@ public class CoreTests
             Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
         });
 
-    class MyDbContextFactory: IDbContextFactory<SampleDbContext>
+    class MyDbContextFactory : IDbContextFactory<SampleDbContext>
     {
         public SampleDbContext CreateDbContext() =>
             throw new NotImplementedException();
@@ -222,7 +231,7 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(x => x.Content == "value");
-        await Verify(new {queryable});
+        await Verify(new { queryable });
     }
 
     void Build(string connection)
@@ -325,6 +334,99 @@ public class CoreTests
         await Verify(data.Companies.Count());
 
         #endregion
+    }
+
+    [DatapointSource]
+    public IEnumerable<int> runs = Enumerable.Range(0, 5);
+
+    [Theory]
+    public async Task RecordingWebApplicationFactory(int run)
+    {
+        // Not actually the test name, the variable name is for README.md to make sense
+        var testName = nameof(RecordingWebApplicationFactory) + run;
+
+        using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
+        await connection.OpenAsync();
+
+        var factory = new CustomWebApplicationFactory(testName);
+
+        using (var scope = factory.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
+
+            await context.Database.EnsureCreatedAsync();
+
+            context.Add(new Company { Id = 1, Content = "Foo" });
+
+            await context.SaveChangesAsync();
+        }
+
+        #region RecordWithIdentifier
+        var httpClient = factory.CreateClient();
+
+        EfRecording.StartRecording(testName);
+
+        var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
+
+        var entries = EfRecording.FinishRecording(testName);
+        #endregion
+
+        #region VerifyRecordedCommandsWithIdentifier
+        await Verify(new
+        {
+            target = companies!.Length,
+            sql = entries
+        });
+        #endregion
+    }
+
+    class CustomWebApplicationFactory : WebApplicationFactory<Startup>
+    {
+        readonly string testName;
+
+        public CustomWebApplicationFactory(string testName)
+        {
+            this.testName = testName;
+        }
+
+        protected override void ConfigureWebHost(IWebHostBuilder builder) =>
+            builder
+        #region EnableRecordingWithIdentifier
+                .ConfigureTestServices(services =>
+                {
+                    services.AddScoped<DbContextOptions<SampleDbContext>>(_ =>
+                    {
+                        return new DbContextOptionsBuilder<SampleDbContext>()
+                            .EnableRecording(testName)
+                            .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
+                            .Options;
+                    });
+                });
+        #endregion
+
+        protected override IHostBuilder CreateHostBuilder() =>
+            Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+    }
+
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services
+                .AddDbContext<SampleDbContext>(builder =>
+                {
+                    builder.UseInMemoryDatabase("");
+                });
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints
+                => endpoints.MapGet("/companies", async (SampleDbContext data) => await data.Companies.ToListAsync()));
+        }
     }
 
     [Test]
