@@ -7,6 +7,7 @@ class DbUpdateExceptionConverter :
     {
         writer.WriteStartObject();
 
+        writer.WriteProperty(exception, exception.Message, "Message");
         writer.WriteProperty(exception, exception.GetType(), "Type");
         writer.WriteProperty(exception, exception.InnerException, "InnerException");
 
@@ -14,10 +15,10 @@ class DbUpdateExceptionConverter :
             .Select(
                 e => new
                 {
-                    EntryProperties = e.Properties.Select(
+                    EntryProperties = e.Properties.ToDictionary(
+                        p => p.Metadata.Name,
                         p => new
                         {
-                            PropertyName = p.Metadata.Name,
                             p.OriginalValue,
                             p.CurrentValue,
                             p.IsTemporary,
