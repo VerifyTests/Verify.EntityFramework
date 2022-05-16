@@ -470,13 +470,4 @@ public class CoreTests
         new DbContextOptionsBuilder<SampleDbContext>()
             .UseInMemoryDatabase(databaseName)
             .Options;
-
-    static CoreTests()
-    {
-        #region EnableCore
-
-        VerifyEntityFramework.Enable();
-
-        #endregion
-    }
 }

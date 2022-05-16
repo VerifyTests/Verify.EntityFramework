@@ -1,0 +1,20 @@
+﻿{
+  Type: DbUpdateException,
+  Entries: [
+    {
+      EntryProperties: [
+        {
+          PropertyName: Id,
+          OriginalValue: Guid_1,
+          CurrentValue: Guid_1
+        },
+        {
+          PropertyName: Property,
+          OriginalValue: Item1,
+          CurrentValue: Item1
+        }
+      ],
+      State: Added
+    }
+  ]
+}

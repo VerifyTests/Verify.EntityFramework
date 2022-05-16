@@ -57,6 +57,7 @@ public static class VerifyEntityFramework
             settings.AddExtraSettings(serializer =>
             {
                 var converters = serializer.Converters;
+                converters.Add(new DbUpdateExceptionConverter());
                 converters.Add(new TrackerConverter());
                 converters.Add(new QueryableConverter());
             });
