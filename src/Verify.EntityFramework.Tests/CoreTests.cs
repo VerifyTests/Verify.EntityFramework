@@ -93,8 +93,7 @@ public class CoreTests
             Company = company
         };
         await Verify(employee)
-            .ModifySerialization(
-                x => x.IgnoreNavigationProperties(data));
+            .IgnoreNavigationProperties(data);
     }
 
     #endregion
@@ -199,11 +198,9 @@ public class CoreTests
         #region AllData
 
         await Verify(data.AllData())
-            .ModifySerialization(
-                serialization =>
-                    serialization.AddExtraSettings(
-                        serializer =>
-                            serializer.TypeNameHandling = TypeNameHandling.Objects));
+            .AddExtraSettings(
+                serializer =>
+                    serializer.TypeNameHandling = TypeNameHandling.Objects);
 
         #endregion
     }

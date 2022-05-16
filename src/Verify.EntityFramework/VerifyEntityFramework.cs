@@ -19,8 +19,20 @@ public static class VerifyEntityFramework
         }
     }
 
+    public static void IgnoreNavigationProperties(this VerifySettings settings, DbContext context) =>
+        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(context));
+
+    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, DbContext context) =>
+        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(context));
+
     public static void IgnoreNavigationProperties(this SerializationSettings settings, DbContext context)
         => IgnoreNavigationProperties(settings, context.Model);
+
+    public static void IgnoreNavigationProperties(this VerifySettings settings, IModel model) =>
+        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(model));
+
+    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel model) =>
+        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(model));
 
     public static void IgnoreNavigationProperties(this SerializationSettings settings, IModel model)
     {

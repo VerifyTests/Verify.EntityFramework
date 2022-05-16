@@ -7,14 +7,11 @@ public static class VerifyEntityFrameworkClassic
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _, _) => QueryableConverter.IsQueryable(target));
-        VerifierSettings.ModifySerialization(settings =>
+        VerifierSettings.AddExtraSettings(serializer =>
         {
-            settings.AddExtraSettings(serializer =>
-            {
-                var converters = serializer.Converters;
-                converters.Add(new TrackerConverter());
-                converters.Add(new QueryableConverter());
-            });
+            var converters = serializer.Converters;
+            converters.Add(new TrackerConverter());
+            converters.Add(new QueryableConverter());
         });
     }
 
