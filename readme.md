@@ -98,6 +98,7 @@ Will result in the following verified file:
   sql: [
     {
       Type: ReaderExecutedAsync,
+      HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
@@ -105,6 +106,7 @@ WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
+      HasTransaction: false,
       Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
@@ -112,7 +114,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -196,6 +198,7 @@ VALUES (@p0, @p1);
     },
     {
       Type: ReaderExecutedAsync,
+      HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
@@ -203,6 +206,7 @@ WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
+      HasTransaction: false,
       Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
@@ -210,7 +214,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -421,42 +425,42 @@ Will result in the following verified file with all data in the database:
 [
   {
     $type: Company,
-    Id: Id_1,
+    Id: 1,
     Content: Company1
   },
   {
     $type: Company,
-    Id: Id_2,
+    Id: 4,
     Content: Company2
   },
   {
     $type: Company,
-    Id: Id_3,
+    Id: 6,
     Content: Company3
   },
   {
     $type: Company,
-    Id: Id_4,
+    Id: 7,
     Content: Company4
   },
   {
     $type: Employee,
-    Id: Id_5,
-    CompanyId: Id_1,
+    Id: 2,
+    CompanyId: 1,
     Content: Employee1,
     Age: 25
   },
   {
     $type: Employee,
-    Id: Id_6,
-    CompanyId: Id_1,
+    Id: 3,
+    CompanyId: 1,
     Content: Employee2,
     Age: 31
   },
   {
     $type: Employee,
-    Id: Id_7,
-    CompanyId: Id_2,
+    Id: 5,
+    CompanyId: 4,
     Content: Employee4,
     Age: 34
   }
