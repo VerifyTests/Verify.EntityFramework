@@ -3,6 +3,7 @@
   sql: [
     {
       Type: ReaderExecutedAsync,
+      HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]

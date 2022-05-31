@@ -62,17 +62,14 @@ public static class VerifyEntityFramework
             QueryableToSql,
             (target, _, _) => QueryableConverter.IsQueryable(target));
 
-        VerifierSettings.ModifySerialization(settings =>
+        VerifierSettings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
+        VerifierSettings.IgnoreMembersWithType<DbContext>();
+        VerifierSettings.AddExtraSettings(serializer =>
         {
-            settings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
-            settings.IgnoreMembersWithType<DbContext>();
-            settings.AddExtraSettings(serializer =>
-            {
-                var converters = serializer.Converters;
-                converters.Add(new DbUpdateExceptionConverter());
-                converters.Add(new TrackerConverter());
-                converters.Add(new QueryableConverter());
-            });
+            var converters = serializer.Converters;
+            converters.Add(new DbUpdateExceptionConverter());
+            converters.Add(new TrackerConverter());
+            converters.Add(new QueryableConverter());
         });
     }
 
