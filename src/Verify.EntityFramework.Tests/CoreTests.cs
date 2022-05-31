@@ -98,6 +98,17 @@ public class CoreTests
 
     #endregion
 
+    void IgnoreNavigationPropertiesGlobal()
+    {
+        #region IgnoreNavigationPropertiesGlobal
+
+        var options = DbContextOptions();
+        using var data = new SampleDbContext(options);
+        VerifyEntityFramework.IgnoreNavigationProperties(data.Model);
+
+        #endregion
+    }
+
     [Test]
     public async Task WithNavigationProp()
     {

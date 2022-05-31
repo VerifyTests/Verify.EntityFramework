@@ -36,11 +36,27 @@ public static class VerifyEntityFramework
 
     public static void IgnoreNavigationProperties(this SerializationSettings settings, IModel model)
     {
+        foreach (var (type, name) in model.GetNavigations())
+        {
+            settings.IgnoreMember(type, name);
+        }
+    }
+
+    public static void IgnoreNavigationProperties(IModel model)
+    {
+        foreach (var (type, name) in model.GetNavigations())
+        {
+            VerifierSettings.IgnoreMember(type, name);
+        }
+    }
+
+    static IEnumerable<(Type type,string name)> GetNavigations(this IModel model)
+    {
         foreach (var type in model.GetEntityTypes())
         {
             foreach (var navigation in type.GetNavigations())
             {
-                settings.IgnoreMember(type.ClrType, navigation.Name);
+                yield return new(type.ClrType, navigation.Name);
             }
         }
     }
