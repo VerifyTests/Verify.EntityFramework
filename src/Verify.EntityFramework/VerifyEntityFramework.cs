@@ -20,21 +20,22 @@ public static class VerifyEntityFramework
     }
 
     public static void IgnoreNavigationProperties(this VerifySettings settings, DbContext context) =>
-        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(context));
+        settings.IgnoreNavigationProperties(context.Model);
 
     public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, DbContext context) =>
-        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(context));
+        settings.IgnoreNavigationProperties(context.Model);
 
-    public static void IgnoreNavigationProperties(this SerializationSettings settings, DbContext context)
-        => IgnoreNavigationProperties(settings, context.Model);
+    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel model)
+    {
+        foreach (var (type, name) in model.GetNavigations())
+        {
+            settings.IgnoreMember(type, name);
+        }
 
-    public static void IgnoreNavigationProperties(this VerifySettings settings, IModel model) =>
-        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(model));
+        return settings;
+    }
 
-    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel model) =>
-        settings.ModifySerialization(_ => _.IgnoreNavigationProperties(model));
-
-    public static void IgnoreNavigationProperties(this SerializationSettings settings, IModel model)
+    public static void IgnoreNavigationProperties(this VerifySettings settings, IModel model)
     {
         foreach (var (type, name) in model.GetNavigations())
         {
@@ -50,7 +51,7 @@ public static class VerifyEntityFramework
         }
     }
 
-    static IEnumerable<(Type type,string name)> GetNavigations(this IModel model)
+    static IEnumerable<(Type type, string name)> GetNavigations(this IModel model)
     {
         foreach (var type in model.GetEntityTypes())
         {
