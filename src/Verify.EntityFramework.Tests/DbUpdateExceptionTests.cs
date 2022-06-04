@@ -27,7 +27,8 @@ public class DbUpdateExceptionTests
         var testDbContext = database.NewDbContext();
         testDbContext.Add(duplicate);
         await ThrowsTask(() => testDbContext.SaveChangesAsync())
-            .IgnoreStackTrack().ScrubInlineGuids();
+            .IgnoreStackTrace()
+            .ScrubInlineGuids();
     }
 
     public class TestEntity
