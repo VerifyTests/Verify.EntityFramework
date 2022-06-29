@@ -497,7 +497,7 @@ public async Task IgnoreNavigationProperties()
 <!-- endSnippet -->
 
 
-### Ignore gloabally
+### Ignore globally
 
 <!-- snippet: IgnoreNavigationPropertiesGlobal -->
 <a id='snippet-ignorenavigationpropertiesglobal'></a>
@@ -512,7 +512,7 @@ VerifyEntityFramework.IgnoreNavigationProperties(data.Model);
 
 ## WebApplicationFactory
 
-To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.testing.webapplicationfactory-1) for [integration testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests)an identifier must be used to be able to retrieve the recorded commands. Start by enable recording with a unique identifier, for example the test name or a GUID:
+To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.testing.webapplicationfactory-1) for [integration testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests) an identifier must be used to be able to retrieve the recorded commands. Start by enable recording with a unique identifier, for example the test name or a GUID:
 
 <!-- snippet: EnableRecordingWithIdentifier -->
 <a id='snippet-enablerecordingwithidentifier'></a>
