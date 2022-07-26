@@ -58,7 +58,7 @@ class TrackerConverter :
 
             foreach (var property in entry.Properties)
             {
-                writer.WriteProperty(entry, property.OriginalValue, property.Metadata.Name);
+                writer.WriteMember(entry, property.OriginalValue, property.Metadata.Name);
             }
 
             writer.WriteEndObject();
@@ -118,11 +118,11 @@ class TrackerConverter :
         if (ids.Count == 1)
         {
             var (name, value) = ids.Single();
-            writer.WriteProperty(entry, value, name);
+            writer.WriteMember(entry, value, name);
         }
         else
         {
-            writer.WriteProperty(entry, ids, "Ids");
+            writer.WriteMember(entry, ids, "Ids");
         }
     }
 }

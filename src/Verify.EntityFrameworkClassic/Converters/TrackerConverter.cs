@@ -74,7 +74,7 @@ class TrackerConverter :
             foreach (var propertyName in entry.CurrentValues.PropertyNames)
             {
                 var value = entry.CurrentValues[propertyName];
-                writer.WriteProperty(entry, value, propertyName);
+                writer.WriteMember(entry, value, propertyName);
             }
 
             writer.WriteEndObject();
@@ -111,12 +111,12 @@ class TrackerConverter :
         WriteId(writer, entry, context);
         foreach (var property in entry.ChangedProperties())
         {
-            writer.WriteProperty(
+            writer.WriteMember(
                 entry,
                 new
                 {
-                    Original = property.Original,
-                    Current = property.Current
+                    property.Original,
+                    property.Current
                 },
                 property.Key);
         }
@@ -135,11 +135,11 @@ class TrackerConverter :
         if (ids.Count == 1)
         {
             var (name, value) = ids.Single();
-            writer.WriteProperty(entry, value, name);
+            writer.WriteMember(entry, value, name);
         }
         else
         {
-            writer.WriteProperty(entry, ids, "Ids");
+            writer.WriteMember(entry, ids, "Ids");
         }
     }
 }

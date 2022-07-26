@@ -7,9 +7,9 @@ class DbUpdateExceptionConverter :
     {
         writer.WriteStartObject();
 
-        writer.WriteProperty(exception, exception.Message, "Message");
-        writer.WriteProperty(exception, exception.GetType(), "Type");
-        writer.WriteProperty(exception, exception.InnerException, "InnerException");
+        writer.WriteMember(exception, exception.Message, "Message");
+        writer.WriteMember(exception, exception.GetType(), "Type");
+        writer.WriteMember(exception, exception.InnerException, "InnerException");
 
         var entriesValue = exception.Entries
             .Select(
@@ -28,8 +28,8 @@ class DbUpdateExceptionConverter :
                 })
             .ToList();
 
-        writer.WriteProperty(exception, entriesValue, "Entries");
-        writer.WriteProperty(exception, exception.StackTrace, "StackTrace");
+        writer.WriteMember(exception, entriesValue, "Entries");
+        writer.WriteMember(exception, exception.StackTrace, "StackTrace");
 
         writer.WriteEndObject();
     }

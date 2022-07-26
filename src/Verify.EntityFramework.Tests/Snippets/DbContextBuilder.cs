@@ -1,5 +1,4 @@
-﻿using EfLocalDb;
-using VerifyTests.EntityFramework;
+﻿using VerifyTests.EntityFramework;
 
 // LocalDb is used to make the sample simpler.
 // Replace with a real DbContext
