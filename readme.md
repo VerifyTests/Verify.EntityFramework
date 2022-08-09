@@ -98,6 +98,7 @@ Will result in the following verified file:
   sql: [
     {
       Type: ReaderExecutedAsync,
+      HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
@@ -105,6 +106,7 @@ WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
+      HasTransaction: false,
       Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
@@ -112,7 +114,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -196,6 +198,7 @@ VALUES (@p0, @p1);
     },
     {
       Type: ReaderExecutedAsync,
+      HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
@@ -203,6 +206,7 @@ WHERE [c].[Content] = N'Title'
     },
     {
       Type: ReaderExecuted,
+      HasTransaction: false,
       Text:
 SELECT COUNT(*)
 FROM [Companies] AS [c]
@@ -210,7 +214,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
