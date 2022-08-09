@@ -254,6 +254,23 @@ public class CoreTests
     }
 
     [Test]
+    public async Task Parameters()
+    {
+        var database = await DbContextBuilder.GetDatabase("Parameters");
+        var data = database.Context;
+        data.Add(
+            new Company
+            {
+                Content = DateTime.Now.ToString()
+            }
+        );
+        EfRecording.StartRecording();
+        await data.SaveChangesAsync();
+        var entries = EfRecording.FinishRecording();
+        await Verify(entries);
+    }
+
+    [Test]
     public async Task MultiRecording()
     {
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
