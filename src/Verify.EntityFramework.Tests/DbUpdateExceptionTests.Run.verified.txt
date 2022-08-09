@@ -20,11 +20,15 @@
       EntryProperties: {
         Id: {
           OriginalValue: Guid_1,
-          CurrentValue: Guid_1
+          CurrentValue: Guid_1,
+          IsTemporary: false,
+          IsModified: false
         },
         Property: {
           OriginalValue: Item1,
-          CurrentValue: Item1
+          CurrentValue: Item1,
+          IsTemporary: false,
+          IsModified: false
         }
       },
       State: Added
