@@ -261,7 +261,7 @@ public class CoreTests
         data.Add(
             new Company
             {
-                Content = DateTime.Now.ToString()
+                Content = Guid.NewGuid().ToString()
             }
         );
         EfRecording.StartRecording();

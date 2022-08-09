@@ -85,7 +85,7 @@ await data.Companies
 
 await Verify(data.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L326-L343' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L343-L360' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -142,7 +142,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L450-L473' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L467-L490' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -173,7 +173,7 @@ await data2.Companies
 
 await Verify(data2.Companies.Count());
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L295-L317' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L312-L334' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.MultiDbContexts.verified.txt -->
@@ -526,7 +526,7 @@ To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotne
             .Options);
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L408-L419' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L425-L436' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then use the same identifier for recording:
@@ -542,7 +542,7 @@ var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
 var entries = EfRecording.FinishRecording(testName);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L375-L385' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L392-L402' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The results will not be automatically included in verified file so it will have to be verified manually:
@@ -556,7 +556,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L387-L395' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L404-L412' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
