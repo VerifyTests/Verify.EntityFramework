@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
+using Argon;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Newtonsoft.Json;
 
 namespace VerifyTests.EntityFramework;
 
