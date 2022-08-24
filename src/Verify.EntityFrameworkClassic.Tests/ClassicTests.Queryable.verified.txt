@@ -1,4 +1,4 @@
-SELECT 
+﻿SELECT 
     [Extent1].[Id] AS [Id], 
     [Extent1].[Content] AS [Content]
     FROM [dbo].[Companies] AS [Extent1]
