@@ -1,16 +1,15 @@
 ﻿public static class ModuleInitializer
 {
-
-    #region EnableCore
+    #region EnableClassic
 
     [ModuleInitializer]
     public static void Init()
     {
-        VerifyEntityFramework.Enable();
+
+        VerifyEntityFrameworkClassic.Enable();
 
         #endregion
 
-        VerifySqlServer.Enable();
         VerifyDiffPlex.Initialize();
     }
 }

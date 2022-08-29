@@ -23,9 +23,12 @@ Enable VerifyEntityFramework once at assembly load time:
 <!-- snippet: EnableCore -->
 <a id='snippet-enablecore'></a>
 ```cs
-VerifyEntityFramework.Enable();
+[ModuleInitializer]
+public static void Init()
+{
+    VerifyEntityFramework.Enable();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ModuleInitializer.cs#L8-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/ModuleInitializer.cs#L4-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -37,6 +40,15 @@ VerifyEntityFramework.Enable();
 VerifyEntityFrameworkClassic.Enable();
 ```
 <sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L130-L134' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-enableclassic-1'></a>
+```cs
+[ModuleInitializer]
+public static void Init()
+{
+
+    VerifyEntityFrameworkClassic.Enable();
+```
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ModuleInitializer.cs#L3-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
