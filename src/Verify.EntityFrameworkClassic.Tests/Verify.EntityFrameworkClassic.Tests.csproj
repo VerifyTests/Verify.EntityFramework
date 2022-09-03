@@ -7,7 +7,7 @@
     <PackageReference Include="Argon" Version="0.1.0-beta.18" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
-    <PackageReference Include="Verify.NUnit" Version="18.0.0-beta.8" />
+    <PackageReference Include="Verify.NUnit" Version="18.0.0-beta.10" />
     <PackageReference Include="Verify.DiffPlex" Version="2.0.0-beta.2" />
     <PackageReference Include="EfClassicLocalDb" Version="13.9.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
