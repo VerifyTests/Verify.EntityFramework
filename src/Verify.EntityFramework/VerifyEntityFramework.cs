@@ -77,7 +77,7 @@ public static class VerifyEntityFramework
 
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
-            (target, _, _) => QueryableConverter.IsQueryable(target));
+            (target, _) => QueryableConverter.IsQueryable(target));
 
         VerifierSettings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
         VerifierSettings.IgnoreMembersWithType<DbContext>();
