@@ -1,5 +1,4 @@
-﻿
-class QueryableConverter :
+﻿class QueryableConverter :
     WriteOnlyJsonConverter
 {
     public override void Write(VerifyJsonWriter writer, object data)

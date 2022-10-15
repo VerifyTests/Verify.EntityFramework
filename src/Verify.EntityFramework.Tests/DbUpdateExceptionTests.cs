@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 [TestFixture]
 public class DbUpdateExceptionTests
 {

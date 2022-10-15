@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 class DbUpdateExceptionConverter :
     WriteOnlyJsonConverter<DbUpdateException>
 {

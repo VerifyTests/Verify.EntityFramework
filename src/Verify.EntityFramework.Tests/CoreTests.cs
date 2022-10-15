@@ -1,15 +1,3 @@
-using System.Net.Http.Json;
-using Argon;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using VerifyTests.EntityFramework;
-
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class CoreTests
@@ -229,6 +217,17 @@ public class CoreTests
         await Verify(queryable);
 
         #endregion
+    }
+
+    [Test]
+    public async Task SetSelect()
+    {
+        var database = await DbContextBuilder.GetDatabase("Queryable");
+        var data = database.Context;
+
+        var query = data.Set<Company>()
+            .Select(x => x.Id);
+        await Verify(query);
     }
 
     [Test]

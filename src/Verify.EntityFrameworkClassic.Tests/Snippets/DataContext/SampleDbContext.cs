@@ -1,7 +1,4 @@
-﻿using System.Data.Common;
-using System.Data.Entity;
-
-public class SampleDbContext :
+﻿public class SampleDbContext :
     DbContext
 {
     public DbSet<Employee> Employees { get; set; } = null!;

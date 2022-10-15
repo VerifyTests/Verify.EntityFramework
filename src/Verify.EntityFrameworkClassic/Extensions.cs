@@ -1,9 +1,5 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-
-static class Extensions
+﻿static class Extensions
 {
-
     public static IEnumerable<ChangePair> ChangedProperties(this DbEntityEntry entry)
     {
         foreach (var name in entry.CurrentValues.PropertyNames)

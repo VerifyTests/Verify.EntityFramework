@@ -1,7 +1,4 @@
-﻿using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
-
-static class QueryableSerializer<TEntity>
+﻿static class QueryableSerializer<TEntity>
     where TEntity : class
 {
     public static string ToSql(IQueryable<TEntity> query)

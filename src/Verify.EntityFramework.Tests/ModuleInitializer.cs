@@ -1,6 +1,5 @@
 ﻿public static class ModuleInitializer
 {
-
     #region EnableCore
 
     [ModuleInitializer]

@@ -1,7 +1,4 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-
-class TrackerConverter :
+﻿class TrackerConverter :
     WriteOnlyJsonConverter<DbChangeTracker>
 {
     static Func<DbChangeTracker, DbContext> func;
