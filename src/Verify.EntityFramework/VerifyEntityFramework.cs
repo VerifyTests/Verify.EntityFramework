@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-
-namespace VerifyTests;
+﻿namespace VerifyTests;
 
 public static class VerifyEntityFramework
 {

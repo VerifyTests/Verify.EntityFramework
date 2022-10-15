@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-
-class TrackerConverter :
+﻿class TrackerConverter :
     WriteOnlyJsonConverter<ChangeTracker>
 {
     public override void Write(VerifyJsonWriter writer, ChangeTracker tracker)

@@ -1,9 +1,4 @@
-﻿using System.Data;
-using System.Data.Common;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
-
-static class Extensions
+﻿static class Extensions
 {
     static MethodInfo setMethod = typeof(DbContext)
         .GetMethod("Set", Array.Empty<Type>())!;

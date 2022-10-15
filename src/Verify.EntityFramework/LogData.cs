@@ -1,8 +1,4 @@
-﻿using System.Data.Common;
-using Argon;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
-namespace VerifyTests.EntityFramework;
+﻿namespace VerifyTests.EntityFramework;
 
 public class LogEntry
 {

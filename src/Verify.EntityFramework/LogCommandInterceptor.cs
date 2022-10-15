@@ -1,7 +1,3 @@
-using System.Data.Common;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using VerifyTests.EntityFramework;
-
 class LogCommandInterceptor :
     DbCommandInterceptor
 {
