@@ -5,7 +5,6 @@
     [ModuleInitializer]
     public static void Init()
     {
-
         VerifyEntityFrameworkClassic.Enable();
 
         #endregion
