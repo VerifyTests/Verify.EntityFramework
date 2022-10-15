@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-
-class QueryableConverter :
+﻿class QueryableConverter :
     WriteOnlyJsonConverter
 {
     public override void Write(VerifyJsonWriter writer, object data)
@@ -11,14 +9,8 @@ class QueryableConverter :
 
     public static string QueryToSql(object data)
     {
-        var entityType = data.GetType().GetGenericArguments().Single();
-        var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(entityType);
-        return (string) queryableSerializer.InvokeMember(
-            name: "ToSql",
-            invokeAttr: BindingFlags.InvokeMethod,
-            binder: null,
-            target: null,
-            args: new[] {data})!;
+        var queryable = (IQueryable)data;
+        return queryable.ToQueryString();
     }
 
     public override bool CanConvert(Type type)
