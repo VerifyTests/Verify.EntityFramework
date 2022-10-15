@@ -222,7 +222,7 @@ public class CoreTests
     [Test]
     public async Task SetSelect()
     {
-        var database = await DbContextBuilder.GetDatabase("Queryable");
+        var database = await DbContextBuilder.GetDatabase("SetSelect");
         var data = database.Context;
 
         var query = data.Set<Company>()
