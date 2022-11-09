@@ -6,12 +6,12 @@
       {
         Message: Violation of PRIMARY KEY constraint 'PK_TestEntities'. Cannot insert duplicate key in object 'dbo.TestEntities'. The duplicate key value is (Guid_1).,
         Number: 2627,
-        Line: 2
+        Line: 3
       },
       {
         Message: The statement has been terminated.,
         Number: 3621,
-        Line: 2
+        Line: 3
       }
     ]
   },
