@@ -197,12 +197,13 @@ await Verify(data2.Companies.Count());
   sql: [
     {
       Type: ReaderExecutedAsync,
-      HasTransaction: true,
+      HasTransaction: false,
       Parameters: {
         @p0 (Int32): 0,
         @p1 (String?): Title
       },
       Text:
+SET IMPLICIT_TRANSACTIONS OFF;
 SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
@@ -225,7 +226,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
