@@ -2,24 +2,24 @@ class LogCommandInterceptor :
     DbCommandInterceptor
 {
     static AsyncLocal<State?> asyncLocal = new();
-    static ConcurrentDictionary<string, ConcurrentBag<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
+    static ConcurrentDictionary<string, List<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
     readonly string? identifier;
 
     public static void Start() => asyncLocal.Value = new();
     public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
 
-    public static IEnumerable<LogEntry>? Stop()
+    public static IReadOnlyList<LogEntry>? Stop()
     {
         var state = asyncLocal.Value;
         asyncLocal.Value = null;
-        return state?.Events.OrderBy(x => x.StartTime);
+        return state?.Events;
     }
 
-    public static IEnumerable<LogEntry>? Stop(string identifier)
+    public static IReadOnlyList<LogEntry>? Stop(string identifier)
     {
         namedEvents.TryRemove(identifier, out var state);
 
-        return state?.OrderBy(x => x.StartTime);
+        return state;
     }
 
     public LogCommandInterceptor(string? identifier) =>
@@ -84,7 +84,7 @@ class LogCommandInterceptor :
 
     class State
     {
-        internal ConcurrentBag<LogEntry> Events = new();
+        internal List<LogEntry> Events = new();
 
         public void WriteLine(LogEntry entry)
             => Events.Add(entry);

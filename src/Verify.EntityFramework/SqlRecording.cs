@@ -16,23 +16,25 @@ public static class EfRecording
     public static void StartRecording(string identifier)
         => LogCommandInterceptor.Start(identifier);
 
-    public static IEnumerable<LogEntry> FinishRecording()
+    public static IReadOnlyList<LogEntry> FinishRecording()
     {
         var entries = LogCommandInterceptor.Stop();
         if (entries is not null)
         {
             return entries;
         }
+
         throw new("No recorded state. It is possible `VerifyEntityFramework.StartRecording()` has not been called on the DbContext.");
     }
 
-    public static IEnumerable<LogEntry> FinishRecording(string identifier)
+    public static IReadOnlyList<LogEntry> FinishRecording(string identifier)
     {
         var entries = LogCommandInterceptor.Stop(identifier);
         if (entries is not null)
         {
             return entries;
         }
+
         throw new("No recorded state. It is possible `VerifyEntityFramework.StartRecording(string identifier)` has not been called on the DbContext.");
     }
 }
