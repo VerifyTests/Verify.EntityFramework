@@ -4,7 +4,10 @@ public static class VerifyEntityFramework
 {
     public static async IAsyncEnumerable<object> AllData(this DbContext data)
     {
-        foreach (var entityType in data.EntityTypes().Where(p => !p.IsOwned()))
+        foreach (var entityType in data
+                     .EntityTypes()
+                     .OrderBy(_ => _.Name)
+                     .Where(_ => !_.IsOwned()))
         {
             var clrType = entityType.ClrType;
             var set = data.Set(clrType);
