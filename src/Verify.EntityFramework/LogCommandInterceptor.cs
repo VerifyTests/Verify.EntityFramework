@@ -3,7 +3,7 @@ class LogCommandInterceptor :
 {
     static AsyncLocal<State?> asyncLocal = new();
     static ConcurrentDictionary<string, List<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
-    readonly string? identifier;
+    string? identifier;
 
     public static void Start() => asyncLocal.Value = new();
     public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());

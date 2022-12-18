@@ -81,6 +81,30 @@ public class CoreTests
             Company = company
         };
         await Verify(employee)
+            .IgnoreNavigationProperties();
+    }
+
+    #endregion
+
+    #region IgnoreNavigationPropertiesExplicit
+
+    [Test]
+    public async Task IgnoreNavigationPropertiesExplicit()
+    {
+        var options = DbContextOptions();
+
+        await using var data = new SampleDbContext(options);
+
+        var company = new Company
+        {
+            Content = "company"
+        };
+        var employee = new Employee
+        {
+            Content = "employee",
+            Company = company
+        };
+        await Verify(employee)
             .IgnoreNavigationProperties(data);
     }
 
@@ -89,6 +113,17 @@ public class CoreTests
     void IgnoreNavigationPropertiesGlobal()
     {
         #region IgnoreNavigationPropertiesGlobal
+
+        var options = DbContextOptions();
+        using var data = new SampleDbContext(options);
+        VerifyEntityFramework.IgnoreNavigationProperties();
+
+        #endregion
+    }
+
+    void IgnoreNavigationPropertiesGlobalExplicit()
+    {
+        #region IgnoreNavigationPropertiesGlobalExplicit
 
         var options = DbContextOptions();
         using var data = new SampleDbContext(options);
@@ -213,7 +248,7 @@ public class CoreTests
         #region Queryable
 
         var queryable = data.Companies
-            .Where(x => x.Content == "value");
+            .Where(_ => _.Content == "value");
         await Verify(queryable);
 
         #endregion
@@ -226,7 +261,7 @@ public class CoreTests
         var data = database.Context;
 
         var query = data.Set<Company>()
-            .Select(x => x.Id);
+            .Select(_ => _.Id);
         await Verify(query);
     }
 
@@ -236,7 +271,7 @@ public class CoreTests
         var database = await DbContextBuilder.GetDatabase("NestedQueryable");
         var data = database.Context;
         var queryable = data.Companies
-            .Where(x => x.Content == "value");
+            .Where(_ => _.Content == "value");
         await Verify(queryable);
     }
 
@@ -286,7 +321,7 @@ public class CoreTests
         {
             var s = i.ToString();
             await data.Companies
-                .Where(x => x.Content == s)
+                .Where(_ => _.Content == s)
                 .ToListAsync();
         }
 
@@ -325,7 +360,7 @@ public class CoreTests
 
         await using var data2 = new SampleDbContext(builder.Options);
         await data2.Companies
-            .Where(x => x.Content == "Title")
+            .Where(_ => _.Content == "Title")
             .ToListAsync();
 
         await Verify(data2.Companies.Count());
@@ -351,7 +386,7 @@ public class CoreTests
         EfRecording.StartRecording();
 
         await data.Companies
-            .Where(x => x.Content == "Title")
+            .Where(_ => _.Content == "Title")
             .ToListAsync();
 
         await Verify(data.Companies.Count());
@@ -368,7 +403,7 @@ public class CoreTests
         // Not actually the test name, the variable name is for README.md to make sense
         var testName = nameof(RecordingWebApplicationFactory) + run;
 
-        using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
+        await using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
         await connection.OpenAsync();
 
         var factory = new CustomWebApplicationFactory(testName);
@@ -413,7 +448,7 @@ public class CoreTests
 
     class CustomWebApplicationFactory : WebApplicationFactory<Startup>
     {
-        readonly string testName;
+        string testName;
 
         public CustomWebApplicationFactory(string testName) =>
             this.testName = testName;
@@ -436,7 +471,7 @@ public class CoreTests
 
         protected override IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
     }
 
     public class Startup
@@ -453,7 +488,7 @@ public class CoreTests
             app.UseRouting();
 
             app.UseEndpoints(endpoints
-                => endpoints.MapGet("/companies", async (SampleDbContext data) => await data.Companies.ToListAsync()));
+                => endpoints.MapGet("/companies", (SampleDbContext data) => data.Companies.ToListAsync()));
         }
     }
 
@@ -475,7 +510,7 @@ public class CoreTests
         EfRecording.StartRecording();
 
         await data.Companies
-            .Where(x => x.Content == "Title")
+            .Where(_ => _.Content == "Title")
             .ToListAsync();
 
         var entries = EfRecording.FinishRecording();

@@ -39,7 +39,7 @@
     static void HandleAdded(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var added = entries
-            .Where(x => x.State == EntityState.Added)
+            .Where(_ => _.State == EntityState.Added)
             .ToList();
         if (!added.Any())
         {
