@@ -403,7 +403,7 @@ public class CoreTests
         // Not actually the test name, the variable name is for README.md to make sense
         var testName = nameof(RecordingWebApplicationFactory) + run;
 
-        using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
+        await using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
         await connection.OpenAsync();
 
         var factory = new CustomWebApplicationFactory(testName);
@@ -448,7 +448,7 @@ public class CoreTests
 
     class CustomWebApplicationFactory : WebApplicationFactory<Startup>
     {
-        readonly string testName;
+        string testName;
 
         public CustomWebApplicationFactory(string testName) =>
             this.testName = testName;
@@ -471,7 +471,7 @@ public class CoreTests
 
         protected override IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
     }
 
     public class Startup
@@ -488,7 +488,7 @@ public class CoreTests
             app.UseRouting();
 
             app.UseEndpoints(endpoints
-                => endpoints.MapGet("/companies", async (SampleDbContext data) => await data.Companies.ToListAsync()));
+                => endpoints.MapGet("/companies", (SampleDbContext data) => data.Companies.ToListAsync()));
         }
     }
 
