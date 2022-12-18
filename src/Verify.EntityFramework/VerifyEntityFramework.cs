@@ -2,6 +2,8 @@
 
 public static class VerifyEntityFramework
 {
+    static IModel? model;
+
     public static async IAsyncEnumerable<object> AllData(this DbContext data)
     {
         foreach (var entityType in data
@@ -25,9 +27,9 @@ public static class VerifyEntityFramework
     public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, DbContext context) =>
         settings.IgnoreNavigationProperties(context.Model);
 
-    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel model)
+    public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel? model = null)
     {
-        foreach (var (type, name) in model.GetNavigations())
+        foreach (var (type, name) in GetModel(model).GetNavigations())
         {
             settings.IgnoreMember(type, name);
         }
@@ -35,17 +37,32 @@ public static class VerifyEntityFramework
         return settings;
     }
 
-    public static void IgnoreNavigationProperties(this VerifySettings settings, IModel model)
+    public static void IgnoreNavigationProperties(this VerifySettings settings, IModel? model = null)
     {
-        foreach (var (type, name) in model.GetNavigations())
+        foreach (var (type, name) in GetModel(model).GetNavigations())
         {
             settings.IgnoreMember(type, name);
         }
     }
 
-    public static void IgnoreNavigationProperties(IModel model)
+    static IModel GetModel(IModel? model)
     {
-        foreach (var (type, name) in model.GetNavigations())
+        if (model != null)
+        {
+            return model;
+        }
+
+        if (VerifyEntityFramework.model == null)
+        {
+            throw new("The `model` parameter must be provided wither on this method or on VerifyEntityFramework.Enable()");
+        }
+
+        return VerifyEntityFramework.model;
+    }
+
+    public static void IgnoreNavigationProperties(IModel? model = null)
+    {
+        foreach (var (type, name) in GetModel(model).GetNavigations())
         {
             VerifierSettings.IgnoreMember(type, name);
         }
@@ -62,8 +79,12 @@ public static class VerifyEntityFramework
         }
     }
 
-    public static void Enable()
+    public static void Enable(DbContext context) =>
+        Enable(context.Model);
+
+    public static void Enable(IModel? model = null)
     {
+        VerifyEntityFramework.model = model;
         VerifierSettings.RegisterJsonAppender(_ =>
         {
             var entries = LogCommandInterceptor.Stop();

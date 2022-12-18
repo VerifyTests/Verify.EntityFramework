@@ -119,7 +119,7 @@ public class ClassicTests
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
         var data = database.Context;
-        var queryable = data.Companies.Where(x => x.Content == "value");
+        var queryable = data.Companies.Where(_ => _.Content == "value");
         await Verify(queryable);
     }
 

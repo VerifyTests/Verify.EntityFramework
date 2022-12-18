@@ -31,7 +31,7 @@
     static void HandleDeleted(List<DbEntityEntry> entries, VerifyJsonWriter writer, DbContext data)
     {
         var deleted = entries
-            .Where(x => x.State == EntityState.Deleted)
+            .Where(_ => _.State == EntityState.Deleted)
             .ToList();
         if (!deleted.Any())
         {
@@ -54,7 +54,7 @@
     static void HandleAdded(List<DbEntityEntry> entries, VerifyJsonWriter writer)
     {
         var added = entries
-            .Where(x => x.State == EntityState.Added)
+            .Where(_ => _.State == EntityState.Added)
             .ToList();
         if (!added.Any())
         {
@@ -83,7 +83,7 @@
     static void HandleModified(List<DbEntityEntry> entries, VerifyJsonWriter writer, DbContext context)
     {
         var modified = entries
-            .Where(x => x.State == EntityState.Modified)
+            .Where(_ => _.State == EntityState.Modified)
             .ToList();
         if (!modified.Any())
         {
