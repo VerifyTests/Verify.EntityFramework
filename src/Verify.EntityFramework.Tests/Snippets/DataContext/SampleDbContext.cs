@@ -9,12 +9,12 @@
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.Entity<Company>()
+        builder.Entity<Company>()
             .HasMany(c => c.Employees)
             .WithOne(e => e.Company)
             .IsRequired();
-        modelBuilder.Entity<Employee>();
+        builder.Entity<Employee>();
     }
 }

@@ -2,7 +2,7 @@
 
 public static class VerifyEntityFramework
 {
-    static IModel? model;
+    static List<(Type type, string name)>? modelNavigations;
 
     public static async IAsyncEnumerable<object> AllData(this DbContext data)
     {
@@ -29,7 +29,7 @@ public static class VerifyEntityFramework
 
     public static SettingsTask IgnoreNavigationProperties(this SettingsTask settings, IModel? model = null)
     {
-        foreach (var (type, name) in GetModel(model).GetNavigations())
+        foreach (var (type, name) in model.GetNavigationsOrShared())
         {
             settings.IgnoreMember(type, name);
         }
@@ -39,33 +39,33 @@ public static class VerifyEntityFramework
 
     public static void IgnoreNavigationProperties(this VerifySettings settings, IModel? model = null)
     {
-        foreach (var (type, name) in GetModel(model).GetNavigations())
+        foreach (var (type, name) in model.GetNavigationsOrShared())
         {
             settings.IgnoreMember(type, name);
         }
     }
 
-    static IModel GetModel(IModel? model)
-    {
-        if (model != null)
-        {
-            return model;
-        }
-
-        if (VerifyEntityFramework.model == null)
-        {
-            throw new("The `model` parameter must be provided wither on this method or on VerifyEntityFramework.Enable()");
-        }
-
-        return VerifyEntityFramework.model;
-    }
-
     public static void IgnoreNavigationProperties(IModel? model = null)
     {
-        foreach (var (type, name) in GetModel(model).GetNavigations())
+        foreach (var (type, name) in model.GetNavigationsOrShared())
         {
             VerifierSettings.IgnoreMember(type, name);
         }
+    }
+
+    static IEnumerable<(Type type, string name)> GetNavigationsOrShared(this IModel? model)
+    {
+        if (model == null)
+        {
+            if (modelNavigations != null)
+            {
+                return modelNavigations;
+            }
+
+            throw new("The `model` parameter must be provided wither on this method or on VerifyEntityFramework.Enable()");
+        }
+
+        return GetNavigations(model);
     }
 
     static IEnumerable<(Type type, string name)> GetNavigations(this IModel model)
@@ -84,7 +84,11 @@ public static class VerifyEntityFramework
 
     public static void Enable(IModel? model = null)
     {
-        VerifyEntityFramework.model = model;
+        if (model != null)
+        {
+            modelNavigations = model.GetNavigations().ToList();
+        }
+
         VerifierSettings.RegisterJsonAppender(_ =>
         {
             var entries = LogCommandInterceptor.Stop();
