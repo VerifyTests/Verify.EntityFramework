@@ -84,6 +84,7 @@ public static class VerifyEntityFramework
 
     public static void Enable(IModel? model = null)
     {
+        InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
         {
             modelNavigations = model.GetNavigations().ToList();
