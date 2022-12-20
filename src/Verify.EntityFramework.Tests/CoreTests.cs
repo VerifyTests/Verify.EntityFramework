@@ -408,17 +408,18 @@ public class CoreTests
 
         var factory = new CustomWebApplicationFactory(testName);
 
-        using (var scope = factory.Services.CreateScope())
+        await using (var scope = factory.Services.CreateAsyncScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
 
             await context.Database.EnsureCreatedAsync();
 
-            context.Add(new Company
-            {
-                Id = 1,
-                Content = "Foo"
-            });
+            context.Add(
+                new Company
+                {
+                    Id = 1,
+                    Content = "Foo"
+                });
 
             await context.SaveChangesAsync();
         }
