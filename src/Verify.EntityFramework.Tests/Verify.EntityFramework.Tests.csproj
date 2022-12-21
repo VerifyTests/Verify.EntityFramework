@@ -3,7 +3,7 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EfLocalDb" Version="14.0.0" />
+    <PackageReference Include="EfLocalDb" Version="14.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
     <PackageReference Include="Argon" Version="0.1.0" />
