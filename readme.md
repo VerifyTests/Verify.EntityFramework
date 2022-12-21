@@ -166,7 +166,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L501-L524' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L502-L525' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -553,7 +553,7 @@ To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotne
             .Options);
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L459-L470' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L460-L471' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then use the same identifier for recording:
@@ -569,7 +569,7 @@ var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
 var entries = EfRecording.FinishRecording(testName);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L426-L436' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L427-L437' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The results will not be automatically included in verified file so it will have to be verified manually:
@@ -583,7 +583,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L438-L446' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L439-L447' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifyrecordedcommandswithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
