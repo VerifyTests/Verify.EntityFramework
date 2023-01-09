@@ -55,11 +55,10 @@ VerifyEntityFrameworkClassic.Enable();
 <a id='snippet-enableclassic-1'></a>
 ```cs
 [ModuleInitializer]
-public static void Init()
-{
+public static void Init() =>
     VerifyEntityFrameworkClassic.Enable();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ModuleInitializer.cs#L3-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
