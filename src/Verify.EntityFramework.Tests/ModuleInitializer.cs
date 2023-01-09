@@ -17,9 +17,13 @@ public static class ModuleInitializer
     {
         var model = GetDbModel();
         VerifyEntityFramework.Enable(model);
+    }
 
-        #endregion
+    #endregion
 
+    [ModuleInitializer]
+    public static void InitOther()
+    {
         VerifySqlServer.Enable();
         VerifyDiffPlex.Initialize();
     }

@@ -3,12 +3,12 @@
     #region EnableClassic
 
     [ModuleInitializer]
-    public static void Init()
-    {
+    public static void Init() =>
         VerifyEntityFrameworkClassic.Enable();
 
-        #endregion
+    #endregion
 
+    [ModuleInitializer]
+    public static void InitOther() =>
         VerifyDiffPlex.Initialize();
-    }
 }

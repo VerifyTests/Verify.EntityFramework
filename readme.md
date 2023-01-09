@@ -36,8 +36,9 @@ public static void Init()
 {
     var model = GetDbModel();
     VerifyEntityFramework.Enable(model);
+}
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/ModuleInitializer.cs#L5-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/ModuleInitializer.cs#L5-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablecore' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The `GetDbModel` pattern allows an instance of the `IModel` to be stored for use when `IgnoreNavigationProperties` is called inside tests. This is optional, and instead can be passed explicitly to `IgnoreNavigationProperties`.
