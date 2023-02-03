@@ -3,10 +3,10 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Argon" Version="0.2.1" />
+    <PackageReference Include="Argon" Version="0.3.3" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
-    <PackageReference Include="Verify.NUnit" Version="19.7.1" />
+    <PackageReference Include="Verify.NUnit" Version="19.8.3" />
     <PackageReference Include="Verify.DiffPlex" Version="2.1.0" />
     <PackageReference Include="EfClassicLocalDb" Version="14.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
