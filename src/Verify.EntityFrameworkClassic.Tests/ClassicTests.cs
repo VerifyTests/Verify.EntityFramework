@@ -129,7 +129,7 @@ public class ClassicTests
     {
         #region EnableClassic
 
-        VerifyEntityFrameworkClassic.Enable();
+        VerifyEntityFrameworkClassic.Initialize();
 
         #endregion
 

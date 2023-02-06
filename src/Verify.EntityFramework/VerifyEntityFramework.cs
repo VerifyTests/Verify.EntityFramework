@@ -79,11 +79,25 @@ public static class VerifyEntityFramework
         }
     }
 
+    [Obsolete("Use Initialize")]
     public static void Enable(DbContext context) =>
-        Enable(context.Model);
+        Initialize(context);
 
-    public static void Enable(IModel? model = null)
+    public static void Initialize(DbContext context) =>
+        Initialize(context.Model);
+
+    [Obsolete("Use Initialize")]
+    public static void Enable(IModel? model = null) =>
+        Initialize(model);
+
+    public static bool Initialized { get; private set; }
+
+    public static void Initialize(IModel? model = null)
     {
+        if (Initialized)
+        {
+            throw new("Already Initialized");
+        }
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
         {

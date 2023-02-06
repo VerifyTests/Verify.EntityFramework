@@ -16,15 +16,12 @@ public static class ModuleInitializer
     public static void Init()
     {
         var model = GetDbModel();
-        VerifyEntityFramework.Enable(model);
+        VerifyEntityFramework.Initialize(model);
     }
 
     #endregion
 
     [ModuleInitializer]
-    public static void InitOther()
-    {
-        VerifySqlServer.Enable();
-        VerifyDiffPlex.Initialize();
-    }
+    public static void InitOther() =>
+        VerifierSettings.InitializePlugins();
 }
