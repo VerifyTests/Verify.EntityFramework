@@ -98,6 +98,8 @@ public static class VerifyEntityFramework
         {
             throw new("Already Initialized");
         }
+
+        Initialized = true;
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
         {
