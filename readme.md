@@ -49,16 +49,11 @@ The `GetDbModel` pattern allows an instance of the `IModel` to be stored for use
 <!-- snippet: EnableClassic -->
 <a id='snippet-enableclassic'></a>
 ```cs
-VerifyEntityFrameworkClassic.Initialize();
-```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ClassicTests.cs#L130-L134' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-enableclassic-1'></a>
-```cs
 [ModuleInitializer]
 public static void Init() =>
     VerifyEntityFrameworkClassic.Initialize();
 ```
-<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFrameworkClassic.Tests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-enableclassic' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
