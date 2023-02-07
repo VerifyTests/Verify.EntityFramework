@@ -125,16 +125,8 @@ public class ClassicTests
 
     #endregion
 
-    static ClassicTests()
-    {
-        #region EnableClassic
-
-        VerifyEntityFrameworkClassic.Initialize();
-
-        #endregion
-
+    static ClassicTests() =>
         sqlInstance = new(
             constructInstance: connection => new(connection),
             storage: Storage.FromSuffix<SampleDbContext>("Tests"));
-    }
 }

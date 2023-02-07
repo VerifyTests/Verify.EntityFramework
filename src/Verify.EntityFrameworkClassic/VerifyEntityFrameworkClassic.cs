@@ -16,6 +16,7 @@ public static class VerifyEntityFrameworkClassic
         }
 
         Initialized = true;
+
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _) => QueryableConverter.IsQueryable(target));

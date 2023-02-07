@@ -100,6 +100,7 @@ public static class VerifyEntityFramework
         }
 
         Initialized = true;
+
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
         {
