@@ -55,13 +55,13 @@ public static class DbContextBuilder
             Id = 7,
             Content = "Company4"
         };
-        data.Add(company1);
-        data.Add(company2);
-        data.Add(company3);
-        data.Add(company4);
-        data.Add(employee1);
-        data.Add(employee2);
-        data.Add(employee4);
+        data.Companies.Add(company1);
+        data.Companies.Add(company2);
+        data.Companies.Add(company3);
+        data.Companies.Add(company4);
+        data.Employees.Add(employee1);
+        data.Employees.Add(employee2);
+        data.Employees.Add(employee4);
         await data.SaveChangesAsync();
     }
 
