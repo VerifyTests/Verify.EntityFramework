@@ -7,6 +7,6 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Verify" Version="19.10.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.87" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.88" PrivateAssets="all" />
   </ItemGroup>
 </Project>
