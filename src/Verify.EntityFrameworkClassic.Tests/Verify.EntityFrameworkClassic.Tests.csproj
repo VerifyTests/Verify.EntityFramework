@@ -10,7 +10,7 @@
     <PackageReference Include="Verify.DiffPlex" Version="2.2.0" />
     <PackageReference Include="EfClassicLocalDb" Version="14.5.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.89" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.90" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFrameworkClassic\Verify.EntityFrameworkClassic.csproj" />
   </ItemGroup>
 </Project>
