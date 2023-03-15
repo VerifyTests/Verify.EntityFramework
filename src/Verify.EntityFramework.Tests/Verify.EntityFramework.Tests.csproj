@@ -4,8 +4,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EfLocalDb" Version="14.5.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
     <PackageReference Include="Argon" Version="0.5.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
@@ -13,10 +13,10 @@
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.5.1" />
     <PackageReference Include="Verify.NUnit" Version="19.11.1" />
     <PackageReference Include="Verify.SqlServer" Version="5.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.90" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.4" />
   </ItemGroup>
 </Project>
