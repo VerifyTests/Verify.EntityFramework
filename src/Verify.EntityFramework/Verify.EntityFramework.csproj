@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.4" />
     <PackageReference Include="Argon" Version="0.5.1" />
     <PackageReference Include="Verify" Version="19.11.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
