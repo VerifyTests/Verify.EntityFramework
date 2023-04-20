@@ -11,10 +11,12 @@ public class DbUpdateExceptionTests
             Id = id,
             Property = "Item1"
         };
-        await using var database = await instance.Build(new List<object>
-        {
-            entity
-        });
+
+        await using var database = await instance.Build(
+            new List<object>
+            {
+                entity
+            });
 
         var duplicate = new TestEntity
         {
