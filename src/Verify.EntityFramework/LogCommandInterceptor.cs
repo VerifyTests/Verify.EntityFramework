@@ -76,9 +76,9 @@ class LogCommandInterceptor :
         {
             asyncLocal.Value?.WriteLine(new(type, command, data, exception));
         }
-        else if (namedEvents.ContainsKey(identifier))
+        else if (namedEvents.TryGetValue(identifier, out var @event))
         {
-            namedEvents[identifier].Add(new(type, command, data, exception));
+            @event.Add(new(type, command, data, exception));
         }
     }
 
