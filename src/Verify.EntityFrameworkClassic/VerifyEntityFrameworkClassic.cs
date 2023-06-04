@@ -2,10 +2,6 @@
 
 public static class VerifyEntityFrameworkClassic
 {
-    [Obsolete("Use Initialize")]
-    public static void Enable() =>
-        Initialize();
-
     public static bool Initialized { get; private set; }
 
     public static void Initialize()

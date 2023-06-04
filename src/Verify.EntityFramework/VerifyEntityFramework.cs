@@ -79,16 +79,8 @@ public static class VerifyEntityFramework
         }
     }
 
-    [Obsolete("Use Initialize")]
-    public static void Enable(DbContext context) =>
-        Initialize(context);
-
     public static void Initialize(DbContext context) =>
         Initialize(context.Model);
-
-    [Obsolete("Use Initialize")]
-    public static void Enable(IModel? model = null) =>
-        Initialize(model);
 
     public static bool Initialized { get; private set; }
 
