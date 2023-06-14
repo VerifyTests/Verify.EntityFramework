@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageReference Include="EfLocalDb" Version="14.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.7" />
     <PackageReference Include="Argon" Version="0.7.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
