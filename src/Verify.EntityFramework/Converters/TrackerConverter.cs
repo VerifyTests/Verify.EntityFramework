@@ -16,7 +16,7 @@
     static void HandleDeleted(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var deleted = entries
-            .Where(x => x.State == EntityState.Deleted)
+            .Where(_ => _.State == EntityState.Deleted)
             .ToList();
         if (!deleted.Any())
         {
@@ -67,7 +67,7 @@
     static void HandleModified(List<EntityEntry> entries, VerifyJsonWriter writer)
     {
         var modified = entries
-            .Where(x => x.State == EntityState.Modified)
+            .Where(_ => _.State == EntityState.Modified)
             .ToList();
         if (!modified.Any())
         {

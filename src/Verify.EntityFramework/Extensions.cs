@@ -18,7 +18,7 @@
     public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data) =>
         data.Model
             .GetEntityTypes()
-            .OrderBy(x => x.Name);
+            .OrderBy(_ => _.Name);
 
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry) =>
         entry.Properties
