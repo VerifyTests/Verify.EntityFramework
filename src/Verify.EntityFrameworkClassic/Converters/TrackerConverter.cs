@@ -12,7 +12,7 @@
         func = tracker =>
         {
             var value = internalContextField.GetValue(tracker);
-            return (DbContext) ownerField.GetValue(value);
+            return (DbContext) ownerField.GetValue(value)!;
         };
     }
 

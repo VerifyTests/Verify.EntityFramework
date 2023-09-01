@@ -16,7 +16,7 @@
             invokeAttr: BindingFlags.InvokeMethod,
             binder: null,
             target: null,
-            args: new[] {data});
+            args: new[] {data})!;
     }
 
     public override bool CanConvert(Type type)
