@@ -1,3 +1,13 @@
-﻿SELECT [c].[Id], [c].[Content]
+﻿{
+  queryable: {
+    Sql:
+SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'value'
+WHERE [c].[Content] = N'value',
+    Result: [
+      {
+        Content: value
+      }
+    ]
+  }
+}
