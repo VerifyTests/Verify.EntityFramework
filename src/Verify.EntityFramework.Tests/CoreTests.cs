@@ -275,6 +275,7 @@ public class CoreTests
         await Verify(queryable);
     }
 
+    // ReSharper disable once UnusedVariable
     void Build(string connection)
     {
         #region EnableRecording
