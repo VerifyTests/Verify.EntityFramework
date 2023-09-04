@@ -2,6 +2,7 @@
 
 global using System.Data;
 global using System.Data.Common;
+global using System.Diagnostics.CodeAnalysis;
 global using Argon;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
