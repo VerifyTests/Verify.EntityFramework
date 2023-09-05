@@ -243,6 +243,11 @@ public class CoreTests
     public async Task Queryable()
     {
         var database = await DbContextBuilder.GetDatabase("Queryable");
+        await database.AddData(
+            new Company
+            {
+                Content = "value"
+            });
         var data = database.Context;
 
         #region Queryable
@@ -269,10 +274,18 @@ public class CoreTests
     public async Task NestedQueryable()
     {
         var database = await DbContextBuilder.GetDatabase("NestedQueryable");
+        await database.AddData(
+            new Company
+            {
+                Content = "value"
+            });
         var data = database.Context;
         var queryable = data.Companies
             .Where(_ => _.Content == "value");
-        await Verify(queryable);
+        await Verify(new
+        {
+            queryable
+        });
     }
 
     // ReSharper disable once UnusedVariable

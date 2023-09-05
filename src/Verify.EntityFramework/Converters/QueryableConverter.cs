@@ -1,17 +1,52 @@
 ﻿class QueryableConverter :
     WriteOnlyJsonConverter
 {
+    static MethodInfo executeQueryableDefinition;
+
+    static QueryableConverter() =>
+        executeQueryableDefinition = typeof(QueryableConverter).GetMethod("ExecuteQueryable", BindingFlags.NonPublic| BindingFlags.Static)!;
+
     public override void Write(VerifyJsonWriter writer, object data)
     {
-        var sql = QueryToSql(data);
+        var queryable = (IQueryable) data;
+        var sql = queryable.ToQueryString();
+        if(!TryExecuteQueryable(queryable, out var result))
+        {
+            writer.Serialize(sql);
+            return;
+        }
+
+        writer.WriteStartObject();
+        writer.WritePropertyName("Sql");
         writer.Serialize(sql);
+        writer.WritePropertyName("Result");
+        writer.Serialize(result);
+        writer.WriteEndObject();
     }
 
-    public static string QueryToSql(object data)
+    public static bool TryExecuteQueryable(IQueryable queryable, [NotNullWhen(true)] out IList? result)
     {
-        var queryable = (IQueryable)data;
-        return queryable.ToQueryString();
+        var entityType = queryable.GetType().GenericTypeArguments.First();
+
+        var executeQueryable = executeQueryableDefinition.MakeGenericMethod(entityType);
+        var parameters = new object?[]
+        {
+            queryable
+        };
+        try
+        {
+            result = (IList) executeQueryable.Invoke(null, parameters)!;
+            return true;
+        }
+        catch
+        {
+            result = null;
+            return false;
+        }
     }
+
+    static List<T> ExecuteQueryable<T>(IQueryable<T> queryable) =>
+        queryable.ToList();
 
     public override bool CanConvert(Type type)
         => IsQueryable(type);
