@@ -138,11 +138,12 @@ public static class VerifyEntityFramework
         var queryable = (IQueryable) arg;
 
         var sql = queryable.ToQueryString();
-        if (QueryableConverter.TryExecuteQueryable(queryable, out var result))
-        {
-            return new(result, "txt", sql);
-        }
-
-        return new(null, "txt", sql);
+        QueryableConverter.TryExecuteQueryable(queryable, out var result);
+        return new(
+            result,
+            new[]
+            {
+                new Target("sql", sql)
+            });
     }
 }

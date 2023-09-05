@@ -395,8 +395,8 @@ Will result in the following verified file:
 
 ### EF Core
 
-<!-- snippet: CoreTests.Queryable#00.verified.txt -->
-<a id='snippet-CoreTests.Queryable#00.verified.txt'></a>
+<!-- snippet: CoreTests.Queryable.verified.txt -->
+<a id='snippet-CoreTests.Queryable.verified.txt'></a>
 ```txt
 [
   {
@@ -404,17 +404,17 @@ Will result in the following verified file:
   }
 ]
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable#00.verified.txt#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable#00.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.txt#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-<!-- snippet: CoreTests.Queryable#01.verified.txt -->
-<a id='snippet-CoreTests.Queryable#01.verified.txt'></a>
-```txt
+<!-- snippet: CoreTests.Queryable.verified.sql -->
+<a id='snippet-CoreTests.Queryable.verified.sql'></a>
+```sql
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'value'
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable#01.verified.txt#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable#01.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.sql#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.sql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
