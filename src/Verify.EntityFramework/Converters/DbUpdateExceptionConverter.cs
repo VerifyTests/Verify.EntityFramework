@@ -9,24 +9,24 @@ class DbUpdateExceptionConverter :
         writer.WriteMember(exception, exception.GetType(), "Type");
         writer.WriteMember(exception, exception.InnerException, "InnerException");
 
-        var entriesValue = exception.Entries
+        var entries = exception.Entries
             .Select(
-                e => new
+                entry => new
                 {
-                    EntryProperties = e.Properties.ToDictionary(
-                        p => p.Metadata.Name,
-                        p => new
+                    EntryProperties = entry.Properties.ToDictionary(
+                        _ => _.Metadata.Name,
+                        _ => new
                         {
-                            p.OriginalValue,
-                            p.CurrentValue,
-                            p.IsTemporary,
-                            p.IsModified,
+                            _.OriginalValue,
+                            _.CurrentValue,
+                            _.IsTemporary,
+                            _.IsModified,
                         }),
-                    e.State,
+                    entry.State,
                 })
             .ToList();
 
-        writer.WriteMember(exception, entriesValue, "Entries");
+        writer.WriteMember(exception, entries, "Entries");
         writer.WriteMember(exception, exception.StackTrace, "StackTrace");
 
         writer.WriteEndObject();
