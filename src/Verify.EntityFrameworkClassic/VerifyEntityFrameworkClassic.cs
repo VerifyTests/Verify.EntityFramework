@@ -1,4 +1,6 @@
-﻿namespace VerifyTests;
+﻿using Argon;
+
+namespace VerifyTests;
 
 public static class VerifyEntityFrameworkClassic
 {
@@ -16,12 +18,8 @@ public static class VerifyEntityFrameworkClassic
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _) => QueryableConverter.IsQueryable(target));
-        VerifierSettings.AddExtraSettings(serializer =>
-        {
-            var converters = serializer.Converters;
-            converters.Add(new TrackerConverter());
-            converters.Add(new QueryableConverter());
-        });
+        DefaultContractResolver.Converters.Add(new TrackerConverter());
+        DefaultContractResolver.Converters.Add(new QueryableConverter());
     }
 
     static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
