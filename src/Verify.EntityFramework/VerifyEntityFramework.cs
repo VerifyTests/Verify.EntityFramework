@@ -124,13 +124,10 @@ public static class VerifyEntityFramework
 
         VerifierSettings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
         VerifierSettings.IgnoreMembersWithType<DbContext>();
-        VerifierSettings.AddExtraSettings(serializer =>
-        {
-            var converters = serializer.Converters;
-            converters.Add(new DbUpdateExceptionConverter());
-            converters.Add(new TrackerConverter());
-            converters.Add(new QueryableConverter());
-        });
+        var converters = DefaultContractResolver.Converters;
+        converters.Add(new DbUpdateExceptionConverter());
+        converters.Add(new TrackerConverter());
+        converters.Add(new QueryableConverter());
     }
 
     static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
