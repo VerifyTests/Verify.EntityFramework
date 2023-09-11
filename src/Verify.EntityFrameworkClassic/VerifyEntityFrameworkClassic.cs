@@ -18,8 +18,12 @@ public static class VerifyEntityFrameworkClassic
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _) => QueryableConverter.IsQueryable(target));
-        DefaultContractResolver.Converters.Add(new TrackerConverter());
-        DefaultContractResolver.Converters.Add(new QueryableConverter());
+        VerifierSettings.AddExtraSettings(serializer =>
+        {
+            var converters = serializer.Converters;
+            converters.Add(new TrackerConverter());
+            converters.Add(new QueryableConverter());
+        });
     }
 
     static ConversionResult QueryableToSql(object arg, IReadOnlyDictionary<string, object> context)
