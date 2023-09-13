@@ -1,6 +1,4 @@
-﻿using Argon;
-
-namespace VerifyTests;
+﻿namespace VerifyTests;
 
 public static class VerifyEntityFrameworkClassic
 {
