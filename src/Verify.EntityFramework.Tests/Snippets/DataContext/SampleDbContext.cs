@@ -12,8 +12,8 @@
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Company>()
-            .HasMany(c => c.Employees)
-            .WithOne(e => e.Company)
+            .HasMany(_ => _.Employees)
+            .WithOne(_ => _.Company)
             .IsRequired();
         builder.Entity<Employee>();
     }
