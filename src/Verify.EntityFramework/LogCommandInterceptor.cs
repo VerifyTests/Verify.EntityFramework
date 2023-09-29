@@ -1,9 +1,8 @@
-class LogCommandInterceptor :
+class LogCommandInterceptor(string? identifier) :
     DbCommandInterceptor
 {
     static AsyncLocal<State?> asyncLocal = new();
     static ConcurrentDictionary<string, List<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
-    string? identifier;
 
     public static void Start() => asyncLocal.Value = new();
     public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
@@ -21,9 +20,6 @@ class LogCommandInterceptor :
 
         return state;
     }
-
-    public LogCommandInterceptor(string? identifier) =>
-        this.identifier = identifier;
 
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
         => Add("CommandFailed", command, data, data.Exception);
