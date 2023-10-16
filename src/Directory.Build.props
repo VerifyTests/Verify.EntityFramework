@@ -7,5 +7,6 @@
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <PackageTags>EntityFramework, Verify</PackageTags>
     <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification of EntityFramework bits.</Description>
+    <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
   </PropertyGroup>
 </Project>
