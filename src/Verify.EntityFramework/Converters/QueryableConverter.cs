@@ -10,7 +10,7 @@
     {
         var queryable = (IQueryable) data;
         var sql = queryable.ToQueryString();
-        if(!TryExecuteQueryable(queryable, out var result))
+        if (!TryExecuteQueryable(queryable, out var result))
         {
             writer.Serialize(sql);
             return;
