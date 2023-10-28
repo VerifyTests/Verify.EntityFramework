@@ -461,13 +461,9 @@ public class CoreTests
         #endregion
     }
 
-    class CustomWebApplicationFactory : WebApplicationFactory<Startup>
+    class CustomWebApplicationFactory(string name) :
+        WebApplicationFactory<Startup>
     {
-        string testName;
-
-        public CustomWebApplicationFactory(string testName) =>
-            this.testName = testName;
-
         protected override void ConfigureWebHost(IWebHostBuilder builder) =>
             builder
 
@@ -475,11 +471,10 @@ public class CoreTests
 
                 .ConfigureTestServices(services =>
                 {
-                    services.AddScoped(_ =>
-                        new DbContextOptionsBuilder<SampleDbContext>()
-                            .EnableRecording(testName)
-                            .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
-                            .Options);
+                    var builder = new DbContextOptionsBuilder<SampleDbContext>()
+                        .EnableRecording(name)
+                        .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
+                    services.AddScoped(_ => builder.Options);
                 });
 
         #endregion

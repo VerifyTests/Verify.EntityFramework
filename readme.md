@@ -164,7 +164,7 @@ await Verify(new
     sql = entries
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L516-L539' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L511-L534' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordingspecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -556,14 +556,13 @@ To be able to use [WebApplicationFactory](https://docs.microsoft.com/en-us/dotne
 ```cs
 .ConfigureTestServices(services =>
 {
-    services.AddScoped(_ =>
-        new DbContextOptionsBuilder<SampleDbContext>()
-            .EnableRecording(testName)
-            .UseSqlite($"Data Source={testName};Mode=Memory;Cache=Shared")
-            .Options);
+    var builder = new DbContextOptionsBuilder<SampleDbContext>()
+        .EnableRecording(name)
+        .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
+    services.AddScoped(_ => builder.Options);
 });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L474-L485' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L470-L480' title='Snippet source file'>snippet source</a> | <a href='#snippet-enablerecordingwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then use the same identifier for recording:
