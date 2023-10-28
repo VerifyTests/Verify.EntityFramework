@@ -195,10 +195,11 @@ public class CoreTests
 
     [Test]
     public Task ShouldIgnoreDbContext() =>
-        Verify(new
-        {
-            Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
-        });
+        Verify(
+            new
+            {
+                Factory = new SampleDbContext(new DbContextOptions<SampleDbContext>())
+            });
 
     class MyDbContextFactory : IDbContextFactory<SampleDbContext>
     {
@@ -282,10 +283,11 @@ public class CoreTests
         var data = database.Context;
         var queryable = data.Companies
             .Where(_ => _.Content == "value");
-        await Verify(new
-        {
-            queryable
-        });
+        await Verify(
+            new
+            {
+                queryable
+            });
     }
 
     // ReSharper disable once UnusedVariable
@@ -452,11 +454,12 @@ public class CoreTests
 
         #region VerifyRecordedCommandsWithIdentifier
 
-        await Verify(new
-        {
-            target = companies!.Length,
-            sql = entries
-        });
+        await Verify(
+            new
+            {
+                target = companies!.Length,
+                sql = entries
+            });
 
         #endregion
     }
@@ -472,31 +475,32 @@ public class CoreTests
                 .EnableRecording(name)
                 .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
             webBuilder.ConfigureTestServices(
-                _ => _.AddScoped(_ => dataBuilder.Options));
+                _ => _.AddScoped(
+                    _ => dataBuilder.Options));
         }
 
         #endregion
 
         protected override IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
+                .ConfigureWebHostDefaults(_ => _.UseStartup<Startup>());
     }
 
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services) =>
             services
-                .AddDbContext<SampleDbContext>(builder =>
-                {
-                    builder.UseInMemoryDatabase("");
-                });
+                .AddDbContext<SampleDbContext>(
+                    _ => _.UseInMemoryDatabase(""));
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting();
 
             app.UseEndpoints(endpoints
-                => endpoints.MapGet("/companies", (SampleDbContext data) => data.Companies.ToListAsync()));
+                => endpoints.MapGet(
+                    "/companies",
+                    (SampleDbContext data) => data.Companies.ToListAsync()));
         }
     }
 
@@ -523,11 +527,12 @@ public class CoreTests
 
         var entries = EfRecording.FinishRecording();
         //TODO: optionally filter the results
-        await Verify(new
-        {
-            target = data.Companies.Count(),
-            sql = entries
-        });
+        await Verify(
+            new
+            {
+                target = data.Companies.Count(),
+                sql = entries
+            });
 
         #endregion
     }
