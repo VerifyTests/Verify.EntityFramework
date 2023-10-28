@@ -464,19 +464,15 @@ public class CoreTests
     class CustomWebApplicationFactory(string name) :
         WebApplicationFactory<Startup>
     {
+        #region EnableRecordingWithIdentifier
+
         protected override void ConfigureWebHost(IWebHostBuilder webBuilder)
         {
-            webBuilder
-
-                #region EnableRecordingWithIdentifier
-
-                .ConfigureTestServices(services =>
-                {
-                    var dataBuilder = new DbContextOptionsBuilder<SampleDbContext>()
-                        .EnableRecording(name)
-                        .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
-                    services.AddScoped(_ => dataBuilder.Options);
-                });
+            var dataBuilder = new DbContextOptionsBuilder<SampleDbContext>()
+                .EnableRecording(name)
+                .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
+            webBuilder.ConfigureTestServices(
+                _ => _.AddScoped(_ => dataBuilder.Options));
         }
 
         #endregion
