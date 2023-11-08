@@ -314,9 +314,9 @@ public class CoreTests
                 Content = Guid.NewGuid().ToString()
             }
         );
-        EfRecording.StartRecording();
+        Recording.Start();
         await data.SaveChangesAsync();
-        var entries = EfRecording.FinishRecording();
+        var entries = Recording.Stop();
         await Verify(entries);
     }
 
@@ -325,7 +325,7 @@ public class CoreTests
     {
         var database = await DbContextBuilder.GetDatabase("MultiRecording");
         var data = database.Context;
-        EfRecording.StartRecording();
+        Recording.Start();
         var company = new Company
         {
             Content = "Title"
@@ -349,7 +349,7 @@ public class CoreTests
         data.Add(company2);
         await data.SaveChangesAsync();
 
-        var eventData = EfRecording.FinishRecording();
+        var eventData = Recording.Stop();
         await Verify(eventData);
     }
 
@@ -366,7 +366,7 @@ public class CoreTests
         builder.EnableRecording();
 
         await using var data1 = new SampleDbContext(builder.Options);
-        EfRecording.StartRecording();
+        Recording.Start();
         var company = new Company
         {
             Content = "Title"
@@ -385,7 +385,7 @@ public class CoreTests
     }
 
     [Test]
-    public async Task Recording()
+    public async Task RecordingTest()
     {
         var database = await DbContextBuilder.GetDatabase("Recording");
         var data = database.Context;
@@ -399,7 +399,7 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        EfRecording.StartRecording();
+        Recording.Start();
 
         await data.Companies
             .Where(_ => _.Content == "Title")
@@ -444,11 +444,11 @@ public class CoreTests
 
         var httpClient = factory.CreateClient();
 
-        EfRecording.StartRecording(testName);
+        Recording.Start(testName);
 
         var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
-        var entries = EfRecording.FinishRecording(testName);
+        var entries = Recording.Stop(testName);
 
         #endregion
 
@@ -519,13 +519,13 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        EfRecording.StartRecording();
+        Recording.Start();
 
         await data.Companies
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 
-        var entries = EfRecording.FinishRecording();
+        var entries = Recording.Stop();
         //TODO: optionally filter the results
         await Verify(
             new

@@ -1,26 +1,6 @@
 class LogCommandInterceptor(string? identifier) :
     DbCommandInterceptor
 {
-    static AsyncLocal<State?> asyncLocal = new();
-    static ConcurrentDictionary<string, List<LogEntry>> namedEvents = new(StringComparer.OrdinalIgnoreCase);
-
-    public static void Start() => asyncLocal.Value = new();
-    public static void Start(string identifier) => namedEvents.GetOrAdd(identifier, _ => new());
-
-    public static IReadOnlyList<LogEntry>? Stop()
-    {
-        var state = asyncLocal.Value;
-        asyncLocal.Value = null;
-        return state?.Events;
-    }
-
-    public static IReadOnlyList<LogEntry>? Stop(string identifier)
-    {
-        namedEvents.TryRemove(identifier, out var state);
-
-        return state;
-    }
-
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
         => Add("CommandFailed", command, data, data.Exception);
 
@@ -70,19 +50,11 @@ class LogCommandInterceptor(string? identifier) :
     {
         if (identifier is null)
         {
-            asyncLocal.Value?.WriteLine(new(type, command, data, exception));
+            Recording.Add("sql", new LogEntry(type, command, data, exception));
         }
-        else if (namedEvents.TryGetValue(identifier, out var @event))
+        else
         {
-            @event.Add(new(type, command, data, exception));
+            Recording.Add(identifier, "sql", new LogEntry(type, command, data, exception));
         }
-    }
-
-    class State
-    {
-        internal List<LogEntry> Events = new();
-
-        public void WriteLine(LogEntry entry)
-            => Events.Add(entry);
     }
 }

@@ -107,17 +107,6 @@ public static class VerifyEntityFramework
             modelNavigations = model.GetNavigations().ToList();
         }
 
-        VerifierSettings.RegisterJsonAppender(_ =>
-        {
-            var entries = LogCommandInterceptor.Stop();
-            if (entries is null)
-            {
-                return null;
-            }
-
-            return new ToAppend("sql", entries);
-        });
-
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _) => QueryableConverter.IsQueryable(target));
@@ -143,4 +132,12 @@ public static class VerifyEntityFramework
                 new Target("sql", sql)
             });
     }
+
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext
+        => builder.EnableRecording(null);
+
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
+        where TContext : DbContext
+        => builder.AddInterceptors(new LogCommandInterceptor(identifier));
 }

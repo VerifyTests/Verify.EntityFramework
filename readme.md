@@ -97,7 +97,7 @@ var company = new Company
 data.Add(company);
 await data.SaveChangesAsync();
 
-EfRecording.StartRecording();
+Recording.Start();
 
 await data.Companies
     .Where(_ => _.Content == "Title")
@@ -110,8 +110,8 @@ await Verify(data.Companies.Count());
 
 Will result in the following verified file:
 
-<!-- snippet: CoreTests.Recording.verified.txt -->
-<a id='snippet-CoreTests.Recording.verified.txt'></a>
+<!-- snippet: CoreTests.RecordingTest.verified.txt -->
+<a id='snippet-CoreTests.RecordingTest.verified.txt'></a>
 ```txt
 {
   target: 5,
@@ -134,7 +134,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Recording.verified.txt#L1-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Recording.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -150,13 +150,13 @@ var company = new Company
 data.Add(company);
 await data.SaveChangesAsync();
 
-EfRecording.StartRecording();
+Recording.Start();
 
 await data.Companies
     .Where(_ => _.Content == "Title")
     .ToListAsync();
 
-var entries = EfRecording.FinishRecording();
+var entries = Recording.Stop();
 //TODO: optionally filter the results
 await Verify(
     new
@@ -181,7 +181,7 @@ builder.UseSqlServer(connectionString);
 builder.EnableRecording();
 
 await using var data1 = new SampleDbContext(builder.Options);
-EfRecording.StartRecording();
+Recording.Start();
 var company = new Company
 {
     Content = "Title"
@@ -575,11 +575,11 @@ Then use the same identifier for recording:
 ```cs
 var httpClient = factory.CreateClient();
 
-EfRecording.StartRecording(testName);
+Recording.Start(testName);
 
 var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
-var entries = EfRecording.FinishRecording(testName);
+var entries = Recording.Stop(testName);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L443-L453' title='Snippet source file'>snippet source</a> | <a href='#snippet-recordwithidentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
