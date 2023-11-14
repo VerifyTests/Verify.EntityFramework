@@ -2,11 +2,13 @@
   target: 1,
   sql: [
     {
-      Type: ReaderExecutedAsync,
-      HasTransaction: false,
-      Text:
+      sql: {
+        Type: ReaderExecutedAsync,
+        HasTransaction: false,
+        Text:
 SELECT "c"."Id", "c"."Content"
 FROM "Companies" AS "c"
+      }
     }
   ]
 }
