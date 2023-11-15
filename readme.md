@@ -114,42 +114,17 @@ Will result in the following verified file:
 <a id='snippet-CoreTests.RecordingTest.verified.txt'></a>
 ```txt
 {
-  target: 5,
-  sql: [
-    {
-      HasTransaction: false,
-      Text:
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
-    },
-    {
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
-    }
-  ],
-  ef: [
-    {
-      Type: ReaderExecutedAsync,
-      HasTransaction: false,
-      Text:
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
-    },
-    {
-      Type: ReaderExecuted,
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
-    }
-  ]
+  }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -218,34 +193,6 @@ await Verify();
 <a id='snippet-CoreTests.MultiDbContexts.verified.txt'></a>
 ```txt
 {
-  target: 5,
-  sql: [
-    {
-      HasTransaction: false,
-      Parameters: {
-        @p0: 0,
-        @p1: Title
-      },
-      Text:
-SET IMPLICIT_TRANSACTIONS OFF;
-SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Content])
-VALUES (@p0, @p1);
-    },
-    {
-      HasTransaction: false,
-      Text:
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
-    },
-    {
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
-    }
-  ],
   ef: [
     {
       Type: ReaderExecutedAsync,
@@ -267,18 +214,11 @@ VALUES (@p0, @p1);
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
-    },
-    {
-      Type: ReaderExecuted,
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
     }
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
