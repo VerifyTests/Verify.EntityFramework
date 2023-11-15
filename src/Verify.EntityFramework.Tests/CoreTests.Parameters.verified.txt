@@ -1,20 +1,6 @@
 ﻿[
   {
-    sql: {
-      HasTransaction: false,
-      Parameters: {
-        @p0: 0,
-        @p1: Guid_1
-      },
-      Text:
-SET IMPLICIT_TRANSACTIONS OFF;
-SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Content])
-VALUES (@p0, @p1);
-    }
-  },
-  {
-    sql: {
+    ef: {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {

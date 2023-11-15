@@ -2,16 +2,7 @@
   target: 5,
   sql: [
     {
-      sql: {
-        HasTransaction: false,
-        Text:
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
-      }
-    },
-    {
-      sql: {
+      ef: {
         Type: ReaderExecutedAsync,
         HasTransaction: false,
         Text:

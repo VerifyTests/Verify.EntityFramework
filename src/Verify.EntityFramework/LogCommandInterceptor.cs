@@ -50,11 +50,11 @@ class LogCommandInterceptor(string? identifier) :
     {
         if (identifier is null)
         {
-            Recording.TryAdd("sql", new LogEntry(type, command, data, exception));
+            Recording.TryAdd("ef", new LogEntry(type, command, data, exception));
         }
         else
         {
-            Recording.TryAdd(identifier, "sql", new LogEntry(type, command, data, exception));
+            Recording.TryAdd(identifier, "ef", new LogEntry(type, command, data, exception));
         }
     }
 }

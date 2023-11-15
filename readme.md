@@ -103,7 +103,7 @@ await data.Companies
     .Where(_ => _.Content == "Title")
     .ToListAsync();
 
-await Verify(data.Companies.Count());
+await Verify();
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L393-L410' title='Snippet source file'>snippet source</a> | <a href='#snippet-recording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -124,18 +124,20 @@ FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
     },
     {
+      HasTransaction: false,
+      Text:
+SELECT COUNT(*)
+FROM [Companies] AS [c]
+    }
+  ],
+  ef: [
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
-    },
-    {
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
     },
     {
       Type: ReaderExecuted,
@@ -147,7 +149,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -207,7 +209,7 @@ await data2.Companies
     .Where(_ => _.Content == "Title")
     .ToListAsync();
 
-await Verify(data2.Companies.Count());
+await Verify();
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L362-L384' title='Snippet source file'>snippet source</a> | <a href='#snippet-multidbcontexts' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -231,6 +233,21 @@ INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
     },
     {
+      HasTransaction: false,
+      Text:
+SELECT [c].[Id], [c].[Content]
+FROM [Companies] AS [c]
+WHERE [c].[Content] = N'Title'
+    },
+    {
+      HasTransaction: false,
+      Text:
+SELECT COUNT(*)
+FROM [Companies] AS [c]
+    }
+  ],
+  ef: [
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -244,25 +261,12 @@ INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
     },
     {
-      HasTransaction: false,
-      Text:
-SELECT [c].[Id], [c].[Content]
-FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
-    },
-    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = N'Title'
-    },
-    {
-      HasTransaction: false,
-      Text:
-SELECT COUNT(*)
-FROM [Companies] AS [c]
     },
     {
       Type: ReaderExecuted,
@@ -274,7 +278,7 @@ FROM [Companies] AS [c]
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

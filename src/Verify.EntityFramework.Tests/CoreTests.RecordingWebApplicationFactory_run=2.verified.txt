@@ -2,7 +2,7 @@
   target: 1,
   sql: [
     {
-      sql: {
+      ef: {
         Type: ReaderExecutedAsync,
         HasTransaction: false,
         Text:

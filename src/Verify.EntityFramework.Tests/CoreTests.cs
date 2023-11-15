@@ -379,7 +379,7 @@ public class CoreTests
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 
-        await Verify(data2.Companies.Count());
+        await Verify();
 
         #endregion
     }
@@ -405,7 +405,7 @@ public class CoreTests
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 
-        await Verify(data.Companies.Count());
+        await Verify();
 
         #endregion
     }
