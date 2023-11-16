@@ -316,8 +316,7 @@ public class CoreTests
         );
         Recording.Start();
         await data.SaveChangesAsync();
-        var entries = Recording.Stop();
-        await Verify(entries);
+        await Verify();
     }
 
     [Test]
@@ -349,8 +348,7 @@ public class CoreTests
         data.Add(company2);
         await data.SaveChangesAsync();
 
-        var eventData = Recording.Stop();
-        await Verify(eventData);
+        await Verify();
     }
 
     [Test]
@@ -531,7 +529,7 @@ public class CoreTests
             new
             {
                 target = data.Companies.Count(),
-                sql = entries
+                entries
             });
 
         #endregion

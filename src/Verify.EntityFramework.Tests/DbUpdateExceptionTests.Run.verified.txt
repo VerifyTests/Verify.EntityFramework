@@ -2,47 +2,18 @@
   Message: An error occurred while saving the entity changes. See the inner exception for details.,
   Type: DbUpdateException,
   InnerException: {
-    Type: SqlException,
     Errors: [
       {
-        Source: Core Microsoft SqlClient Data Provider,
-        Number: 2627,
-        State: 1,
-        Class: 14,
-        Server: (LocalDb)\TestDbContext,
         Message: Violation of PRIMARY KEY constraint 'PK_TestEntities'. Cannot insert duplicate key in object 'dbo.TestEntities'. The duplicate key value is (Guid_1).,
-        Procedure: ,
-        LineNumber: 3
+        Number: 2627,
+        Line: 3
       },
       {
-        Source: Core Microsoft SqlClient Data Provider,
-        Number: 3621,
-        Server: (LocalDb)\TestDbContext,
         Message: The statement has been terminated.,
-        Procedure: ,
-        LineNumber: 3
+        Number: 3621,
+        Line: 3
       }
-    ],
-    ClientConnectionId: Guid_2,
-    Class: 14,
-    LineNumber: 3,
-    Number: 2627,
-    Procedure: ,
-    Server: (LocalDb)\TestDbContext,
-    State: 1,
-    IsTransient: false,
-    ErrorCode: -2146232060,
-    Message:
-Violation of PRIMARY KEY constraint 'PK_TestEntities'. Cannot insert duplicate key in object 'dbo.TestEntities'. The duplicate key value is (Guid_1).
-The statement has been terminated.,
-    Data: {
-      HelpLink.ProdName: Microsoft SQL Server,
-      HelpLink.ProdVer: 16.00.1105,
-      HelpLink.EvtSrc: MSSQLServer,
-      HelpLink.EvtID: 2627,
-      HelpLink.BaseHelpUrl: https://go.microsoft.com/fwlink,
-      HelpLink.LinkId: 20476
-    }
+    ]
   },
   Entries: [
     {

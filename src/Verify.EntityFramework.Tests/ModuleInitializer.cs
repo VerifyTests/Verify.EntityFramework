@@ -22,6 +22,9 @@ public static class ModuleInitializer
     #endregion
 
     [ModuleInitializer]
-    public static void InitOther() =>
+    public static void InitOther()
+    {
         VerifierSettings.InitializePlugins();
+        Recording.IgnoreNames("sql");
+    }
 }

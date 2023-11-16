@@ -1,6 +1,6 @@
 ﻿{
   target: 5,
-  sql: [
+  entries: [
     {
       ef: {
         Type: ReaderExecutedAsync,

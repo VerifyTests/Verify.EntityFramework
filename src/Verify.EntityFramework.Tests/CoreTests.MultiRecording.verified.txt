@@ -1,6 +1,6 @@
-﻿[
-  {
-    ef: {
+﻿{
+  ef: [
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -12,10 +12,8 @@ SET IMPLICIT_TRANSACTIONS OFF;
 SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -25,10 +23,8 @@ VALUES (@p0, @p1);
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -38,10 +34,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -51,10 +45,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -64,10 +56,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -77,10 +67,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -90,10 +78,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -103,10 +89,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -116,10 +100,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -129,10 +111,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -142,10 +122,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -155,10 +133,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -168,10 +144,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -181,10 +155,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -194,10 +166,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -207,10 +177,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -220,10 +188,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -233,10 +199,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -246,10 +210,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -259,10 +221,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -272,10 +232,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -285,10 +243,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -298,10 +254,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -311,10 +265,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -324,10 +276,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -337,10 +287,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -350,10 +298,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -363,10 +309,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -376,10 +320,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -389,10 +331,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -402,10 +342,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -415,10 +353,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -428,10 +364,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -441,10 +375,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -454,10 +386,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -467,10 +397,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -480,10 +408,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -493,10 +419,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -506,10 +430,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -519,10 +441,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -532,10 +452,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -545,10 +463,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -558,10 +474,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -571,10 +485,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -584,10 +496,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -597,10 +507,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -610,10 +518,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -623,10 +529,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -636,10 +540,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -649,10 +551,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -662,10 +562,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -675,10 +573,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -688,10 +584,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -701,10 +595,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -714,10 +606,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -727,10 +617,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -740,10 +628,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -753,10 +639,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -766,10 +650,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -779,10 +661,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -792,10 +672,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -805,10 +683,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -818,10 +694,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -831,10 +705,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -844,10 +716,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -857,10 +727,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -870,10 +738,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -883,10 +749,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -896,10 +760,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -909,10 +771,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -922,10 +782,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -935,10 +793,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -948,10 +804,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -961,10 +815,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -974,10 +826,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -987,10 +837,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1000,10 +848,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1013,10 +859,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1026,10 +870,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1039,10 +881,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1052,10 +892,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1065,10 +903,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1078,10 +914,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1091,10 +925,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1104,10 +936,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1117,10 +947,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1130,10 +958,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1143,10 +969,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1156,10 +980,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1169,10 +991,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1182,10 +1002,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1195,10 +1013,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1208,10 +1024,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1221,10 +1035,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1234,10 +1046,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1247,10 +1057,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1260,10 +1068,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1273,10 +1079,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1286,10 +1090,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1299,10 +1101,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1312,10 +1112,8 @@ WHERE [c].[Content] = @__s_0
 SELECT [c].[Id], [c].[Content]
 FROM [Companies] AS [c]
 WHERE [c].[Content] = @__s_0
-    }
-  },
-  {
-    ef: {
+    },
+    {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Parameters: {
@@ -1328,5 +1126,5 @@ SET NOCOUNT ON;
 INSERT INTO [Companies] ([Id], [Content])
 VALUES (@p0, @p1);
     }
-  }
-]
+  ]
+}

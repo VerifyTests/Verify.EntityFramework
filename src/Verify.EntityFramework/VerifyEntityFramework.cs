@@ -127,10 +127,9 @@ public static class VerifyEntityFramework
         QueryableConverter.TryExecuteQueryable(queryable, out var result);
         return new(
             result,
-            new[]
-            {
-                new Target("sql", sql)
-            });
+            [
+                new("sql", sql)
+            ]);
     }
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)

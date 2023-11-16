@@ -5,8 +5,8 @@
   <ItemGroup>
     <PackageReference Include="Polyfill" Version="1.32.1" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Verify" Version="22.4.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.101" PrivateAssets="all" />
+    <PackageReference Include="Verify" Version="22.5.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.102" PrivateAssets="all" />
   </ItemGroup>
 </Project>
