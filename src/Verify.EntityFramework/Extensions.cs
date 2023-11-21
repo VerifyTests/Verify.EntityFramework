@@ -22,15 +22,15 @@
 
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry) =>
         entry.Properties
-            .Where(x =>
+            .Where(entry =>
             {
-                if (!x.IsModified)
+                if (!entry.IsModified)
                 {
                     return false;
                 }
 
-                var original = x.OriginalValue;
-                var current = x.CurrentValue;
+                var original = entry.OriginalValue;
+                var current = entry.CurrentValue;
                 if (ReferenceEquals(original, current))
                 {
                     return false;
