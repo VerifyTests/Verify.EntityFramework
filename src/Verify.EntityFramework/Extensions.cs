@@ -1,14 +1,14 @@
 ﻿static class Extensions
 {
     static MethodInfo setMethod = typeof(DbContext)
-        .GetMethod("Set", Array.Empty<Type>())!;
+        .GetMethod("Set", [])!;
 
     static MethodInfo asNoTracking = typeof(EntityFrameworkQueryableExtensions).GetMethod("AsNoTracking")!;
 
     public static IQueryable<object> AsNoTracking(this IQueryable<object> set, Type clrType)
     {
         var genericNoTracking = asNoTracking.MakeGenericMethod(clrType);
-        return (IQueryable<object>) genericNoTracking.Invoke(null, new object[] {set})!;
+        return (IQueryable<object>) genericNoTracking.Invoke(null, [set])!;
     }
 
     public static IQueryable<object> Set(this DbContext data, Type t) =>
