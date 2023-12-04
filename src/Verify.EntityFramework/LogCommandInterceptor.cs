@@ -48,13 +48,20 @@ class LogCommandInterceptor(string? identifier) :
 
     void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
+        var context = data.Context;
+        if (context != null && context.IsRecordingDisabled())
+        {
+            return;
+        }
+
+        var entry = new LogEntry(type, command, data, exception);
         if (identifier is null)
         {
-            Recording.TryAdd("ef", new LogEntry(type, command, data, exception));
+            Recording.TryAdd("ef", entry);
         }
         else
         {
-            Recording.TryAdd(identifier, "ef", new LogEntry(type, command, data, exception));
+            Recording.TryAdd(identifier, "ef", entry);
         }
     }
 }

@@ -408,6 +408,35 @@ public class CoreTests
         #endregion
     }
 
+    [Test]
+    public async Task RecordingDisabledTest()
+    {
+        var database = await DbContextBuilder.GetDatabase("RecordingDisabledTest");
+        var data = database.Context;
+
+        #region RecordingDisableForInstance
+
+        var company = new Company
+        {
+            Content = "Title"
+        };
+        data.Add(company);
+        await data.SaveChangesAsync();
+
+        Recording.Start();
+
+        await data.Companies
+            .Where(_ => _.Content == "Title")
+            .ToListAsync();
+        data.DisableRecording();
+        await data.Companies
+            .Where(_ => _.Content == "Disabled")
+            .ToListAsync();
+
+        await Verify();
+        #endregion
+    }
+
     [DatapointSource]
     public IEnumerable<int> runs = Enumerable.Range(0, 5);
 
