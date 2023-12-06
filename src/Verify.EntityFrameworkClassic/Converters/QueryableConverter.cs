@@ -9,7 +9,10 @@
 
     public static string QueryToSql(object data)
     {
-        var entityType = data.GetType().GetGenericArguments().Single();
+        var entityType = data
+            .GetType()
+            .GetGenericArguments()
+            .Single();
         var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(entityType);
         return (string) queryableSerializer.InvokeMember(
             name: "ToSql",

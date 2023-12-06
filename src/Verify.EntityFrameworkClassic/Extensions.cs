@@ -23,17 +23,24 @@
         }
     }
 
+    public static string Name(this DbEntityEntry entry) =>
+        entry.Entity
+            .GetType()
+            .Name;
+
     public static IEnumerable<(string name, object value)> FindPrimaryKeyValues(this DbContext context, DbEntityEntry entry)
     {
-        var objectContext = ((IObjectContextAdapter)context).ObjectContext;
+        var objectContext = ((IObjectContextAdapter) context).ObjectContext;
 
         var setBase = objectContext.ObjectStateManager
-            .GetObjectStateEntry(entry.Entity).EntitySet;
+            .GetObjectStateEntry(entry.Entity)
+            .EntitySet;
 
         foreach (var property in setBase.ElementType.KeyMembers)
         {
             var name = property.Name;
-            var value = entry.Property(name).CurrentValue;
+            var value = entry.Property(name)
+                .CurrentValue;
             yield return (name, value);
         }
     }

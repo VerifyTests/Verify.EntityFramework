@@ -12,11 +12,13 @@
     }
 
     public static IQueryable<object> Set(this DbContext data, Type t) =>
-        (IQueryable<object>) setMethod.MakeGenericMethod(t)
+        (IQueryable<object>) setMethod
+            .MakeGenericMethod(t)
             .Invoke(data, null)!;
 
     public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data) =>
-        data.Model
+        data
+            .Model
             .GetEntityTypes()
             .OrderBy(_ => _.Name);
 
@@ -55,7 +57,8 @@
         foreach (var property in primaryKey.Properties)
         {
             var name = property.Name;
-            var value = entry.Property(name).CurrentValue;
+            var value = entry.Property(name)
+                .CurrentValue;
             yield return (name, value);
         }
     }

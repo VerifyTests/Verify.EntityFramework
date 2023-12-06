@@ -19,7 +19,9 @@ public static class VerifyEntityFramework
             var idProperty = clrType.GetProperty("Id", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (idProperty != null)
             {
-                list = list.OrderBy(_ => idProperty.GetValue(_)).ToList();
+                list = list
+                    .OrderBy(_ => idProperty.GetValue(_))
+                    .ToList();
             }
 
             foreach (var entity in list)
@@ -104,7 +106,9 @@ public static class VerifyEntityFramework
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
         {
-            modelNavigations = model.GetNavigations().ToList();
+            modelNavigations = model
+                .GetNavigations()
+                .ToList();
         }
 
         VerifierSettings.RegisterFileConverter(

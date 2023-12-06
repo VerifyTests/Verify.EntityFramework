@@ -19,7 +19,9 @@
     public override void Write(VerifyJsonWriter writer, DbChangeTracker tracker)
     {
         writer.WriteStartObject();
-        var entries = tracker.Entries().ToList();
+        var entries = tracker
+            .Entries()
+            .ToList();
         HandleAdded(entries, writer);
         var data = func(tracker);
         HandleModified(entries, writer, data);
@@ -42,7 +44,7 @@
         writer.WriteStartObject();
         foreach (var entry in deleted)
         {
-            writer.WritePropertyName(entry.Entity.GetType().Name);
+            writer.WritePropertyName(entry.Name());
             writer.WriteStartObject();
             WriteId(writer, entry, data);
             writer.WriteEndObject();
@@ -65,7 +67,7 @@
         writer.WriteStartObject();
         foreach (var entry in added)
         {
-            writer.WritePropertyName(entry.Entity.GetType().Name);
+            writer.WritePropertyName(entry.Name());
             writer.WriteStartObject();
 
             foreach (var propertyName in entry.CurrentValues.PropertyNames)
@@ -102,7 +104,7 @@
 
     static void HandleModified(VerifyJsonWriter writer, DbEntityEntry entry, DbContext context)
     {
-        writer.WritePropertyName(entry.Entity.GetType().Name);
+        writer.WritePropertyName(entry.Name());
         writer.WriteStartObject();
 
         WriteId(writer, entry, context);
@@ -123,7 +125,9 @@
 
     static void WriteId(VerifyJsonWriter writer, DbEntityEntry entry, DbContext context)
     {
-        var ids = context.FindPrimaryKeyValues(entry).ToList();
+        var ids = context
+            .FindPrimaryKeyValues(entry)
+            .ToList();
         if (!ids.Any())
         {
             return;

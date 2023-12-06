@@ -9,10 +9,14 @@
     }
 
     static object Private(object obj, string privateField)
-        => obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj)!;
+        => obj
+            .GetType()
+            .GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj)!;
 
     static T Private<T>(object obj, string privateField)
-        => (T) obj.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj)!;
+        => (T) obj
+            .GetType()
+            .GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj)!;
 
     public static ObjectQuery<T1> GetObjectQuery<T1>(DbQuery<T1> query)
     {

@@ -56,7 +56,8 @@ public class CoreTests
         data.Add(company);
         await data.SaveChangesAsync();
 
-        data.Companies.Single().Content = "after";
+        data.Companies.Single()
+            .Content = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -151,8 +152,10 @@ public class CoreTests
         data.Add(employee);
         await data.SaveChangesAsync();
 
-        data.Companies.Single().Content = "companyAfter";
-        data.Employees.Single().Content = "employeeAfter";
+        data.Companies.Single()
+            .Content = "companyAfter";
+        data.Employees.Single()
+            .Content = "employeeAfter";
         await Verify(data.ChangeTracker);
     }
 
@@ -170,7 +173,8 @@ public class CoreTests
         data.Add(employee);
         await data.SaveChangesAsync();
 
-        data.Employees.Single().Content = "after";
+        data.Employees.Single()
+            .Content = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -220,7 +224,8 @@ public class CoreTests
         await data.SaveChangesAsync();
 
         var employee = data.Employees.Single();
-        data.Update(employee).Entity.Content = "after";
+        data.Update(employee)
+            .Entity.Content = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -266,7 +271,8 @@ public class CoreTests
         var database = await DbContextBuilder.GetDatabase("SetSelect");
         var data = database.Context;
 
-        var query = data.Set<Company>()
+        var query = data
+            .Set<Company>()
             .Select(_ => _.Id);
         await Verify(query);
     }
@@ -311,7 +317,9 @@ public class CoreTests
         data.Add(
             new Company
             {
-                Content = Guid.NewGuid().ToString()
+                Content = Guid
+                    .NewGuid()
+                    .ToString()
             }
         );
         Recording.Start();
@@ -335,7 +343,8 @@ public class CoreTests
         for (var i = 0; i < 100; i++)
         {
             var s = i.ToString();
-            await data.Companies
+            await data
+                .Companies
                 .Where(_ => _.Content == s)
                 .ToListAsync();
         }
@@ -373,7 +382,8 @@ public class CoreTests
         await data1.SaveChangesAsync();
 
         await using var data2 = new SampleDbContext(builder.Options);
-        await data2.Companies
+        await data2
+            .Companies
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 
@@ -399,7 +409,8 @@ public class CoreTests
 
         Recording.Start();
 
-        await data.Companies
+        await data
+            .Companies
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 
@@ -425,15 +436,18 @@ public class CoreTests
 
         Recording.Start();
 
-        await data.Companies
+        await data
+            .Companies
             .Where(_ => _.Content == "Title")
             .ToListAsync();
         data.DisableRecording();
-        await data.Companies
+        await data
+            .Companies
             .Where(_ => _.Content == "Disabled")
             .ToListAsync();
 
         await Verify();
+
         #endregion
     }
 
@@ -509,7 +523,8 @@ public class CoreTests
         #endregion
 
         protected override IHostBuilder CreateHostBuilder() =>
-            Host.CreateDefaultBuilder()
+            Host
+                .CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(_ => _.UseStartup<Startup>());
     }
 
@@ -548,7 +563,8 @@ public class CoreTests
 
         Recording.Start();
 
-        await data.Companies
+        await data
+            .Companies
             .Where(_ => _.Content == "Title")
             .ToListAsync();
 

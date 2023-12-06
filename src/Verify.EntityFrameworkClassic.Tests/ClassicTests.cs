@@ -10,7 +10,10 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        data.Companies.Add(new() {Content = "before"});
+        data.Companies.Add(new()
+        {
+            Content = "before"
+        });
         await Verify(data.ChangeTracker);
     }
 
@@ -23,7 +26,10 @@ public class ClassicTests
     {
         using var database = await sqlInstance.Build();
         var data = database.Context;
-        data.Companies.Add(new() {Content = "before"});
+        data.Companies.Add(new()
+        {
+            Content = "before"
+        });
         await data.SaveChangesAsync();
 
         var company = data.Companies.Single();
@@ -47,7 +53,8 @@ public class ClassicTests
         data.Companies.Add(company);
         await data.SaveChangesAsync();
 
-        data.Companies.Single().Content = "after";
+        data.Companies.Single()
+            .Content = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -71,12 +78,15 @@ public class ClassicTests
         data.Employees.Add(employee);
         await data.SaveChangesAsync();
 
-        data.Companies.Single().Content = "companyAfter";
-        data.Employees.Single().Content = "employeeAfter";
+        data.Companies.Single()
+            .Content = "companyAfter";
+        data.Employees.Single()
+            .Content = "employeeAfter";
         await Verify(data.ChangeTracker);
     }
 
-    [Test, Explicit]
+    [Test]
+    [Explicit]
     public async Task SomePropsModified()
     {
         using var database = await sqlInstance.Build();
@@ -87,9 +97,15 @@ public class ClassicTests
         };
         data.Companies.Add(company);
         await data.SaveChangesAsync();
-        var entity = data.Companies.Attach(new() {Id = company.Id});
+        var entity = data.Companies.Attach(new()
+        {
+            Id = company.Id
+        });
         entity.Content = "after";
-        data.Entry(entity).Property(_ => _.Content).IsModified = true;
+        data
+            .Entry(entity)
+            .Property(_ => _.Content)
+            .IsModified = true;
         data.Configuration.ValidateOnSaveEnabled = false;
         await data.SaveChangesAsync();
         await Verify(data);

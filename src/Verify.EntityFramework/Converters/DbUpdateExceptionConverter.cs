@@ -9,7 +9,8 @@ class DbUpdateExceptionConverter :
         writer.WriteMember(exception, exception.GetType(), "Type");
         writer.WriteMember(exception, exception.InnerException, "InnerException");
 
-        var entries = exception.Entries
+        var entries = exception
+            .Entries
             .Select(
                 entry => new
                 {
@@ -20,9 +21,9 @@ class DbUpdateExceptionConverter :
                             _.OriginalValue,
                             _.CurrentValue,
                             _.IsTemporary,
-                            _.IsModified,
+                            _.IsModified
                         }),
-                    entry.State,
+                    entry.State
                 })
             .ToList();
 

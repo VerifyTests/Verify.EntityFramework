@@ -1,7 +1,6 @@
-﻿
-
-// LocalDb is used to make the sample simpler.
+﻿// LocalDb is used to make the sample simpler.
 // Replace with a real DbContext
+
 public static class DbContextBuilder
 {
     static DbContextBuilder() =>

@@ -6,7 +6,8 @@
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Company>()
+        builder
+            .Entity<Company>()
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
             .IsRequired();

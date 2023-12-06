@@ -5,7 +5,9 @@
     {
         writer.WriteStartObject();
 
-        var entries = tracker.Entries().ToList();
+        var entries = tracker
+            .Entries()
+            .ToList();
         HandleAdded(entries, writer);
         HandleModified(entries, writer);
         HandleDeleted(entries, writer);
@@ -106,7 +108,9 @@
 
     static void WriteId(VerifyJsonWriter writer, EntityEntry entry)
     {
-        var ids = entry.FindPrimaryKeyValues().ToList();
+        var ids = entry
+            .FindPrimaryKeyValues()
+            .ToList();
         if (!ids.Any())
         {
             return;

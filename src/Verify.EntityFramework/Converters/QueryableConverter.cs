@@ -4,7 +4,7 @@
     static MethodInfo executeQueryableDefinition;
 
     static QueryableConverter() =>
-        executeQueryableDefinition = typeof(QueryableConverter).GetMethod("ExecuteQueryable", BindingFlags.NonPublic| BindingFlags.Static)!;
+        executeQueryableDefinition = typeof(QueryableConverter).GetMethod("ExecuteQueryable", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     public override void Write(VerifyJsonWriter writer, object data)
     {
@@ -26,7 +26,9 @@
 
     public static bool TryExecuteQueryable(IQueryable queryable, [NotNullWhen(true)] out IList? result)
     {
-        var entityType = queryable.GetType().GenericTypeArguments.First();
+        var entityType = queryable
+            .GetType()
+            .GenericTypeArguments.First();
 
         var executeQueryable = executeQueryableDefinition.MakeGenericMethod(entityType);
         var parameters = new object?[]
