@@ -6,7 +6,6 @@
     <PackageReference Include="Polyfill" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Verify" Version="23.0.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
     <PackageReference Include="ProjectDefaults" Version="1.0.109" PrivateAssets="all" />
   </ItemGroup>
 </Project>
