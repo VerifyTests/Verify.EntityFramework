@@ -15,13 +15,12 @@ public static class VerifyEntityFramework
             var set = data.Set(clrType);
             var queryable = set.AsNoTracking(clrType);
 
-            var list = await queryable.ToListAsync();
+            IEnumerable<object> list = await queryable.ToListAsync();
             var idProperty = clrType.GetProperty("Id", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
             if (idProperty != null)
             {
-                list = list
-                    .OrderBy(_ => idProperty.GetValue(_))
-                    .ToList();
+                list = list.OrderBy(_ => idProperty.GetValue(_));
             }
 
             foreach (var entity in list)
