@@ -24,8 +24,7 @@ class DbUpdateExceptionConverter :
                             _.IsModified
                         }),
                     entry.State
-                })
-            .ToList();
+                });
 
         writer.WriteMember(exception, entries, "Entries");
         writer.WriteMember(exception, exception.StackTrace, "StackTrace");
