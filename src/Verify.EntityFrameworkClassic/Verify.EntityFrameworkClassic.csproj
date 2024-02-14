@@ -6,6 +6,6 @@
     <PackageReference Include="Polyfill" Version="2.2.2" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Verify" Version="23.1.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.109" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.110" PrivateAssets="all" />
   </ItemGroup>
 </Project>

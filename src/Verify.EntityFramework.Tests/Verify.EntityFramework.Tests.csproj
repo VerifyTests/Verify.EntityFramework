@@ -14,7 +14,7 @@
     <PackageReference Include="Verify.NUnit" Version="23.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.109" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.110" PrivateAssets="all" />
     <PackageReference Include="Verify.SqlServer" Version="8.0.1" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
