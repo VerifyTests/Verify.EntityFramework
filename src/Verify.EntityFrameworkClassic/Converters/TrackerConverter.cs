@@ -35,7 +35,7 @@
         var deleted = entries
             .Where(_ => _.State == EntityState.Deleted)
             .ToList();
-        if (!deleted.Any())
+        if (deleted.Count == 0)
         {
             return;
         }
@@ -58,7 +58,7 @@
         var added = entries
             .Where(_ => _.State == EntityState.Added)
             .ToList();
-        if (!added.Any())
+        if (added.Count == 0)
         {
             return;
         }
@@ -87,7 +87,7 @@
         var modified = entries
             .Where(_ => _.State == EntityState.Modified)
             .ToList();
-        if (!modified.Any())
+        if (modified.Count == 0)
         {
             return;
         }
@@ -128,7 +128,7 @@
         var ids = context
             .FindPrimaryKeyValues(entry)
             .ToList();
-        if (!ids.Any())
+        if (ids.Count == 0)
         {
             return;
         }

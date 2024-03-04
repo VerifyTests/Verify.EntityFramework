@@ -111,7 +111,7 @@ public class CoreTests
 
     #endregion
 
-    void IgnoreNavigationPropertiesGlobal()
+    static void IgnoreNavigationPropertiesGlobal()
     {
         #region IgnoreNavigationPropertiesGlobal
 
@@ -122,7 +122,7 @@ public class CoreTests
         #endregion
     }
 
-    void IgnoreNavigationPropertiesGlobalExplicit()
+    static void IgnoreNavigationPropertiesGlobalExplicit()
     {
         #region IgnoreNavigationPropertiesGlobalExplicit
 
@@ -297,7 +297,7 @@ public class CoreTests
     }
 
     // ReSharper disable once UnusedVariable
-    void Build(string connection)
+    static void Build(string connection)
     {
         #region EnableRecording
 
@@ -528,6 +528,7 @@ public class CoreTests
                 .ConfigureWebHostDefaults(_ => _.UseStartup<Startup>());
     }
 
+#pragma warning disable CA1822
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services) =>
@@ -545,6 +546,7 @@ public class CoreTests
                     (SampleDbContext data) => data.Companies.ToListAsync()));
         }
     }
+#pragma warning restore CA1822
 
     [Test]
     public async Task RecordingSpecific()
