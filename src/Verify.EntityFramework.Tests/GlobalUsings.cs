@@ -1,6 +1,4 @@
-﻿// Global using directives
-
-global using System.Net.Http.Json;
+﻿global using System.Net.Http.Json;
 global using Argon;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Hosting;
