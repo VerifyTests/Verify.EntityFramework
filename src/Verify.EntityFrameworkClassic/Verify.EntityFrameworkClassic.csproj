@@ -7,7 +7,7 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
     <PackageReference Include="Polyfill" Version="4.4.1" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Verify" Version="23.7.1" />
+    <PackageReference Include="Verify" Version="23.7.2" />
     <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
