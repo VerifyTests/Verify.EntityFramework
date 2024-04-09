@@ -31,13 +31,9 @@
             .GenericTypeArguments.First();
 
         var executeQueryable = executeQueryableDefinition.MakeGenericMethod(entityType);
-        var parameters = new object?[]
-        {
-            queryable
-        };
         try
         {
-            result = (IList) executeQueryable.Invoke(null, parameters)!;
+            result = (IList) executeQueryable.Invoke(null, [queryable])!;
             return true;
         }
         catch
