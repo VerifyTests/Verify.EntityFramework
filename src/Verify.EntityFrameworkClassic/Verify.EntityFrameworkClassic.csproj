@@ -5,7 +5,7 @@
   <ItemGroup>
     <!-- explicit ref to avoid CVE -->
     <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
-    <PackageReference Include="Polyfill" Version="4.5.0" PrivateAssets="all" />
+    <PackageReference Include="Polyfill" Version="4.6.0" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Verify" Version="24.0.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
