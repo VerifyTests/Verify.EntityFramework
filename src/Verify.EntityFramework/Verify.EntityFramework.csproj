@@ -8,6 +8,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
     <PackageReference Include="Verify" Version="24.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@
     <PackageReference Include="Verify.DiffPlex" Version="3.0.0" />
     <PackageReference Include="EfClassicLocalDb" Version="17.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFrameworkClassic\Verify.EntityFrameworkClassic.csproj" />
   </ItemGroup>
 </Project>
