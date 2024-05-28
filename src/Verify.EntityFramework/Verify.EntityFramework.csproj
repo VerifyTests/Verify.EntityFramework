@@ -4,10 +4,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- explicit to avoid a CVE -->
-    <PackageReference Include="Azure.Identity" Version="1.11.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.5" />
-    <PackageReference Include="Verify" Version="24.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Verify" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
   </ItemGroup>
 </Project>

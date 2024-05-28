@@ -4,11 +4,11 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- explicit ref to avoid CVE -->
-    <PackageReference Include="System.Drawing.Common" Version="8.0.5" />
-    <PackageReference Include="Polyfill" Version="5.2.2" PrivateAssets="all" />
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Verify" Version="24.2.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Drawing.Common" />
+    <PackageReference Include="Polyfill" PrivateAssets="all" />
+    <PackageReference Include="EntityFramework" />
+    <PackageReference Include="Verify" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
 </Project>
