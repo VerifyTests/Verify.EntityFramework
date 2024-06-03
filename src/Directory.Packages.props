@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="EfClassicLocalDb" Version="18.0.1" />
-    <PackageVersion Include="EfLocalDb" Version="18.0.0" />
+    <PackageVersion Include="EfLocalDb" Version="18.0.1" />
     <PackageVersion Include="EntityFramework" Version="6.4.4" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.6" />
@@ -23,6 +23,6 @@
     <PackageVersion Include="Verify" Version="25.0.1" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.0.0" />
     <PackageVersion Include="Verify.NUnit" Version="25.0.1" />
-    <PackageVersion Include="Verify.SqlServer" Version="8.0.4" />
+    <PackageVersion Include="Verify.SqlServer" Version="8.0.5" />
   </ItemGroup>
 </Project>
