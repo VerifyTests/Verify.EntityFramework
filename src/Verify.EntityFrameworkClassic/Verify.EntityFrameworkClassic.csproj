@@ -3,8 +3,6 @@
     <TargetFrameworks>net48;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <!-- explicit ref to avoid CVE -->
-    <PackageReference Include="System.Drawing.Common" />
     <PackageReference Include="Polyfill" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" />
     <PackageReference Include="Verify" />
