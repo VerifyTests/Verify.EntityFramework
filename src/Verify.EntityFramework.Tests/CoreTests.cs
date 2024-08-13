@@ -2,6 +2,22 @@
 [Parallelizable(ParallelScope.All)]
 public class CoreTests
 {
+    [Test]
+    public async Task MissingOrderBy()
+    {
+        await using var database = await DbContextBuilder.GetDatabase("RecordingSpecific");
+        var data = database.Context;
+        var company = new Company
+        {
+            Content = "before"
+        };
+        data.Add(company);
+
+        Recording.Start();
+        await data.Companies.Where(_=>_.Id == company.Id).ToListAsync();
+        await Verify();
+    }
+
     #region Added
 
     [Test]

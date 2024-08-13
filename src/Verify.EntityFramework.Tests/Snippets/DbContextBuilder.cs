@@ -9,6 +9,7 @@ public static class DbContextBuilder
             constructInstance: builder =>
             {
                 builder.EnableRecording();
+                builder.ThrowForMissingOrderBy();
                 return new(builder.Options);
             });
 
