@@ -2,7 +2,6 @@
 {
     List<OrderingExpression> orderedExpressions = [];
 
-    [return: NotNullIfNotNull(nameof(expression))]
     public override Expression? Visit(Expression? expression)
     {
         if (expression is null)
@@ -15,7 +14,7 @@
             case ShapedQueryExpression shapedQueryExpression:
                 if(shapedQueryExpression.ResultCardinality != ResultCardinality.Enumerable)
                 {
-                    return null!;
+                    return null;
                 }
                 Visit(shapedQueryExpression.QueryExpression);
                 return shapedQueryExpression;
