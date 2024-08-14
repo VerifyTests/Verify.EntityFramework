@@ -13,6 +13,10 @@
         switch (expression)
         {
             case ShapedQueryExpression shapedQueryExpression:
+                if(shapedQueryExpression.ResultCardinality != ResultCardinality.Enumerable)
+                {
+                    return null!;
+                }
                 Visit(shapedQueryExpression.QueryExpression);
                 return shapedQueryExpression;
 

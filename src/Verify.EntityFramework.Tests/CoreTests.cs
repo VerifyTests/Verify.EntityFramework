@@ -38,6 +38,14 @@ public class CoreTests
     }
 
     [Test]
+    public async Task SingleMissingOrder()
+    {
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
+        var data = database.Context;
+        await Verify(data.Companies.Where(_ => _.Content == "Company1").SingleAsync());
+    }
+
+    [Test]
     public async Task WithNestedOrderBy()
     {
         await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
