@@ -10,7 +10,7 @@
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-<!--    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 </Project>
