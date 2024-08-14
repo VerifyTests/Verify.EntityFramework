@@ -5,7 +5,7 @@ public class CoreTests
     [Test]
     public async Task MissingOrderBy()
     {
-        await using var database = await DbContextBuilder.GetOrderRequiredDatabase("RecordingSpecific");
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
         var data = database.Context;
         await ThrowsTask(
                 () => data.Companies
@@ -16,7 +16,7 @@ public class CoreTests
     [Test]
     public async Task WithOrderBy()
     {
-        await using var database = await DbContextBuilder.GetOrderRequiredDatabase("RecordingSpecific");
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
         var data = database.Context;
         await Verify(
             data.Companies
@@ -254,7 +254,7 @@ public class CoreTests
     [Test]
     public async Task AllData()
     {
-        var database = await DbContextBuilder.GetDatabase("AllData");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
 
         #region AllData
@@ -270,7 +270,7 @@ public class CoreTests
     [Test]
     public async Task Queryable()
     {
-        var database = await DbContextBuilder.GetDatabase("Queryable");
+        var database = await DbContextBuilder.GetDatabase();
         await database.AddData(
             new Company
             {
@@ -290,7 +290,7 @@ public class CoreTests
     [Test]
     public async Task SetSelect()
     {
-        var database = await DbContextBuilder.GetDatabase("SetSelect");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
 
         var query = data
@@ -302,7 +302,7 @@ public class CoreTests
     [Test]
     public async Task NestedQueryable()
     {
-        var database = await DbContextBuilder.GetDatabase("NestedQueryable");
+        var database = await DbContextBuilder.GetDatabase();
         await database.AddData(
             new Company
             {
@@ -334,7 +334,7 @@ public class CoreTests
     [Test]
     public async Task Parameters()
     {
-        var database = await DbContextBuilder.GetDatabase("Parameters");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
         data.Add(
             new Company
@@ -352,7 +352,7 @@ public class CoreTests
     [Test]
     public async Task MultiRecording()
     {
-        var database = await DbContextBuilder.GetDatabase("MultiRecording");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
         Recording.Start();
         var company = new Company
@@ -385,7 +385,7 @@ public class CoreTests
     [Test]
     public async Task MultiDbContexts()
     {
-        var database = await DbContextBuilder.GetDatabase("MultiDbContexts");
+        var database = await DbContextBuilder.GetDatabase();
         var connectionString = database.ConnectionString;
 
         #region MultiDbContexts
@@ -417,7 +417,7 @@ public class CoreTests
     [Test]
     public async Task RecordingTest()
     {
-        var database = await DbContextBuilder.GetDatabase("Recording");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
 
         #region Recording
@@ -444,7 +444,7 @@ public class CoreTests
     [Test]
     public async Task RecordingDisabledTest()
     {
-        var database = await DbContextBuilder.GetDatabase("RecordingDisabledTest");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
 
         #region RecordingDisableForInstance
@@ -573,7 +573,7 @@ public class CoreTests
     [Test]
     public async Task RecordingSpecific()
     {
-        var database = await DbContextBuilder.GetDatabase("RecordingSpecific");
+        var database = await DbContextBuilder.GetDatabase();
         var data = database.Context;
 
         #region RecordingSpecific

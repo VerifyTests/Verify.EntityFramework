@@ -75,9 +75,9 @@ public static class DbContextBuilder
         await data.SaveChangesAsync();
     }
 
-    public static Task<SqlDatabase<SampleDbContext>> GetDatabase(string suffix)
+    public static Task<SqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
         => sqlInstance.Build(suffix);
 
-    public static Task<SqlDatabase<SampleDbContext>> GetOrderRequiredDatabase(string suffix)
+    public static Task<SqlDatabase<SampleDbContext>> GetOrderRequiredDatabase([CallerMemberName] string suffix = "")
         => orderRequiredSqlInstance.Build(suffix);
 }
