@@ -3,7 +3,8 @@
 
 public static class DbContextBuilder
 {
-    static DbContextBuilder() =>
+    static DbContextBuilder()
+    {
         sqlInstance = new(
             buildTemplate: CreateDb,
             constructInstance: builder =>
@@ -11,8 +12,19 @@ public static class DbContextBuilder
                 builder.EnableRecording();
                 return new(builder.Options);
             });
+        orderRequiredSqlInstance = new(
+            buildTemplate: CreateDb,
+            storage: Storage.FromSuffix<SampleDbContext>("ThrowForMissingOrderBy"),
+            constructInstance: builder =>
+            {
+                builder.EnableRecording();
+                builder.ThrowForMissingOrderBy();
+                return new(builder.Options);
+            });
+    }
 
     static SqlInstance<SampleDbContext> sqlInstance;
+    static SqlInstance<SampleDbContext> orderRequiredSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -63,6 +75,9 @@ public static class DbContextBuilder
         await data.SaveChangesAsync();
     }
 
-    public static Task<SqlDatabase<SampleDbContext>> GetDatabase(string suffix)
+    public static Task<SqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
         => sqlInstance.Build(suffix);
+
+    public static Task<SqlDatabase<SampleDbContext>> GetOrderRequiredDatabase([CallerMemberName] string suffix = "")
+        => orderRequiredSqlInstance.Build(suffix);
 }
