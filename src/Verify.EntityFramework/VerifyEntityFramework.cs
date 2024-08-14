@@ -131,9 +131,17 @@ public static class VerifyEntityFramework
         return new(result, [new("sql", sql)]);
     }
 
+    public static DbContextOptionsBuilder<TContext> ThrowForMissingOrderBy<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext =>
+        builder.ReplaceService<IShapedQueryCompilingExpressionVisitorFactory, RelationalFactory>();
+
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext
         => builder.EnableRecording(null);
+
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
+        where TContext : DbContext =>
+        builder.AddInterceptors(new LogCommandInterceptor(identifier));
 
     static ConcurrentBag<Guid> recordingDisabledContextIds = [];
 
@@ -144,8 +152,4 @@ public static class VerifyEntityFramework
     internal static bool IsRecordingDisabled<TContext>(this TContext context)
         where TContext : DbContext =>
         recordingDisabledContextIds.Contains(context.ContextId.InstanceId);
-
-    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
-        where TContext : DbContext =>
-        builder.AddInterceptors(new LogCommandInterceptor(identifier));
 }
