@@ -1,6 +1,8 @@
 ﻿sealed class MissingOrderByVisitor : ExpressionVisitor
 {
-    [return: NotNullIfNotNull("expression")]
+    List<OrderingExpression> orderedExpressions = [];
+
+    [return: NotNullIfNotNull(nameof(expression))]
     public override Expression? Visit(Expression? expression)
     {
         if (expression is null)
@@ -24,14 +26,53 @@
 
                 return splitExpression;
 
-            case SelectExpression { Orderings.Count: 0 } selectExpression:
+            case TableExpression tableExpression:
             {
+                foreach (var orderedExpression in orderedExpressions)
+                {
+                    if (orderedExpression.Expression is ColumnExpression columnExpression)
+                    {
+                        if (columnExpression.Table == tableExpression)
+                        {
+                            return base.Visit(expression);
+                        }
+
+                        if (columnExpression.Table is PredicateJoinExpressionBase joinExpression)
+                        {
+                            if (joinExpression.Table == tableExpression)
+                            {
+                                return base.Visit(expression);
+                            }
+                        }
+                    }
+                }
+
                 throw new(
                     $"""
-                     SelectExpression must have at least one ordering.
+                     TableExpression must have at least one ordering.
                      Expression:
-                     {PrintShortSql(selectExpression)}
+                     {ExpressionPrinter.Print(tableExpression)}
                      """);
+            }
+            case SelectExpression selectExpression:
+            {
+                var orderings = selectExpression.Orderings;
+                if (orderings.Count == 0)
+                {
+                    throw new(
+                        $"""
+                         SelectExpression must have at least one ordering.
+                         Expression:
+                         {PrintShortSql(selectExpression)}
+                         """);
+                }
+
+                foreach (var ordering in orderings)
+                {
+                    orderedExpressions.Add(ordering);
+                }
+
+                return base.Visit(expression);
             }
 
             case NonQueryExpression nonQueryExpression:
@@ -44,5 +85,4 @@
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "PrintShortSql")]
     static extern string PrintShortSql(SelectExpression expression);
-
 }

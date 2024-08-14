@@ -14,12 +14,37 @@ public class CoreTests
     }
 
     [Test]
+    public async Task NestedMissingOrderBy()
+    {
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
+        var data = database.Context;
+        await ThrowsTask(
+                () => data.Companies
+                    .Include(_ => _.Employees)
+                    .OrderBy(_ => _.Content)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
     public async Task WithOrderBy()
     {
         await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
         var data = database.Context;
         await Verify(
             data.Companies
+                .OrderBy(_ => _.Content)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task WithNestedOrderBy()
+    {
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
+        var data = database.Context;
+        await Verify(
+            data.Companies
+                .Include(_ => _.Employees.OrderBy(_ => _.Age))
                 .OrderBy(_ => _.Content)
                 .ToListAsync());
     }
