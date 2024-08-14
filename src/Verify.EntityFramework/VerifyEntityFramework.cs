@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-
-namespace VerifyTests;
+﻿namespace VerifyTests;
 
 public static class VerifyEntityFramework
 {
@@ -134,12 +132,8 @@ public static class VerifyEntityFramework
     }
 
     public static DbContextOptionsBuilder<TContext> ThrowForMissingOrderBy<TContext>(this DbContextOptionsBuilder<TContext> builder)
-        where TContext : DbContext
-    {
-
-        return builder.ReplaceService<IQueryTranslationPostprocessorFactory, Foo>();
-     //   return builder.AddInterceptors(new MissingOrderByVisitor());
-    }
+        where TContext : DbContext =>
+        builder.ReplaceService<IShapedQueryCompilingExpressionVisitorFactory, RelationalFactory>();
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext

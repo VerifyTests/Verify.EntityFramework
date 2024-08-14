@@ -5,17 +5,23 @@ public class CoreTests
     [Test]
     public async Task MissingOrderBy()
     {
-        await using var database = await DbContextBuilder.GetDatabase("RecordingSpecific");
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase("RecordingSpecific");
         var data = database.Context;
-        var company = new Company
-        {
-            Content = "before"
-        };
-        data.Add(company);
+        await ThrowsTask(
+                () => data.Companies
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
 
-        Recording.Start();
-        await data.Companies.Where(_=>_.Id == company.Id).ToListAsync();
-        await Verify();
+    [Test]
+    public async Task WithOrderBy()
+    {
+        await using var database = await DbContextBuilder.GetOrderRequiredDatabase("RecordingSpecific");
+        var data = database.Context;
+        await Verify(
+            data.Companies
+                .OrderBy(_ => _.Content)
+                .ToListAsync());
     }
 
     #region Added
