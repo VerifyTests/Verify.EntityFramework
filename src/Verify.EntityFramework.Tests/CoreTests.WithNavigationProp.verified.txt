@@ -2,14 +2,14 @@
   Modified: {
     Company: {
       Id: 0,
-      Content: {
+      Name: {
         Original: companyBefore,
         Current: companyAfter
       }
     },
     Employee: {
       Id: 0,
-      Content: {
+      Name: {
         Original: employeeBefore,
         Current: employeeAfter
       }

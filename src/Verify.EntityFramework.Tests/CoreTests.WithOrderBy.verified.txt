@@ -1,18 +1,18 @@
 ﻿[
   {
     Id: 1,
-    Content: Company1
+    Name: Company1
   },
   {
     Id: 4,
-    Content: Company2
+    Name: Company2
   },
   {
     Id: 6,
-    Content: Company3
+    Name: Company3
   },
   {
     Id: 7,
-    Content: Company4
+    Name: Company4
   }
 ]

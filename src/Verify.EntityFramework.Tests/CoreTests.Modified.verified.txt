@@ -2,9 +2,9 @@
   Modified: {
     Company: {
       Id: 0,
-      Content: {
-        Original: before,
-        Current: after
+      Name: {
+        Original: old name,
+        Current: new name
       }
     }
   }

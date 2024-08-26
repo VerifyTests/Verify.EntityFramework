@@ -1,4 +1,4 @@
 ﻿{
   Id: 1,
-  Content: Company1
+  Name: Company1
 }

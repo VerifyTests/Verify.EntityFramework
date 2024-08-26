@@ -4,12 +4,12 @@
     HasTransaction: false,
     Parameters: {
       @p0 (Int32): 0,
-      @p1 (String?): Guid_1
+      @p1 (String): Guid_1
     },
     Text:
 SET IMPLICIT_TRANSACTIONS OFF;
 SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Content])
+INSERT INTO [Companies] ([Id], [Name])
 VALUES (@p0, @p1);
   }
 }

@@ -6,7 +6,7 @@
         Type: ReaderExecutedAsync,
         HasTransaction: false,
         Text:
-SELECT "c"."Id", "c"."Content"
+SELECT "c"."Id", "c"."Name"
 FROM "Companies" AS "c"
       }
     }

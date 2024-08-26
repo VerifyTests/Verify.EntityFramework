@@ -292,7 +292,7 @@ public async Task Added()
     await using var data = new SampleDbContext(options);
     var company = new Company
     {
-        Name = "before"
+        Name = "company name"
     };
     data.Add(company);
     await Verify(data.ChangeTracker);
@@ -334,7 +334,7 @@ public async Task Deleted()
     await using var data = new SampleDbContext(options);
     data.Add(new Company
     {
-        Name = "before"
+        Name = "company name"
     });
     await data.SaveChangesAsync();
 
@@ -378,13 +378,13 @@ public async Task Modified()
     await using var data = new SampleDbContext(options);
     var company = new Company
     {
-        Name = "before"
+        Name = "old name"
     };
     data.Add(company);
     await data.SaveChangesAsync();
 
     data.Companies.Single()
-        .Name = "after";
+        .Name = "new name";
     await Verify(data.ChangeTracker);
 }
 ```
@@ -420,16 +420,19 @@ This test:
 <a id='snippet-Queryable'></a>
 ```cs
 var queryable = data.Companies
-    .Where(_ => _.Name == "value");
+    .Where(_ => _.Name == "company name");
 await Verify(queryable);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L314-L320' title='Snippet source file'>snippet source</a> | <a href='#snippet-Queryable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Will result in the following verified file:
+Will result in the following verified files:
 
 
 ### EF Core
+
+
+#### CoreTests.Queryable.verified.txt
 
 <!-- snippet: CoreTests.Queryable.verified.txt -->
 <a id='snippet-CoreTests.Queryable.verified.txt'></a>
@@ -443,6 +446,9 @@ Will result in the following verified file:
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.txt#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+
+#### CoreTests.Queryable.verified.sql
+
 <!-- snippet: CoreTests.Queryable.verified.sql -->
 <a id='snippet-CoreTests.Queryable.verified.sql'></a>
 ```sql
@@ -455,6 +461,9 @@ WHERE [c].[Content] = N'value'
 
 
 ### EF Classic
+
+
+#### ClassicTests.Queryable.verified.txt
 
 <!-- snippet: ClassicTests.Queryable.verified.txt -->
 <a id='snippet-ClassicTests.Queryable.verified.txt'></a>

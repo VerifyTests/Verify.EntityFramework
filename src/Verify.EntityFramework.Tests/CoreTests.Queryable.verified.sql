@@ -1,3 +1,3 @@
-﻿SELECT [c].[Id], [c].[Content]
+﻿SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'value'
+WHERE [c].[Name] = N'company name'

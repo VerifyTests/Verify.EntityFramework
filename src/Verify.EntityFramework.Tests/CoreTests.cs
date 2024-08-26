@@ -67,7 +67,7 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var company = new Company
         {
-            Name = "before"
+            Name = "company name"
         };
         data.Add(company);
         await Verify(data.ChangeTracker);
@@ -85,7 +85,7 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         data.Add(new Company
         {
-            Name = "before"
+            Name = "company name"
         });
         await data.SaveChangesAsync();
 
@@ -106,13 +106,13 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var company = new Company
         {
-            Name = "before"
+            Name = "old name"
         };
         data.Add(company);
         await data.SaveChangesAsync();
 
         data.Companies.Single()
-            .Name = "after";
+            .Name = "new name";
         await Verify(data.ChangeTracker);
     }
 
@@ -307,14 +307,14 @@ public class CoreTests
         await database.AddData(
             new Company
             {
-                Name = "value"
+                Name = "company name"
             });
         var data = database.Context;
 
         #region Queryable
 
         var queryable = data.Companies
-            .Where(_ => _.Name == "value");
+            .Where(_ => _.Name == "company name");
         await Verify(queryable);
 
         #endregion

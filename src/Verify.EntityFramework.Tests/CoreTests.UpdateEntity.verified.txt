@@ -2,7 +2,7 @@
   Modified: {
     Employee: {
       Id: 0,
-      Content: {
+      Name: {
         Original: before,
         Current: after
       }

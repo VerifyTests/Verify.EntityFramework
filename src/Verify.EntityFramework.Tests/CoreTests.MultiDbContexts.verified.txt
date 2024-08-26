@@ -5,21 +5,21 @@
       HasTransaction: false,
       Parameters: {
         @p0 (Int32): 0,
-        @p1 (String?): Title
+        @p1 (String): Title
       },
       Text:
 SET IMPLICIT_TRANSACTIONS OFF;
 SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Content])
+INSERT INTO [Companies] ([Id], [Name])
 VALUES (@p0, @p1);
     },
     {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
-SELECT [c].[Id], [c].[Content]
+SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
+WHERE [c].[Name] = N'Title'
     }
   ]
 }

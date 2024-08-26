@@ -1,40 +1,40 @@
 ﻿[
   {
     Id: 1,
-    Content: Company1,
+    Name: Company1,
     Employees: [
       {
         Id: 2,
         CompanyId: 1,
-        Content: Employee1,
+        Name: Employee1,
         Age: 25
       },
       {
         Id: 3,
         CompanyId: 1,
-        Content: Employee2,
+        Name: Employee2,
         Age: 31
       }
     ]
   },
   {
     Id: 4,
-    Content: Company2,
+    Name: Company2,
     Employees: [
       {
         Id: 5,
         CompanyId: 4,
-        Content: Employee4,
+        Name: Employee4,
         Age: 34
       }
     ]
   },
   {
     Id: 6,
-    Content: Company3
+    Name: Company3
   },
   {
     Id: 7,
-    Content: Company4
+    Name: Company4
   }
 ]
