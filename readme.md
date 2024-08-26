@@ -119,9 +119,9 @@ Will result in the following verified file:
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-SELECT [c].[Id], [c].[Content]
+SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
+WHERE [c].[Name] = N'Title'
   }
 }
 ```
@@ -202,21 +202,21 @@ await Verify();
       HasTransaction: false,
       Parameters: {
         @p0 (Int32): 0,
-        @p1 (String?): Title
+        @p1 (String): Title
       },
       Text:
 SET IMPLICIT_TRANSACTIONS OFF;
 SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Content])
+INSERT INTO [Companies] ([Id], [Name])
 VALUES (@p0, @p1);
     },
     {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
-SELECT [c].[Id], [c].[Content]
+SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
+WHERE [c].[Name] = N'Title'
     }
   ]
 }
@@ -262,9 +262,9 @@ await Verify();
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-SELECT [c].[Id], [c].[Content]
+SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'Title'
+WHERE [c].[Name] = N'Title'
   }
 }
 ```
@@ -310,7 +310,7 @@ Will result in the following verified file:
   Added: {
     Company: {
       Id: 0,
-      Content: before
+      Name: company name
     }
   }
 }
@@ -400,9 +400,9 @@ Will result in the following verified file:
   Modified: {
     Company: {
       Id: 0,
-      Content: {
-        Original: before,
-        Current: after
+      Name: {
+        Original: old name,
+        Current: new name
       }
     }
   }
@@ -439,7 +439,7 @@ Will result in the following verified files:
 ```txt
 [
   {
-    Content: value
+    Name: company name
   }
 ]
 ```
@@ -452,9 +452,9 @@ Will result in the following verified files:
 <!-- snippet: CoreTests.Queryable.verified.sql -->
 <a id='snippet-CoreTests.Queryable.verified.sql'></a>
 ```sql
-SELECT [c].[Id], [c].[Content]
+SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
-WHERE [c].[Content] = N'value'
+WHERE [c].[Name] = N'company name'
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.sql#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.sql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -502,42 +502,42 @@ Will result in the following verified file with all data in the database:
   {
     $type: Company,
     Id: 1,
-    Content: Company1
+    Name: Company1
   },
   {
     $type: Company,
     Id: 4,
-    Content: Company2
+    Name: Company2
   },
   {
     $type: Company,
     Id: 6,
-    Content: Company3
+    Name: Company3
   },
   {
     $type: Company,
     Id: 7,
-    Content: Company4
+    Name: Company4
   },
   {
     $type: Employee,
     Id: 2,
     CompanyId: 1,
-    Content: Employee1,
+    Name: Employee1,
     Age: 25
   },
   {
     $type: Employee,
     Id: 3,
     CompanyId: 1,
-    Content: Employee2,
+    Name: Employee2,
     Age: 31
   },
   {
     $type: Employee,
     Id: 5,
     CompanyId: 4,
-    Content: Employee4,
+    Name: Employee4,
     Age: 34
   }
 ]
