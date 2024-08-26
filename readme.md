@@ -92,7 +92,7 @@ To start recording call `EfRecording.StartRecording()`. The results will be auto
 ```cs
 var company = new Company
 {
-    Content = "Title"
+    Name = "Title"
 };
 data.Add(company);
 await data.SaveChangesAsync();
@@ -101,7 +101,7 @@ Recording.Start();
 
 await data
     .Companies
-    .Where(_ => _.Content == "Title")
+    .Where(_ => _.Name == "Title")
     .ToListAsync();
 
 await Verify();
@@ -136,7 +136,7 @@ Sql entries can be explicitly read using `EfRecording.FinishRecording`, optional
 ```cs
 var company = new Company
 {
-    Content = "Title"
+    Name = "Title"
 };
 data.Add(company);
 await data.SaveChangesAsync();
@@ -145,7 +145,7 @@ Recording.Start();
 
 await data
     .Companies
-    .Where(_ => _.Content == "Title")
+    .Where(_ => _.Name == "Title")
     .ToListAsync();
 
 var entries = Recording.Stop();
@@ -176,7 +176,7 @@ await using var data1 = new SampleDbContext(builder.Options);
 Recording.Start();
 var company = new Company
 {
-    Content = "Title"
+    Name = "Title"
 };
 data1.Add(company);
 await data1.SaveChangesAsync();
@@ -184,7 +184,7 @@ await data1.SaveChangesAsync();
 await using var data2 = new SampleDbContext(builder.Options);
 await data2
     .Companies
-    .Where(_ => _.Content == "Title")
+    .Where(_ => _.Name == "Title")
     .ToListAsync();
 
 await Verify();
@@ -232,7 +232,7 @@ WHERE [c].[Content] = N'Title'
 ```cs
 var company = new Company
 {
-    Content = "Title"
+    Name = "Title"
 };
 data.Add(company);
 await data.SaveChangesAsync();
@@ -241,12 +241,12 @@ Recording.Start();
 
 await data
     .Companies
-    .Where(_ => _.Content == "Title")
+    .Where(_ => _.Name == "Title")
     .ToListAsync();
 data.DisableRecording();
 await data
     .Companies
-    .Where(_ => _.Content == "Disabled")
+    .Where(_ => _.Name == "Disabled")
     .ToListAsync();
 
 await Verify();
@@ -292,7 +292,7 @@ public async Task Added()
     await using var data = new SampleDbContext(options);
     var company = new Company
     {
-        Content = "before"
+        Name = "before"
     };
     data.Add(company);
     await Verify(data.ChangeTracker);
@@ -334,7 +334,7 @@ public async Task Deleted()
     await using var data = new SampleDbContext(options);
     data.Add(new Company
     {
-        Content = "before"
+        Name = "before"
     });
     await data.SaveChangesAsync();
 
@@ -378,13 +378,13 @@ public async Task Modified()
     await using var data = new SampleDbContext(options);
     var company = new Company
     {
-        Content = "before"
+        Name = "before"
     };
     data.Add(company);
     await data.SaveChangesAsync();
 
     data.Companies.Single()
-        .Content = "after";
+        .Name = "after";
     await Verify(data.ChangeTracker);
 }
 ```
@@ -420,7 +420,7 @@ This test:
 <a id='snippet-Queryable'></a>
 ```cs
 var queryable = data.Companies
-    .Where(_ => _.Content == "value");
+    .Where(_ => _.Name == "value");
 await Verify(queryable);
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L314-L320' title='Snippet source file'>snippet source</a> | <a href='#snippet-Queryable' title='Start of snippet'>anchor</a></sup>
@@ -553,11 +553,11 @@ public async Task IgnoreNavigationProperties()
 
     var company = new Company
     {
-        Content = "company"
+        Name = "company"
     };
     var employee = new Employee
     {
-        Content = "employee",
+        Name = "employee",
         Company = company
     };
     await Verify(employee)
