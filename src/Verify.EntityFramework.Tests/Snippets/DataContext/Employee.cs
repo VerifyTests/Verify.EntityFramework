@@ -7,6 +7,6 @@ public class Employee
 
     public int CompanyId { get; set; }
     public Company Company { get; set; } = null!;
-    public string? Content { get; set; }
+    public required string Name { get; set; }
     public int Age { get; set; }
 }

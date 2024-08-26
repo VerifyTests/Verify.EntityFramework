@@ -21,7 +21,7 @@ public class CoreTests
         await ThrowsTask(
                 () => data.Companies
                     .Include(_ => _.Employees)
-                    .OrderBy(_ => _.Content)
+                    .OrderBy(_ => _.Name)
                     .ToListAsync())
             .IgnoreStackTrace();
     }
@@ -33,7 +33,7 @@ public class CoreTests
         var data = database.Context;
         await Verify(
             data.Companies
-                .OrderBy(_ => _.Content)
+                .OrderBy(_ => _.Name)
                 .ToListAsync());
     }
 
@@ -42,7 +42,7 @@ public class CoreTests
     {
         await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
         var data = database.Context;
-        await Verify(data.Companies.Where(_ => _.Content == "Company1").SingleAsync());
+        await Verify(data.Companies.Where(_ => _.Name == "Company1").SingleAsync());
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class CoreTests
         await Verify(
             data.Companies
                 .Include(_ => _.Employees.OrderBy(_ => _.Age))
-                .OrderBy(_ => _.Content)
+                .OrderBy(_ => _.Name)
                 .ToListAsync());
     }
 
@@ -67,7 +67,7 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var company = new Company
         {
-            Content = "before"
+            Name = "before"
         };
         data.Add(company);
         await Verify(data.ChangeTracker);
@@ -85,7 +85,7 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         data.Add(new Company
         {
-            Content = "before"
+            Name = "before"
         });
         await data.SaveChangesAsync();
 
@@ -106,13 +106,13 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var company = new Company
         {
-            Content = "before"
+            Name = "before"
         };
         data.Add(company);
         await data.SaveChangesAsync();
 
         data.Companies.Single()
-            .Content = "after";
+            .Name = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -129,11 +129,11 @@ public class CoreTests
 
         var company = new Company
         {
-            Content = "company"
+            Name = "company"
         };
         var employee = new Employee
         {
-            Content = "employee",
+            Name = "employee",
             Company = company
         };
         await Verify(employee)
@@ -153,11 +153,11 @@ public class CoreTests
 
         var company = new Company
         {
-            Content = "company"
+            Name = "company"
         };
         var employee = new Employee
         {
-            Content = "employee",
+            Name = "employee",
             Company = company
         };
         await Verify(employee)
@@ -196,21 +196,21 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var company = new Company
         {
-            Content = "companyBefore"
+            Name = "companyBefore"
         };
         data.Add(company);
         var employee = new Employee
         {
-            Content = "employeeBefore",
+            Name = "employeeBefore",
             Company = company
         };
         data.Add(employee);
         await data.SaveChangesAsync();
 
         data.Companies.Single()
-            .Content = "companyAfter";
+            .Name = "companyAfter";
         data.Employees.Single()
-            .Content = "employeeAfter";
+            .Name = "employeeAfter";
         await Verify(data.ChangeTracker);
     }
 
@@ -222,14 +222,14 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         var employee = new Employee
         {
-            Content = "before",
+            Name = "before",
             Age = 10
         };
         data.Add(employee);
         await data.SaveChangesAsync();
 
         data.Employees.Single()
-            .Content = "after";
+            .Name = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -274,13 +274,13 @@ public class CoreTests
         await using var data = new SampleDbContext(options);
         data.Add(new Employee
         {
-            Content = "before"
+            Name = "before"
         });
         await data.SaveChangesAsync();
 
         var employee = data.Employees.Single();
         data.Update(employee)
-            .Entity.Content = "after";
+            .Entity.Name = "after";
         await Verify(data.ChangeTracker);
     }
 
@@ -307,14 +307,14 @@ public class CoreTests
         await database.AddData(
             new Company
             {
-                Content = "value"
+                Name = "value"
             });
         var data = database.Context;
 
         #region Queryable
 
         var queryable = data.Companies
-            .Where(_ => _.Content == "value");
+            .Where(_ => _.Name == "value");
         await Verify(queryable);
 
         #endregion
@@ -339,11 +339,11 @@ public class CoreTests
         await database.AddData(
             new Company
             {
-                Content = "value"
+                Name = "value"
             });
         var data = database.Context;
         var queryable = data.Companies
-            .Where(_ => _.Content == "value");
+            .Where(_ => _.Name == "value");
         await Verify(
             new
             {
@@ -372,7 +372,7 @@ public class CoreTests
         data.Add(
             new Company
             {
-                Content = Guid
+                Name = Guid
                     .NewGuid()
                     .ToString()
             }
@@ -390,7 +390,7 @@ public class CoreTests
         Recording.Start();
         var company = new Company
         {
-            Content = "Title"
+            Name = "Title"
         };
         data.Add(company);
         await data.SaveChangesAsync();
@@ -400,14 +400,14 @@ public class CoreTests
             var s = i.ToString();
             await data
                 .Companies
-                .Where(_ => _.Content == s)
+                .Where(_ => _.Name == s)
                 .ToListAsync();
         }
 
         var company2 = new Company
         {
             Id = 2,
-            Content = "Title2"
+            Name = "Title2"
         };
         data.Add(company2);
         await data.SaveChangesAsync();
@@ -431,7 +431,7 @@ public class CoreTests
         Recording.Start();
         var company = new Company
         {
-            Content = "Title"
+            Name = "Title"
         };
         data1.Add(company);
         await data1.SaveChangesAsync();
@@ -439,7 +439,7 @@ public class CoreTests
         await using var data2 = new SampleDbContext(builder.Options);
         await data2
             .Companies
-            .Where(_ => _.Content == "Title")
+            .Where(_ => _.Name == "Title")
             .ToListAsync();
 
         await Verify();
@@ -457,7 +457,7 @@ public class CoreTests
 
         var company = new Company
         {
-            Content = "Title"
+            Name = "Title"
         };
         data.Add(company);
         await data.SaveChangesAsync();
@@ -466,7 +466,7 @@ public class CoreTests
 
         await data
             .Companies
-            .Where(_ => _.Content == "Title")
+            .Where(_ => _.Name == "Title")
             .ToListAsync();
 
         await Verify();
@@ -484,7 +484,7 @@ public class CoreTests
 
         var company = new Company
         {
-            Content = "Title"
+            Name = "Title"
         };
         data.Add(company);
         await data.SaveChangesAsync();
@@ -493,12 +493,12 @@ public class CoreTests
 
         await data
             .Companies
-            .Where(_ => _.Content == "Title")
+            .Where(_ => _.Name == "Title")
             .ToListAsync();
         data.DisableRecording();
         await data
             .Companies
-            .Where(_ => _.Content == "Disabled")
+            .Where(_ => _.Name == "Disabled")
             .ToListAsync();
 
         await Verify();
@@ -530,7 +530,7 @@ public class CoreTests
                 new Company
                 {
                     Id = 1,
-                    Content = "Foo"
+                    Name = "Foo"
                 });
 
             await context.SaveChangesAsync();
@@ -613,7 +613,7 @@ public class CoreTests
 
         var company = new Company
         {
-            Content = "Title"
+            Name = "Title"
         };
         data.Add(company);
         await data.SaveChangesAsync();
@@ -622,7 +622,7 @@ public class CoreTests
 
         await data
             .Companies
-            .Where(_ => _.Content == "Title")
+            .Where(_ => _.Name == "Title")
             .ToListAsync();
 
         var entries = Recording.Stop();
