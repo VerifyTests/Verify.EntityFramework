@@ -18,6 +18,5 @@
     <PackageReference Include="Verify.SqlServer" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-    <PackageReference Include="Azure.Identity" />
   </ItemGroup>
 </Project>
