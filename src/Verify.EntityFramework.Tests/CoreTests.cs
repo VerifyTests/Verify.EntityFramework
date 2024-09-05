@@ -27,6 +27,33 @@ public class CoreTests
     }
 
     [Test]
+    public async Task ScrubInlineEfDateTimes()
+    {
+        var target = "2024-09-05T06:59:16.1018211Z";
+
+        #region ScrubInlineEfDateTimesInstance
+
+        var settings = new VerifySettings();
+        settings.ScrubInlineEfDateTimes();
+        await Verify(target, settings);
+
+        #endregion
+    }
+
+    [Test]
+    public async Task ScrubInlineEfDateTimesFluent()
+    {
+        var target = "2024-09-05T06:59:16.1018211Z";
+
+        #region ScrubInlineEfDateTimesFluent
+
+        await Verify(target)
+            .ScrubInlineEfDateTimes();
+
+        #endregion
+    }
+
+    [Test]
     public async Task WithOrderBy()
     {
         await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
