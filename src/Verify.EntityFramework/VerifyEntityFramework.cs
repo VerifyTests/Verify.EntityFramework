@@ -54,6 +54,18 @@ public static class VerifyEntityFramework
         }
     }
 
+    public static void ScrubInlineEfDateTimes() =>
+        VerifierSettings.ScrubInlineDateTimes("yyyy-MM-ddTHH:mm:ss.fffffffZ");
+
+    public static SettingsTask ScrubInlineEfDateTimes(this SettingsTask settings)
+    {
+        settings.CurrentSettings.ScrubInlineEfDateTimes();
+        return settings;
+    }
+
+    public static void ScrubInlineEfDateTimes(this VerifySettings settings) =>
+        settings.ScrubInlineDateTimes("yyyy-MM-ddTHH:mm:ss.fffffffZ");
+
     public static void IgnoreNavigationProperties(IModel? model = null)
     {
         foreach (var (type, name) in model.GetNavigationsOrShared())
