@@ -25,6 +25,6 @@
     <PackageVersion Include="Verify.NUnit" Version="27.0.0" />
     <PackageVersion Include="Verify.SqlServer" Version="10.1.0" />
     <!-- explicit to avoid CVE -->
-    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 </Project>
