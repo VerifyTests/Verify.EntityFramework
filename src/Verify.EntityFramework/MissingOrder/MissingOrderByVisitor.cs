@@ -35,18 +35,19 @@
                 {
                     if (orderedExpression.Expression is ColumnExpression columnExpression)
                     {
-                        if (columnExpression.Table == tableExpression)
-                        {
-                            return base.Visit(expression);
-                        }
-
-                        if (columnExpression.Table is PredicateJoinExpressionBase joinExpression)
-                        {
-                            if (joinExpression.Table == tableExpression)
-                            {
-                                return base.Visit(expression);
-                            }
-                        }
+                        Debug.WriteLine(columnExpression);
+                        // if (columnExpression..Table == tableExpression.Alias)
+                        // {
+                        //     return base.Visit(expression);
+                        // }
+                        //
+                        // if (columnExpression.Table is PredicateJoinExpressionBase joinExpression)
+                        // {
+                        //     if (joinExpression.Table == tableExpression)
+                        //     {
+                        //         return base.Visit(expression);
+                        //     }
+                        // }
                     }
                 }
 
