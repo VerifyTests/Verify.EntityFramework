@@ -35,7 +35,7 @@
                 {
                     if (orderedExpression.Expression is ColumnExpression columnExpression)
                     {
-                        if (columnExpression.Table == tableExpression)
+                        if (columnExpression.TableAlias == tableExpression.Name)
                         {
                             return base.Visit(expression);
                         }
