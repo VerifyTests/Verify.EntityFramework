@@ -1,6 +1,7 @@
-﻿sealed class MissingOrderByVisitor : ExpressionVisitor
+﻿sealed class MissingOrderByVisitor :
+    ExpressionVisitor
 {
-    List<OrderingExpression> orderedExpressions = [];
+    List<TableExpressionBase> orderedTables = [];
 
     public override Expression? Visit(Expression? expression)
     {
@@ -11,43 +12,39 @@
 
         switch (expression)
         {
-            case ShapedQueryExpression shapedQueryExpression:
-                if(shapedQueryExpression.ResultCardinality != ResultCardinality.Enumerable)
+            case ShapedQueryExpression shaped:
+                if(shaped.ResultCardinality != ResultCardinality.Enumerable)
                 {
                     return null;
                 }
-                Visit(shapedQueryExpression.QueryExpression);
-                return shapedQueryExpression;
+                Visit(shaped.QueryExpression);
+                return shaped;
 
-            case RelationalSplitCollectionShaperExpression splitExpression:
-                foreach (var table in splitExpression.SelectExpression.Tables)
+            case RelationalSplitCollectionShaperExpression split:
+                foreach (var table in split.SelectExpression.Tables)
                 {
                     Visit(table);
                 }
 
-                Visit(splitExpression.InnerShaper);
+                Visit(split.InnerShaper);
 
-                return splitExpression;
+                return split;
 
             case TableExpression tableExpression:
             {
-                foreach (var orderedExpression in orderedExpressions)
+                foreach (var table in orderedTables)
                 {
-                    if (orderedExpression.Expression is ColumnExpression columnExpression)
+                    if (table == tableExpression)
                     {
-                        Debug.WriteLine(columnExpression);
-                        // if (columnExpression..Table == tableExpression.Alias)
-                        // {
-                        //     return base.Visit(expression);
-                        // }
-                        //
-                        // if (columnExpression.Table is PredicateJoinExpressionBase joinExpression)
-                        // {
-                        //     if (joinExpression.Table == tableExpression)
-                        //     {
-                        //         return base.Visit(expression);
-                        //     }
-                        // }
+                        return base.Visit(expression);
+                    }
+
+                    if (table is PredicateJoinExpressionBase join)
+                    {
+                        if (join.Table == tableExpression)
+                        {
+                            return base.Visit(expression);
+                        }
                     }
                 }
 
@@ -58,22 +55,32 @@
                      {ExpressionPrinter.Print(tableExpression)}
                      """);
             }
-            case SelectExpression selectExpression:
+            case SelectExpression select:
             {
-                var orderings = selectExpression.Orderings;
+                var orderings = select.Orderings;
                 if (orderings.Count == 0)
                 {
                     throw new(
                         $"""
                          SelectExpression must have at least one ordering.
                          Expression:
-                         {PrintShortSql(selectExpression)}
+                         {PrintShortSql(select)}
                          """);
                 }
 
                 foreach (var ordering in orderings)
                 {
-                    orderedExpressions.Add(ordering);
+                    if (ordering.Expression is not ColumnExpression column)
+                    {
+                        continue;
+                    }
+
+                    if (!TryFindTable(select.Tables, column.TableAlias, out var table))
+                    {
+                        continue;
+                    }
+
+                    orderedTables.Add(table);
                 }
 
                 return base.Visit(expression);
@@ -85,6 +92,28 @@
             default:
                 return base.Visit(expression);
         }
+    }
+
+    static bool TryFindTable(IReadOnlyList<TableExpressionBase> tables, string name, [NotNullWhen(true)] out TableExpressionBase? result)
+    {
+        foreach (var table in tables)
+        {
+            if (table.NameOrAlias() == name)
+            {
+                result = table;
+                return true;
+            }
+
+            if (table is LeftJoinExpression join &&
+                join.Table.NameOrAlias() == name)
+            {
+                result = join;
+                return true;
+            }
+        }
+
+        result = null;
+        return false;
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "PrintShortSql")]
