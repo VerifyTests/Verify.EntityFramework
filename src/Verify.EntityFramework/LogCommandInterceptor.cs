@@ -49,7 +49,8 @@ class LogCommandInterceptor(string? identifier) :
     void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
         var context = data.Context;
-        if (context != null && context.IsRecordingDisabled())
+        if (context != null &&
+            context.IsRecordingDisabled())
         {
             return;
         }

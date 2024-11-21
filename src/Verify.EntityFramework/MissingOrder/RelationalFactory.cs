@@ -1,11 +1,9 @@
-class RelationalFactory : RelationalShapedQueryCompilingExpressionVisitorFactory
+class RelationalFactory(
+    ShapedQueryCompilingExpressionVisitorDependencies dependencies,
+    RelationalShapedQueryCompilingExpressionVisitorDependencies relational) :
+    RelationalShapedQueryCompilingExpressionVisitorFactory(dependencies, relational)
 {
-    public RelationalFactory(ShapedQueryCompilingExpressionVisitorDependencies dependencies, RelationalShapedQueryCompilingExpressionVisitorDependencies relationalDependencies) :
-        base(dependencies, relationalDependencies)
-    {
-    }
-
-    public override  ShapedQueryCompilingExpressionVisitor Create(QueryCompilationContext context)
+    public override ShapedQueryCompilingExpressionVisitor Create(QueryCompilationContext context)
         => new RelationalVisitor(
             Dependencies,
             RelationalDependencies,

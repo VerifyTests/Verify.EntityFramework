@@ -4,13 +4,13 @@
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder model)
     {
-        builder
+        model
             .Entity<Company>()
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
             .IsRequired();
-        builder.Entity<Employee>();
+        model.Entity<Employee>();
     }
 }

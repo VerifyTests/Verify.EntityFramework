@@ -4,9 +4,9 @@
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
 
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    protected override void OnModelCreating(DbModelBuilder model)
     {
-        modelBuilder.Entity<Company>();
-        modelBuilder.Entity<Employee>();
+        model.Entity<Company>();
+        model.Entity<Employee>();
     }
 }
