@@ -1,4 +1,5 @@
-﻿global using System.Net.Http.Json;
+﻿global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Net.Http.Json;
 global using Argon;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Hosting;
