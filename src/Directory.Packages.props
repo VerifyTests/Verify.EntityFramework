@@ -20,9 +20,9 @@
     <PackageVersion Include="Polyfill" Version="7.5.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.147" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.0" />
-    <PackageVersion Include="Verify" Version="28.12.0" />
+    <PackageVersion Include="Verify" Version="28.12.1" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.NUnit" Version="28.12.0" />
+    <PackageVersion Include="Verify.NUnit" Version="28.12.1" />
     <PackageVersion Include="Verify.SqlServer" Version="11.0.1" />
   </ItemGroup>
 </Project>
