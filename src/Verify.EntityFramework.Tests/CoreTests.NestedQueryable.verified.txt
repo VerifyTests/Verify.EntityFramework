@@ -1,9 +1,10 @@
 ﻿{
   queryable: {
     Sql:
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'value',
+select [c].[Id],
+       [c].[Name]
+from   [Companies] as [c]
+where  [c].[Name] = N'value',
     Result: [
       {
         Name: value

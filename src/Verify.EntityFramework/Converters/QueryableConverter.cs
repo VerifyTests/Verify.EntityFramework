@@ -1,4 +1,4 @@
-﻿class QueryableConverter :
+﻿class QueryableConverter(bool formatSql) :
     WriteOnlyJsonConverter
 {
     static MethodInfo executeQueryableDefinition;
@@ -10,6 +10,11 @@
     {
         var queryable = (IQueryable) data;
         var sql = queryable.ToQueryString();
+        if (formatSql)
+        {
+            //TODO: add span support to Serialize
+            sql = SqlFormatter.Format(sql).ToString();
+        }
         if (!TryExecuteQueryable(queryable, out var result))
         {
             writer.Serialize(sql);
@@ -17,10 +22,8 @@
         }
 
         writer.WriteStartObject();
-        writer.WritePropertyName("Sql");
-        writer.Serialize(sql);
-        writer.WritePropertyName("Result");
-        writer.Serialize(result);
+        writer.WriteMember(data, sql, "Sql");
+        writer.WriteMember(data, result, "Result");
         writer.WriteEndObject();
     }
 

@@ -10,4 +10,5 @@ global using Microsoft.EntityFrameworkCore.Metadata;
 global using Microsoft.EntityFrameworkCore.Query;
 global using Microsoft.EntityFrameworkCore.Query.Internal;
 global using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+global using Microsoft.SqlServer.TransactSql.ScriptDom;
 global using VerifyTests.EntityFramework;

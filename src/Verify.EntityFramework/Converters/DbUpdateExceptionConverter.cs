@@ -11,10 +11,10 @@ class DbUpdateExceptionConverter :
 
         var entries = exception
             .Entries
-            .Select(
-                entry => new
-                {
-                    EntryProperties = entry.Properties.ToDictionary(
+            .Select(entry => new
+            {
+                EntryProperties = entry.Properties
+                    .ToDictionary(
                         _ => _.Metadata.Name,
                         _ => new
                         {
@@ -23,8 +23,8 @@ class DbUpdateExceptionConverter :
                             _.IsTemporary,
                             _.IsModified
                         }),
-                    entry.State
-                });
+                entry.State
+            });
 
         writer.WriteMember(exception, entries, "Entries");
         writer.WriteMember(exception, exception.StackTrace, "StackTrace");

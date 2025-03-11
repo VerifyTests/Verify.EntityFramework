@@ -8,18 +8,21 @@
         @p1 (String): Title
       },
       Text:
-SET IMPLICIT_TRANSACTIONS OFF;
-SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Name])
-VALUES (@p0, @p1);
+set implicit_transactions off;
+
+set nocount on;
+
+insert  into [Companies] ([Id], [Name])
+values                  (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'Title'
+select [c].[Id],
+       [c].[Name]
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
     }
   ]
 }

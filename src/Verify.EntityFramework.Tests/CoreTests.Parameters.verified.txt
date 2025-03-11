@@ -7,9 +7,11 @@
       @p1 (String): Guid_1
     },
     Text:
-SET IMPLICIT_TRANSACTIONS OFF;
-SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Name])
-VALUES (@p0, @p1);
+set implicit_transactions off;
+
+set nocount on;
+
+insert  into [Companies] ([Id], [Name])
+values                  (@p0, @p1)
   }
 }
