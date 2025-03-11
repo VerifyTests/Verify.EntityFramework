@@ -121,8 +121,8 @@ Will result in the following verified file:
     Text:
 select [c].[Id],
        [c].[Name]
-from [Companies] as [c]
-where [c].[Name] = N'Title'
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
   }
 }
 ```
@@ -210,8 +210,8 @@ set implicit_transactions off;
 
 set nocount on;
 
-insert into [Companies] ([Id], [Name])
-values                 (@p0, @p1)
+insert  into [Companies] ([Id], [Name])
+values                  (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
@@ -219,8 +219,8 @@ values                 (@p0, @p1)
       Text:
 select [c].[Id],
        [c].[Name]
-from [Companies] as [c]
-where [c].[Name] = N'Title'
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
     }
   ]
 }
@@ -268,8 +268,8 @@ await Verify();
     Text:
 select [c].[Id],
        [c].[Name]
-from [Companies] as [c]
-where [c].[Name] = N'Title'
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
   }
 }
 ```
