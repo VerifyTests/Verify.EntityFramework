@@ -18,7 +18,6 @@
             writer.WriteMember(logEntry, logEntry.Text, "Text");
         }
 
-
         writer.WriteEndObject();
     }
 }
