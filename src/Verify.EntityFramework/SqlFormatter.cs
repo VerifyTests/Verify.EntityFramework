@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-static class SqlFormatter
+﻿static class SqlFormatter
 {
     public static StringBuilder Format(string input)
     {
@@ -21,6 +19,9 @@ static class SqlFormatter
                  {input}
                  """);
         }
+
+        var visitor = new RemoveSquareBracketVisitor();
+        fragment.Accept(visitor);
 
         var generator = new Sql170ScriptGenerator(
             new()

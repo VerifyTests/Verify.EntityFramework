@@ -12,8 +12,8 @@ set implicit_transactions off;
 
 set nocount on;
 
-insert  into [Companies] ([Id], [Name])
-values                  (@p0, @p1)
+insert  into Companies (Id, Name)
+values                (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
@@ -22,10 +22,10 @@ values                  (@p0, @p1)
         @__s_0 (String?): 0
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -34,10 +34,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 1
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -46,10 +46,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 2
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -58,10 +58,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 3
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -70,10 +70,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 4
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -82,10 +82,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 5
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -94,10 +94,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 6
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -106,10 +106,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 7
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -118,10 +118,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 8
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -130,10 +130,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 9
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -142,10 +142,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 10
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -154,10 +154,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 11
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -166,10 +166,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 12
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -178,10 +178,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 13
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -190,10 +190,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 14
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -202,10 +202,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 15
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -214,10 +214,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 16
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -226,10 +226,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 17
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -238,10 +238,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 18
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -250,10 +250,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 19
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -262,10 +262,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 20
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -274,10 +274,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 21
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -286,10 +286,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 22
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -298,10 +298,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 23
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -310,10 +310,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 24
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -322,10 +322,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 25
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -334,10 +334,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 26
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -346,10 +346,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 27
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -358,10 +358,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 28
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -370,10 +370,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 29
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -382,10 +382,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 30
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -394,10 +394,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 31
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -406,10 +406,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 32
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -418,10 +418,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 33
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -430,10 +430,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 34
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -442,10 +442,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 35
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -454,10 +454,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 36
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -466,10 +466,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 37
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -478,10 +478,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 38
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -490,10 +490,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 39
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -502,10 +502,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 40
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -514,10 +514,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 41
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -526,10 +526,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 42
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -538,10 +538,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 43
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -550,10 +550,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 44
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -562,10 +562,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 45
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -574,10 +574,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 46
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -586,10 +586,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 47
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -598,10 +598,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 48
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -610,10 +610,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 49
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -622,10 +622,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 50
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -634,10 +634,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 51
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -646,10 +646,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 52
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -658,10 +658,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 53
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -670,10 +670,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 54
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -682,10 +682,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 55
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -694,10 +694,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 56
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -706,10 +706,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 57
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -718,10 +718,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 58
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -730,10 +730,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 59
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -742,10 +742,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 60
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -754,10 +754,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 61
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -766,10 +766,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 62
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -778,10 +778,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 63
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -790,10 +790,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 64
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -802,10 +802,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 65
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -814,10 +814,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 66
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -826,10 +826,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 67
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -838,10 +838,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 68
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -850,10 +850,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 69
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -862,10 +862,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 70
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -874,10 +874,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 71
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -886,10 +886,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 72
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -898,10 +898,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 73
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -910,10 +910,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 74
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -922,10 +922,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 75
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -934,10 +934,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 76
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -946,10 +946,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 77
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -958,10 +958,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 78
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -970,10 +970,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 79
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -982,10 +982,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 80
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -994,10 +994,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 81
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1006,10 +1006,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 82
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1018,10 +1018,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 83
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1030,10 +1030,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 84
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1042,10 +1042,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 85
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1054,10 +1054,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 86
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1066,10 +1066,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 87
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1078,10 +1078,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 88
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1090,10 +1090,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 89
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1102,10 +1102,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 90
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1114,10 +1114,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 91
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1126,10 +1126,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 92
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1138,10 +1138,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 93
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1150,10 +1150,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 94
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1162,10 +1162,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 95
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1174,10 +1174,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 96
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1186,10 +1186,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 97
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1198,10 +1198,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 98
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1210,10 +1210,10 @@ where  [c].[Name] = @__s_0
         @__s_0 (String?): 99
       },
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = @__s_0
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = @__s_0
     },
     {
       Type: ReaderExecutedAsync,
@@ -1227,8 +1227,8 @@ set implicit_transactions off;
 
 set nocount on;
 
-insert  into [Companies] ([Id], [Name])
-values                  (@p0, @p1)
+insert  into Companies (Id, Name)
+values                (@p0, @p1)
     }
   ]
 }
