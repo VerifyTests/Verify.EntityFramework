@@ -8,17 +8,16 @@
         writer.WriteMember(logEntry, logEntry.HasTransaction, "HasTransaction");
         writer.WriteMember(logEntry, logEntry.Exception, "Exception");
         writer.WriteMember(logEntry, logEntry.Parameters, "Parameters");
-        ReadOnlySpan<char> text;
         if (logEntry.IsSqlServer)
         {
-            text = SqlFormatter.Format(logEntry.Text);
+            var text = SqlFormatter.Format(logEntry.Text);
+            writer.WriteMember(logEntry, text.ToString(), "Text");
         }
         else
         {
-            text = logEntry.Text.AsSpan();
+            writer.WriteMember(logEntry, logEntry.Text, "Text");
         }
 
-        writer.WriteMember(logEntry, text, "Text");
 
         writer.WriteEndObject();
     }
