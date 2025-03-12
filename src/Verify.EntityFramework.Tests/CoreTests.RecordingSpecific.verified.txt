@@ -6,10 +6,10 @@
         Type: ReaderExecutedAsync,
         HasTransaction: false,
         Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = N'Title'
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = N'Title'
       }
     }
   ]
