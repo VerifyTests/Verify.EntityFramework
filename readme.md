@@ -119,13 +119,14 @@ Will result in the following verified file:
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'Title'
+select [c].[Id],
+       [c].[Name]
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingTest.verified.txt#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -205,23 +206,26 @@ await Verify();
         @p1 (String): Title
       },
       Text:
-SET IMPLICIT_TRANSACTIONS OFF;
-SET NOCOUNT ON;
-INSERT INTO [Companies] ([Id], [Name])
-VALUES (@p0, @p1);
+set implicit_transactions off;
+
+set nocount on;
+
+insert  into [Companies] ([Id], [Name])
+values                  (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'Title'
+select [c].[Id],
+       [c].[Name]
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
     }
   ]
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.MultiDbContexts.verified.txt#L1-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.MultiDbContexts.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -262,13 +266,14 @@ await Verify();
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'Title'
+select [c].[Id],
+       [c].[Name]
+from   [Companies] as [c]
+where  [c].[Name] = N'Title'
   }
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingDisabledTest.verified.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingDisabledTest.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingDisabledTest.verified.txt#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingDisabledTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
