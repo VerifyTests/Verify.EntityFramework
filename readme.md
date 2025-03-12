@@ -119,10 +119,10 @@ Will result in the following verified file:
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = N'Title'
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = N'Title'
   }
 }
 ```
@@ -210,17 +210,17 @@ set implicit_transactions off;
 
 set nocount on;
 
-insert  into [Companies] ([Id], [Name])
-values                  (@p0, @p1)
+insert  into Companies (Id, Name)
+values                (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
       HasTransaction: false,
       Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = N'Title'
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = N'Title'
     }
   ]
 }
@@ -266,10 +266,10 @@ await Verify();
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-select [c].[Id],
-       [c].[Name]
-from   [Companies] as [c]
-where  [c].[Name] = N'Title'
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = N'Title'
   }
 }
 ```
