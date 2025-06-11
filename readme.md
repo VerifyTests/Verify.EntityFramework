@@ -10,6 +10,11 @@ Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testin
 **See [Milestones](../../milestones?state=closed) for release notes.**
 
 
+## Sponsors
+
+include: zzz
+
+
 ## NuGet
 
  * https://nuget.org/packages/Verify.EntityFramework/
