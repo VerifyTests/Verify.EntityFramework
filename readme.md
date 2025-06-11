@@ -12,6 +12,7 @@ Extends [Verify](https://github.com/VerifyTests/Verify) to allow snapshot testin
 
 ## Sponsors
 
+
 ### Entity Framework Extensions<!-- include: zzz. path: /docs/zzz.include.md -->
 
 [Entity Framework Extensions](https://entityframework-extensions.net/) is a major sponsor and is proud to contribute to the development this project.
