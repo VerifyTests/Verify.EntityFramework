@@ -4,11 +4,11 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfClassicLocalDb" Version="20.3.0" />
-    <PackageVersion Include="EfLocalDb" Version="20.3.0" />
+    <PackageVersion Include="EfClassicLocalDb" Version="21.0.0" />
+    <PackageVersion Include="EfLocalDb" Version="21.0.0" />
     <PackageVersion Include="EntityFramework" Version="6.5.1" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0-beta.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-rc.2.25502.107" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
@@ -18,12 +18,12 @@
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="170.128.0" />
     <PackageVersion Include="NUnit" Version="4.4.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" />
-    <PackageVersion Include="Polyfill" Version="8.9.1" />
+    <PackageVersion Include="Polyfill" Version="9.0.1" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.162" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.0" />
-    <PackageVersion Include="Verify" Version="31.5.3" />
+    <PackageVersion Include="Verify" Version="31.6.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.NUnit" Version="31.5.3" />
+    <PackageVersion Include="Verify.NUnit" Version="31.6.0" />
     <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.3" />
   </ItemGroup>

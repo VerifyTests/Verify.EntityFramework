@@ -86,9 +86,6 @@
                 return base.Visit(expression);
             }
 
-            case NonQueryExpression nonQueryExpression:
-                return nonQueryExpression;
-
             default:
                 return base.Visit(expression);
         }
