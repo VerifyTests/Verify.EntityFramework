@@ -7,6 +7,6 @@
     <PackageReference Include="Verify" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="System.Data.SqlClient" />
-    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" Condition="$(Configuration)=='Release'" />
   </ItemGroup>
 </Project>
