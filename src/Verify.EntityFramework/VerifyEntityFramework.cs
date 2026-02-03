@@ -1,4 +1,6 @@
-﻿namespace VerifyTests;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace VerifyTests;
 
 public static class VerifyEntityFramework
 {
@@ -133,6 +135,7 @@ public static class VerifyEntityFramework
         converters.Add(new TrackerConverter());
         converters.Add(new QueryableConverter(formatSql));
         converters.Add(new LogEntryConverter());
+        converters.Add(new ExpressionEntryConverter());
     }
     static bool IsSqlServer(this IModel model)
     {
@@ -150,8 +153,24 @@ public static class VerifyEntityFramework
     }
 
     public static DbContextOptionsBuilder<TContext> ThrowForMissingOrderBy<TContext>(this DbContextOptionsBuilder<TContext> builder)
-        where TContext : DbContext =>
+        where TContext : DbContext
+    {
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new MissingOrderByExtension());
         builder.ReplaceService<IShapedQueryCompilingExpressionVisitorFactory, RelationalFactory>();
+        return builder;
+    }
+
+    public static DbContextOptionsBuilder<TContext> EnableExpressionRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext =>
+        builder.EnableExpressionRecording(null);
+
+    public static DbContextOptionsBuilder<TContext> EnableExpressionRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
+        where TContext : DbContext
+    {
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new ExpressionRecordingExtension(identifier));
+        builder.ReplaceService<IShapedQueryCompilingExpressionVisitorFactory, RelationalFactory>();
+        return builder;
+    }
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext

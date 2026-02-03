@@ -21,10 +21,20 @@ public static class DbContextBuilder
                 builder.ThrowForMissingOrderBy();
                 return new(builder.Options);
             });
+        expressionRecordingSqlInstance = new(
+            buildTemplate: CreateDb,
+            storage: Storage.FromSuffix<SampleDbContext>("ExpressionRecording"),
+            constructInstance: builder =>
+            {
+                builder.EnableRecording();
+                builder.EnableExpressionRecording();
+                return new(builder.Options);
+            });
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;
     static SqlInstance<SampleDbContext> orderRequiredSqlInstance;
+    static SqlInstance<SampleDbContext> expressionRecordingSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -80,4 +90,7 @@ public static class DbContextBuilder
 
     public static Task<SqlDatabase<SampleDbContext>> GetOrderRequiredDatabase([CallerMemberName] string suffix = "")
         => orderRequiredSqlInstance.Build(suffix);
+
+    public static Task<SqlDatabase<SampleDbContext>> GetExpressionRecordingDatabase([CallerMemberName] string suffix = "")
+        => expressionRecordingSqlInstance.Build(suffix);
 }

@@ -1,0 +1,30 @@
+﻿[
+  {
+    ef-expression: {
+      Type: QueryCompilation,
+      Expression:
+ShapedQueryExpression: 
+    QueryExpression: 
+        Projection Mapping:
+            EmptyProjectionMember -> Dictionary<IPropertyBase, int> { [Property: Company.Id (int) Required PK AfterSave:Throw, 0], [Property: Company.Name (string) Required, 1] }
+        SELECT c.Id, c.Name
+        FROM Companies AS c
+        WHERE c.Name == 'TestCompany'
+    ShaperExpression: StructuralTypeShaperExpression(
+            StructuralType: Company
+            ValueBufferExpression: ProjectionBindingExpression: EmptyProjectionMember
+            IsNullable: False)
+
+    }
+  },
+  {
+    ef: {
+      Type: ReaderExecutedAsync,
+      HasTransaction: false,
+      Text:
+SELECT "c"."Id", "c"."Name"
+FROM "Companies" AS "c"
+WHERE "c"."Name" = 'TestCompany'
+    }
+  }
+]

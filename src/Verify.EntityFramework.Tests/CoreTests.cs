@@ -3,6 +3,51 @@
 public class CoreTests
 {
     [Test]
+    public async Task ExpressionRecording()
+    {
+        var database = await DbContextBuilder.GetExpressionRecordingDatabase();
+        var data = database.Context;
+
+        Recording.Start();
+
+        await data
+            .Companies
+            .Where(_ => _.Name == "Company1")
+            .ToListAsync();
+
+        await Verify();
+    }
+
+    [Test]
+    public async Task ExpressionRecordingWithIdentifier()
+    {
+        await using var connection = new SqliteConnection("Data Source=ExpressionRecordingWithIdentifier;Mode=Memory;Cache=Shared");
+        await connection.OpenAsync();
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseSqlite(connection);
+        builder.EnableRecording("test-id");
+        builder.EnableExpressionRecording("test-id");
+
+        await using var data = new SampleDbContext(builder.Options);
+        await data.Database.EnsureCreatedAsync();
+
+        data.Add(new Company { Id = 1, Name = "TestCompany" });
+        await data.SaveChangesAsync();
+
+        Recording.Start("test-id");
+
+        await data
+            .Companies
+            .Where(_ => _.Name == "TestCompany")
+            .ToListAsync();
+
+        var entries = Recording.Stop("test-id");
+
+        await Verify(entries);
+    }
+
+    [Test]
     public async Task MissingOrderBy()
     {
         await using var database = await DbContextBuilder.GetOrderRequiredDatabase();
