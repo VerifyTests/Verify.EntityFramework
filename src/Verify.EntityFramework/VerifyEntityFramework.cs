@@ -132,7 +132,7 @@ public static class VerifyEntityFramework
         var converters = DefaultContractResolver.Converters;
         converters.Add(new DbUpdateExceptionConverter());
         converters.Add(new TrackerConverter());
-        converters.Add(new QueryableConverter(formatSql));
+        converters.Add(new QueryableConverter());
         converters.Add(new LogEntryConverter());
     }
     static bool IsSqlServer(this IModel model)
