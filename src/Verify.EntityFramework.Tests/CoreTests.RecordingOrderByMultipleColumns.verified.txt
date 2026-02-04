@@ -1,0 +1,12 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Text:
+select   c.Id,
+         c.Name
+from     Companies as c
+order by c.Name,
+         c.Id
+  }
+}

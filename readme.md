@@ -168,7 +168,7 @@ await Verify(
         entries
     });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L639-L664' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingSpecific' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L674-L699' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingSpecific' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -265,7 +265,7 @@ await data
 
 await Verify();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L510-L533' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingDisableForInstance' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L545-L568' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingDisableForInstance' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CoreTests.RecordingDisabledTest.verified.txt -->
@@ -622,7 +622,7 @@ protected override void ConfigureWebHost(IWebHostBuilder webBuilder)
             _ => dataBuilder.Options));
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L593-L605' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingWithIdentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L628-L640' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingWithIdentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then use the same identifier for recording:
@@ -638,7 +638,7 @@ var companies = await httpClient.GetFromJsonAsync<Company[]>("/companies");
 
 var entries = Recording.Stop(testName);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L566-L576' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordWithIdentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L601-L611' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordWithIdentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The results will not be automatically included in verified file so it will have to be verified manually:
@@ -653,7 +653,7 @@ await Verify(
         sql = entries
     });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L578-L587' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyRecordedCommandsWithIdentifier' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.cs#L613-L622' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyRecordedCommandsWithIdentifier' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
