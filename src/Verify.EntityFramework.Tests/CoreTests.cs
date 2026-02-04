@@ -502,6 +502,41 @@ public class CoreTests
     }
 
     [Test]
+    public async Task RecordingOrderByMultipleColumns()
+    {
+        var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+
+        Recording.Start();
+
+        await data
+            .Companies
+            .OrderBy(_ => _.Name)
+            .ThenBy(_ => _.Id)
+            .ToListAsync();
+
+        await Verify();
+    }
+
+    [Test]
+    public async Task RecordingOrderByWithInclude()
+    {
+        var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+
+        Recording.Start();
+
+        await data
+            .Companies
+            .Include(_ => _.Employees)
+            .OrderBy(_ => _.Name)
+            .ThenBy(_ => _.Id)
+            .ToListAsync();
+
+        await Verify();
+    }
+
+    [Test]
     public async Task RecordingDisabledTest()
     {
         var database = await DbContextBuilder.GetDatabase();

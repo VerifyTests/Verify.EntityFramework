@@ -1,5 +1,7 @@
 ﻿static class SqlFormatter
 {
+    static readonly FormattedScriptGenerator generator = new();
+
     public static StringBuilder Format(string input)
     {
         var parser = new TSql170Parser(false);
@@ -23,21 +25,9 @@
         var visitor = new RemoveSquareBracketVisitor();
         fragment.Accept(visitor);
 
-        var generator = new Sql170ScriptGenerator(
-            new()
-            {
-                SqlVersion = SqlVersion.Sql170,
-                KeywordCasing = KeywordCasing.Lowercase,
-                IndentationSize = 2,
-                AlignClauseBodies = true
-            });
+        var script = generator.GenerateScript(fragment);
 
-        var builder = new StringBuilder();
-        using (var writer = new StringWriter(builder, CultureInfo.InvariantCulture))
-        {
-            generator.GenerateScript(fragment, writer);
-        }
-
+        var builder = new StringBuilder(script);
         builder.TrimEnd();
         if (builder[^1] == ';')
         {
