@@ -3,7 +3,8 @@
 
 public static class DbContextBuilder
 {
-    static DbContextBuilder() =>
+    static DbContextBuilder()
+    {
         sqlInstance = new(
             buildTemplate: CreateDb,
             constructInstance: builder =>
@@ -11,8 +12,19 @@ public static class DbContextBuilder
                 builder.EnableRecording();
                 return new(builder.Options);
             });
+        descriptiveAliasSqlInstance = new(
+            buildTemplate: CreateDb,
+            storage: Storage.FromSuffix<SampleDbContext>("DescriptiveTableAliases"),
+            constructInstance: builder =>
+            {
+                builder.EnableRecording();
+                builder.UseDescriptiveTableAliases();
+                return new(builder.Options);
+            });
+    }
 
     static SqlInstance<SampleDbContext> sqlInstance;
+    static SqlInstance<SampleDbContext> descriptiveAliasSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -65,4 +77,7 @@ public static class DbContextBuilder
 
     public static Task<SqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
         => sqlInstance.Build(suffix);
+
+    public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveAliasDatabase([CallerMemberName] string suffix = "")
+        => descriptiveAliasSqlInstance.Build(suffix);
 }

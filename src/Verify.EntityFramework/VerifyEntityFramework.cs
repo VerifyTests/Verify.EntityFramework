@@ -149,6 +149,12 @@ public static class VerifyEntityFramework
         return new(result, [new("sql", sql)]);
     }
 
+#pragma warning disable EF9002
+    public static DbContextOptionsBuilder<TContext> UseDescriptiveTableAliases<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext =>
+        builder.ReplaceService<ISqlAliasManagerFactory, DescriptiveSqlAliasManagerFactory>();
+#pragma warning restore EF9002
+
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext
         => builder.EnableRecording(null);

@@ -3,6 +3,35 @@
 public class CoreTests
 {
     [Test]
+    public async Task DescriptiveTableAliasesQueryable()
+    {
+        var database = await DbContextBuilder.GetDescriptiveAliasDatabase();
+        await database.AddData(
+            new Company
+            {
+                Name = "company name"
+            });
+        var data = database.Context;
+
+        var queryable = data.Companies
+            .Where(_ => _.Name == "company name");
+        await Verify(queryable);
+    }
+
+    [Test]
+    public async Task DescriptiveTableAliases()
+    {
+        await using var database = await DbContextBuilder.GetDescriptiveAliasDatabase();
+        var data = database.Context;
+        Recording.Start();
+        await data.Companies
+            .Include(_ => _.Employees)
+            .OrderBy(_ => _.Name)
+            .ToListAsync();
+        await Verify();
+    }
+
+    [Test]
     public async Task ScrubInlineEfDateTimes()
     {
         var target = "2024-09-05T06:59:16.1018211Z";
