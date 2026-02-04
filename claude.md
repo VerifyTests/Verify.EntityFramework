@@ -36,8 +36,7 @@ src/
 │   │   ├── QueryableConverter.cs     # Converts IQueryable to SQL + results
 │   │   ├── TrackerConverter.cs       # Converts ChangeTracker state
 │   │   └── LogEntryConverter.cs      # Recorded SQL entries
-│   ├── LogCommandInterceptor.cs      # DbCommandInterceptor for SQL recording
-│   └── MissingOrder/                 # Detects missing ORDER BY clauses
+│   └── LogCommandInterceptor.cs      # DbCommandInterceptor for SQL recording
 │
 ├── Verify.EntityFramework.Tests/     # EF Core tests
 ├── Verify.EntityFrameworkClassic/    # EF 6 library
@@ -64,7 +63,6 @@ Tests use `[ModuleInitializer]` to call `VerifyEntityFramework.Initialize(model)
 - `IgnoreNavigationProperties()` - Exclude EF navigation properties from serialization
 - `EnableRecording()` - Enable SQL command recording on DbContextOptionsBuilder
 - `DisableRecording()` - Stop recording for a specific context instance
-- `ThrowForMissingOrderBy()` - Enforce ORDER BY clauses in queries
 - `ScrubInlineEfDateTimes()` - Sanitize DateTime values in SQL
 
 ## Testing Conventions
