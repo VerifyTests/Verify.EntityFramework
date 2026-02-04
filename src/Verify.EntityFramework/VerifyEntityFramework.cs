@@ -146,7 +146,7 @@ public static class VerifyEntityFramework
         var queryable = (IQueryable) arg;
 
         var sql = queryable.ToQueryString();
-        if (formatSql)
+        if (queryable.ShouldFormatSql())
         {
             sql = SqlFormatter.Format(sql).ToString();
         }
