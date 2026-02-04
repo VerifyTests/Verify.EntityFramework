@@ -467,11 +467,12 @@ Will result in the following verified files:
 <!-- snippet: CoreTests.Queryable.verified.sql -->
 <a id='snippet-CoreTests.Queryable.verified.sql'></a>
 ```sql
-SELECT [c].[Id], [c].[Name]
-FROM [Companies] AS [c]
-WHERE [c].[Name] = N'company name'
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Name = N'company name'
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.sql#L1-L3' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.sql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.Queryable.verified.sql#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.Queryable.verified.sql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

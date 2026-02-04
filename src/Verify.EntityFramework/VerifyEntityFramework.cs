@@ -3,6 +3,7 @@
 public static class VerifyEntityFramework
 {
     static List<(Type type, string name)>? modelNavigations;
+    static bool formatSql;
 
     public static async IAsyncEnumerable<object> AllData(this DbContext data)
     {
@@ -125,7 +126,7 @@ public static class VerifyEntityFramework
         VerifierSettings.RegisterFileConverter(
             QueryableToSql,
             (target, _) => QueryableConverter.IsQueryable(target));
-        var formatSql = model != null && model.IsSqlServer();
+        formatSql = model != null && model.IsSqlServer();
         VerifierSettings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
         VerifierSettings.IgnoreMembersWithType<DbContext>();
         var converters = DefaultContractResolver.Converters;
@@ -145,6 +146,11 @@ public static class VerifyEntityFramework
         var queryable = (IQueryable) arg;
 
         var sql = queryable.ToQueryString();
+        if (formatSql)
+        {
+            sql = SqlFormatter.Format(sql).ToString();
+        }
+
         QueryableConverter.TryExecuteQueryable(queryable, out var result);
         return new(result, [new("sql", sql)]);
     }
