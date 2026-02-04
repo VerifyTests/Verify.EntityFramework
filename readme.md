@@ -679,19 +679,35 @@ builder.UseDescriptiveTableAliases();
 With descriptive aliases enabled, the generated SQL:
 
 ```sql
-SELECT [companies].[Id], [companies].[Name], [employees].[Id], [employees].[Age], [employees].[CompanyId], [employees].[Name]
-FROM [Companies] AS [companies]
-LEFT JOIN [Employees] AS [employees] ON [companies].[Id] = [employees].[CompanyId]
-ORDER BY [companies].[Name], [companies].[Id]
+select   companies.Id,
+         companies.Name,
+         employees.Id,
+         employees.Age,
+         employees.CompanyId,
+         employees.Name
+from     Companies as companies
+         left outer join
+         Employees as employees
+         on companies.Id = employees.CompanyId
+order by companies.Name,
+         companies.Id
 ```
 
 Instead of the default:
 
 ```sql
-SELECT [c].[Id], [c].[Name], [e].[Id], [e].[Age], [e].[CompanyId], [e].[Name]
-FROM [Companies] AS [c]
-LEFT JOIN [Employees] AS [e] ON [c].[Id] = [e].[CompanyId]
-ORDER BY [c].[Name], [c].[Id]
+select   c.Id,
+         c.Name,
+         e.Id,
+         e.Age,
+         e.CompanyId,
+         e.Name
+from     Companies as c
+         left outer join
+         Employees as e
+         on c.Id = e.CompanyId
+order by c.Name,
+         c.Id
 ```
 
 
