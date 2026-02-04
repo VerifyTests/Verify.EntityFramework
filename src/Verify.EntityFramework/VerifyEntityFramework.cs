@@ -21,7 +21,7 @@ public static class VerifyEntityFramework
 
             if (idProperty != null)
             {
-                list = list.OrderBy(_ => idProperty.GetValue(_));
+                list = list.OrderBy(idProperty.GetValue);
             }
 
             foreach (var entity in list)
