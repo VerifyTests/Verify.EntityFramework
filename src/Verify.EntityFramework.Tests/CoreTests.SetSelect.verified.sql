@@ -1,2 +1,2 @@
-﻿SELECT [c].[Id]
-FROM [Companies] AS [c]
+﻿select c.Id
+from   Companies as c
