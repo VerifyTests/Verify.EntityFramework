@@ -1,40 +1,19 @@
-﻿[
-  {
-    Id: 1,
-    Name: Company1,
-    Employees: [
-      {
-        Id: 2,
-        CompanyId: 1,
-        Name: Employee1,
-        Age: 25
-      },
-      {
-        Id: 3,
-        CompanyId: 1,
-        Name: Employee2,
-        Age: 31
-      }
-    ]
-  },
-  {
-    Id: 4,
-    Name: Company2,
-    Employees: [
-      {
-        Id: 5,
-        CompanyId: 4,
-        Name: Employee4,
-        Age: 34
-      }
-    ]
-  },
-  {
-    Id: 6,
-    Name: Company3
-  },
-  {
-    Id: 7,
-    Name: Company4
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Text:
+select   companies.Id,
+         companies.Name,
+         employees.Id,
+         employees.Age,
+         employees.CompanyId,
+         employees.Name
+from     Companies as companies
+         left outer join
+         Employees as employees
+         on companies.Id = employees.CompanyId
+order by companies.Name,
+         companies.Id
   }
-]
+}

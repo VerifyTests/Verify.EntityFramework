@@ -63,6 +63,7 @@ Tests use `[ModuleInitializer]` to call `VerifyEntityFramework.Initialize(model)
 - `IgnoreNavigationProperties()` - Exclude EF navigation properties from serialization
 - `EnableRecording()` - Enable SQL command recording on DbContextOptionsBuilder
 - `DisableRecording()` - Stop recording for a specific context instance
+- `UseDescriptiveTableAliases()` - Replace single-char SQL table aliases with full table names via custom `ISqlAliasManagerFactory`
 - `ScrubInlineEfDateTimes()` - Sanitize DateTime values in SQL
 
 ## Testing Conventions
