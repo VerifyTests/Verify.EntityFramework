@@ -155,6 +155,20 @@ public static class VerifyEntityFramework
         return new(result, [new("sql", sql)]);
     }
 
+    internal static bool ShouldFormatSql(this IQueryable queryable)
+    {
+        var model = FindModel(queryable.Expression);
+        return model != null && model.IsSqlServer();
+    }
+
+    static IModel? FindModel(Expression? expression) =>
+        expression switch
+        {
+            EntityQueryRootExpression root => root.EntityType.Model,
+            MethodCallExpression { Arguments.Count: > 0 } method => FindModel(method.Arguments[0]),
+            _ => null
+        };
+
 #pragma warning disable EF9002
     public static DbContextOptionsBuilder<TContext> UseDescriptiveTableAliases<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext =>
