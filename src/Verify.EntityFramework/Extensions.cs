@@ -11,21 +11,6 @@
         return (IQueryable<object>) genericNoTracking.Invoke(null, [set])!;
     }
 
-    public static string? NameOrAlias(this TableExpressionBase tableExpressionBase)
-    {
-        if (tableExpressionBase.Alias != null)
-        {
-            return tableExpressionBase.Alias;
-        }
-
-        if (tableExpressionBase is TableExpression tableExpression)
-        {
-            return tableExpression.Name;
-        }
-
-        return null;
-    }
-
     public static IQueryable<object> Set(this DbContext data, Type t) =>
         (IQueryable<object>) setMethod
             .MakeGenericMethod(t)

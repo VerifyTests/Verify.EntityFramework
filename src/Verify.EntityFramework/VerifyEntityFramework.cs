@@ -149,9 +149,11 @@ public static class VerifyEntityFramework
         return new(result, [new("sql", sql)]);
     }
 
-    public static DbContextOptionsBuilder<TContext> ThrowForMissingOrderBy<TContext>(this DbContextOptionsBuilder<TContext> builder)
+#pragma warning disable EF9002
+    public static DbContextOptionsBuilder<TContext> UseDescriptiveTableAliases<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext =>
-        builder.ReplaceService<IShapedQueryCompilingExpressionVisitorFactory, RelationalFactory>();
+        builder.ReplaceService<ISqlAliasManagerFactory, DescriptiveSqlAliasManagerFactory>();
+#pragma warning restore EF9002
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext

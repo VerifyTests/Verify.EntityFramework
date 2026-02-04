@@ -12,19 +12,19 @@ public static class DbContextBuilder
                 builder.EnableRecording();
                 return new(builder.Options);
             });
-        orderRequiredSqlInstance = new(
+        descriptiveAliasSqlInstance = new(
             buildTemplate: CreateDb,
-            storage: Storage.FromSuffix<SampleDbContext>("ThrowForMissingOrderBy"),
+            storage: Storage.FromSuffix<SampleDbContext>("DescriptiveTableAliases"),
             constructInstance: builder =>
             {
                 builder.EnableRecording();
-                builder.ThrowForMissingOrderBy();
+                builder.UseDescriptiveTableAliases();
                 return new(builder.Options);
             });
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;
-    static SqlInstance<SampleDbContext> orderRequiredSqlInstance;
+    static SqlInstance<SampleDbContext> descriptiveAliasSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -78,6 +78,6 @@ public static class DbContextBuilder
     public static Task<SqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
         => sqlInstance.Build(suffix);
 
-    public static Task<SqlDatabase<SampleDbContext>> GetOrderRequiredDatabase([CallerMemberName] string suffix = "")
-        => orderRequiredSqlInstance.Build(suffix);
+    public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveAliasDatabase([CallerMemberName] string suffix = "")
+        => descriptiveAliasSqlInstance.Build(suffix);
 }

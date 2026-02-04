@@ -1,8 +1,0 @@
-﻿{
-  Type: Exception,
-  Message:
-SelectExpression must have at least one ordering.
-Expression:
-SELECT c.Id, c.Name
-FROM Companies AS c
-}
