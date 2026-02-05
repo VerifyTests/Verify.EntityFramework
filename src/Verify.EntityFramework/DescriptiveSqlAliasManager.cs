@@ -6,16 +6,14 @@ class DescriptiveSqlAliasManager : SqlAliasManager
 
     public override string GenerateTableAlias(string name)
     {
-        var lowerName = name.ToLowerInvariant();
-
-        if (aliases.TryGetValue(lowerName, out var counter))
+        if (aliases.TryGetValue(name, out var counter))
         {
-            aliases[lowerName] = counter + 1;
-            return lowerName + counter;
+            aliases[name] = counter + 1;
+            return name + counter;
         }
 
-        aliases[lowerName] = 0;
-        return lowerName;
+        aliases[name] = 0;
+        return name;
     }
 
     protected override Dictionary<string, string>? RemapTableAliases(IReadOnlySet<string> usedAliases) =>

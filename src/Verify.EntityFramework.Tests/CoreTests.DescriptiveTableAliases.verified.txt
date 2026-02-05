@@ -3,17 +3,17 @@
     Type: ReaderExecutedAsync,
     HasTransaction: false,
     Text:
-select   companies.Id,
-         companies.Name,
-         employees.Id,
-         employees.Age,
-         employees.CompanyId,
-         employees.Name
-from     Companies as companies
+select   Companies.Id,
+         Companies.Name,
+         Employees.Id,
+         Employees.Age,
+         Employees.CompanyId,
+         Employees.Name
+from     Companies as Companies
          left outer join
-         Employees as employees
-         on companies.Id = employees.CompanyId
-order by companies.Name,
-         companies.Id
+         Employees as Employees
+         on Companies.Id = Employees.CompanyId
+order by Companies.Name,
+         Companies.Id
   }
 }
