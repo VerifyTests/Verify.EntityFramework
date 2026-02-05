@@ -1,4 +1,4 @@
-﻿select companies.Id,
-       companies.Name
-from   Companies as companies
-where  companies.Name = N'company name'
+﻿select Companies.Id,
+       Companies.Name
+from   Companies as Companies
+where  Companies.Name = N'company name'

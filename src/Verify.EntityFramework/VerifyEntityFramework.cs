@@ -86,7 +86,7 @@ public static class VerifyEntityFramework
             throw new("The `model` parameter must be provided wither on this method or on VerifyEntityFramework.Enable()");
         }
 
-        return GetNavigations(model);
+        return model.GetNavigations();
     }
 
     static IEnumerable<(Type type, string name)> GetNavigations(this IModel model)
