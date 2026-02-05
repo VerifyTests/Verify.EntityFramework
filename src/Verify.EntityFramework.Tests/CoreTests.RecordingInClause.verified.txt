@@ -1,0 +1,20 @@
+{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Parameters: {
+      @ids1 (Int32): 1,
+      @ids2 (Int32): 2,
+      @ids3 (Int32): 4,
+      @ids4 (Int32): 6
+    },
+    Text:
+select c.Id,
+       c.Name
+from   Companies as c
+where  c.Id in (@ids1,
+                @ids2,
+                @ids3,
+                @ids4)
+  }
+}

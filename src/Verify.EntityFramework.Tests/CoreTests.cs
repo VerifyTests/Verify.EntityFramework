@@ -511,6 +511,40 @@ public class CoreTests
     }
 
     [Test]
+    public async Task RecordingInClause()
+    {
+        var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+
+        Recording.Start();
+
+        var ids = new[] { 1, 2, 4, 6 };
+        await data
+            .Companies
+            .Where(_ => ids.Contains(_.Id))
+            .ToListAsync();
+
+        await Verify();
+    }
+
+    [Test]
+    public async Task RecordingNotInClause()
+    {
+        var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+
+        Recording.Start();
+
+        var ids = new[] { 1, 2, 4 };
+        await data
+            .Companies
+            .Where(_ => !ids.Contains(_.Id))
+            .ToListAsync();
+
+        await Verify();
+    }
+
+    [Test]
     public async Task RecordingDisabledTest()
     {
         var database = await DbContextBuilder.GetDatabase();
