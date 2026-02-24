@@ -18,7 +18,7 @@
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="170.168.0" />
     <PackageVersion Include="NUnit" Version="4.5.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" Pinned="true" />
-    <PackageVersion Include="Polyfill" Version="9.10.0" />
+    <PackageVersion Include="Polyfill" Version="9.11.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.172" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="Verify" Version="31.13.2" />
