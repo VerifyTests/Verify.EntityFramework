@@ -176,8 +176,8 @@ public static class VerifyEntityFramework
     public static DbContextOptionsBuilder<TContext> UseDescriptiveParameterNames<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext =>
         builder
-            .ReplaceService<IParameterNameGeneratorFactory, DescriptiveParameterNameGeneratorFactory>()
-            .ReplaceService<IModificationCommandFactory, DescriptiveModificationCommandFactory>();
+            .ReplaceService<IParameterNameGeneratorFactory, DescriptiveParameterFactory>()
+            .ReplaceService<IModificationCommandFactory, DescriptiveParameterFactory>();
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext

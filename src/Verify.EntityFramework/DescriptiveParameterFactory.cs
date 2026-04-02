@@ -1,5 +1,6 @@
-class DescriptiveModificationCommandFactory :
-    IModificationCommandFactory
+class DescriptiveParameterFactory :
+    IModificationCommandFactory,
+    IParameterNameGeneratorFactory
 {
     public IModificationCommand CreateModificationCommand(
         in ModificationCommandParameters modificationCommandParameters) =>
@@ -8,4 +9,6 @@ class DescriptiveModificationCommandFactory :
     public INonTrackedModificationCommand CreateNonTrackedModificationCommand(
         in NonTrackedModificationCommandParameters modificationCommandParameters) =>
         new ModificationCommand(modificationCommandParameters);
+
+    public ParameterNameGenerator Create() => new DescriptiveParameterNameGenerator();
 }
