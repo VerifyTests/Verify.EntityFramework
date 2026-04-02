@@ -1,6 +1,7 @@
 ﻿#pragma warning disable EF9002
 
-class DescriptiveSqlAliasManager : SqlAliasManager
+class DescriptiveSqlAliasManager :
+    SqlAliasManager
 {
     Dictionary<string, int> aliases = new(StringComparer.OrdinalIgnoreCase);
 

@@ -173,6 +173,12 @@ public static class VerifyEntityFramework
         builder.ReplaceService<ISqlAliasManagerFactory, DescriptiveSqlAliasManagerFactory>();
 #pragma warning restore EF9002
 
+    public static DbContextOptionsBuilder<TContext> UseDescriptiveParameterNames<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext =>
+        builder
+            .ReplaceService<IParameterNameGeneratorFactory, DescriptiveParameterFactory>()
+            .ReplaceService<IModificationCommandFactory, DescriptiveParameterFactory>();
+
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
         where TContext : DbContext
         => builder.EnableRecording(null);

@@ -1,4 +1,4 @@
-﻿namespace VerifyTests.EntityFramework;
+namespace VerifyTests.EntityFramework;
 
 public class LogEntry(
     string type,
