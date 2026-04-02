@@ -1,0 +1,25 @@
+class DescriptiveModificationCommand(in ModificationCommandParameters parameters) :
+    ModificationCommand(parameters)
+{
+    protected override IColumnModification CreateColumnModification(in ColumnModificationParameters parameters)
+    {
+        if (parameters.GenerateParameterName?.Target is not DescriptiveParameterNameGenerator generator)
+        {
+            return base.CreateColumnModification(parameters);
+        }
+
+        var columnName = parameters.ColumnName;
+        var original = parameters.GenerateParameterName;
+
+        var modified = parameters with
+        {
+            GenerateParameterName = () =>
+            {
+                generator.SetColumnHint(columnName);
+                return original();
+            }
+        };
+
+        return base.CreateColumnModification(modified);
+    }
+}

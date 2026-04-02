@@ -21,10 +21,20 @@ public static class DbContextBuilder
                 builder.UseDescriptiveTableAliases();
                 return new(builder.Options);
             });
+        descriptiveParameterNamesSqlInstance = new(
+            buildTemplate: CreateDb,
+            storage: Storage.FromSuffix<SampleDbContext>("DescriptiveParameterNames"),
+            constructInstance: builder =>
+            {
+                builder.EnableRecording();
+                builder.UseDescriptiveParameterNames();
+                return new(builder.Options);
+            });
     }
 
     static SqlInstance<SampleDbContext> sqlInstance;
     static SqlInstance<SampleDbContext> descriptiveAliasSqlInstance;
+    static SqlInstance<SampleDbContext> descriptiveParameterNamesSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -80,4 +90,7 @@ public static class DbContextBuilder
 
     public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveAliasDatabase([CallerMemberName] string suffix = "")
         => descriptiveAliasSqlInstance.Build(suffix);
+
+    public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveParameterNamesDatabase([CallerMemberName] string suffix = "")
+        => descriptiveParameterNamesSqlInstance.Build(suffix);
 }

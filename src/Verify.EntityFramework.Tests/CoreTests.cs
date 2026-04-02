@@ -3,6 +3,45 @@
 public class CoreTests
 {
     [Test]
+    public async Task DescriptiveParameterNames()
+    {
+        var database = await DbContextBuilder.GetDescriptiveParameterNamesDatabase();
+        var data = database.Context;
+        var company = new Company
+        {
+            Name = "Title"
+        };
+        data.Add(company);
+        Recording.Start();
+        await data.SaveChangesAsync();
+        await Verify();
+    }
+
+    [Test]
+    public async Task DescriptiveParameterNamesDuplicate()
+    {
+        var database = await DbContextBuilder.GetDescriptiveParameterNamesDatabase();
+        var data = database.Context;
+        var company = new Company
+        {
+            Id = 100,
+            Name = "CompanyName"
+        };
+        var employee = new Employee
+        {
+            Id = 200,
+            CompanyId = 100,
+            Name = "EmployeeName",
+            Age = 25
+        };
+        data.Add(company);
+        data.Add(employee);
+        Recording.Start();
+        await data.SaveChangesAsync();
+        await Verify();
+    }
+
+    [Test]
     public async Task DescriptiveTableAliasesQueryable()
     {
         var database = await DbContextBuilder.GetDescriptiveAliasDatabase();

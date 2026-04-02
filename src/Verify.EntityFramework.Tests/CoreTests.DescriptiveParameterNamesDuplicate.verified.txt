@@ -1,0 +1,22 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: true,
+    Parameters: {
+      @Age (Int32): 25,
+      @CompanyId (Int32): 100,
+      @Id (Int32): 100,
+      @Id0 (Int32): 200,
+      @Name (String): CompanyName,
+      @Name0 (String): EmployeeName
+    },
+    Text:
+set nocount on;
+
+insert  into Companies (Id, Name)
+values                (@Id, @Name);
+
+insert  into Employees (Id, Age, CompanyId, Name)
+values                (@Id0, @Age, @CompanyId, @Name0)
+  }
+}
