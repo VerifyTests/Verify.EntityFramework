@@ -717,7 +717,7 @@ order by c.Name,
 
 ## Descriptive Parameter Names
 
-By default EF generates generic parameter names in SQL (eg `@p0`, `@p1`). `UseDescriptiveParameterNames` replaces these with the column name, making recorded and verified SQL easier to read. When duplicate column names occur across tables in the same batch, a counter suffix is appended (eg `@Id`, `@Id0`).
+By default EF generates generic parameter names in SQL (eg `@p0`, `@p1`). `UseDescriptiveParameterNames` replaces these with the column name, making recorded and verified SQL easier to read. When the same column name appears across multiple tables in a batch, a counter suffix is appended to subsequent occurrences to keep names unique (eg `@Id` for the first table, `@Id1` for the second).
 
 
 ### Enable
@@ -774,7 +774,7 @@ values                (@p0, @p1)
 
 ### Duplicate column names
 
-When multiple tables in the same batch have columns with the same name, a counter suffix is appended to keep parameter names unique:
+When multiple tables in the same batch have columns with the same name, the counter increments to keep parameter names unique:
 
 <!-- snippet: CoreTests.DescriptiveParameterNamesDuplicate.verified.txt -->
 <a id='snippet-CoreTests.DescriptiveParameterNamesDuplicate.verified.txt'></a>
@@ -786,19 +786,19 @@ When multiple tables in the same batch have columns with the same name, a counte
     Parameters: {
       @Age (Int32): 25,
       @CompanyId (Int32): 100,
-      @Id (Int32): 100,
-      @Id0 (Int32): 200,
-      @Name (String): CompanyName,
-      @Name0 (String): EmployeeName
+      @Id0 (Int32): 100,
+      @Id1 (Int32): 200,
+      @Name0 (String): CompanyName,
+      @Name1 (String): EmployeeName
     },
     Text:
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name);
+values                (@Id0, @Name0);
 
 insert  into Employees (Id, Age, CompanyId, Name)
-values                (@Id0, @Age, @CompanyId, @Name0)
+values                (@Id1, @Age, @CompanyId, @Name1)
   }
 }
 ```

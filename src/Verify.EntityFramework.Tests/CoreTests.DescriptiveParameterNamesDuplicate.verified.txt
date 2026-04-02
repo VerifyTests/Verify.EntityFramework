@@ -5,18 +5,18 @@
     Parameters: {
       @Age (Int32): 25,
       @CompanyId (Int32): 100,
-      @Id (Int32): 100,
-      @Id0 (Int32): 200,
-      @Name (String): CompanyName,
-      @Name0 (String): EmployeeName
+      @Id0 (Int32): 100,
+      @Id1 (Int32): 200,
+      @Name0 (String): CompanyName,
+      @Name1 (String): EmployeeName
     },
     Text:
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name);
+values                (@Id0, @Name0);
 
 insert  into Employees (Id, Age, CompanyId, Name)
-values                (@Id0, @Age, @CompanyId, @Name0)
+values                (@Id1, @Age, @CompanyId, @Name1)
   }
 }

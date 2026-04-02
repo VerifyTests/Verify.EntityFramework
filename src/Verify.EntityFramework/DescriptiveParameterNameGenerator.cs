@@ -25,7 +25,7 @@ class DescriptiveParameterNameGenerator :
             return hint + counter;
         }
 
-        names[hint] = 0;
+        names[hint] = 1;
         return hint;
     }
 
