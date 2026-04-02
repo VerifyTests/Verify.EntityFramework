@@ -717,7 +717,7 @@ order by c.Name,
 
 ## Descriptive Parameter Names
 
-By default EF generates generic parameter names in SQL (eg `@p0`, `@p1`). `UseDescriptiveParameterNames` replaces these with the column name, making recorded and verified SQL easier to read. When the same column name appears across multiple tables in a batch, a counter suffix is appended to subsequent occurrences to keep names unique (eg `@Id` for the first table, `@Id1` for the second).
+By default EF generates generic parameter names in SQL (eg `@p0`, `@p1`). `UseDescriptiveParameterNames` replaces these with the column name, making recorded and verified SQL easier to read. When the same column name appears across multiple tables in a batch, subsequent occurrences are prefixed with the entity type name (eg `@Id` for the first table, `@EmployeeId` for the second).
 
 
 ### Enable
@@ -774,7 +774,7 @@ values                (@p0, @p1)
 
 ### Duplicate column names
 
-When multiple tables in the same batch have columns with the same name, the counter increments to keep parameter names unique:
+When multiple tables in the same batch have columns with the same name, subsequent occurrences are prefixed with the entity type name:
 
 <!-- snippet: CoreTests.DescriptiveParameterNamesDuplicate.verified.txt -->
 <a id='snippet-CoreTests.DescriptiveParameterNamesDuplicate.verified.txt'></a>
@@ -786,24 +786,26 @@ When multiple tables in the same batch have columns with the same name, the coun
     Parameters: {
       @Age (Int32): 25,
       @CompanyId (Int32): 100,
-      @Id0 (Int32): 100,
-      @Id1 (Int32): 200,
-      @Name0 (String): CompanyName,
-      @Name1 (String): EmployeeName
+      @EmployeeId (Int32): 200,
+      @EmployeeName (String): EmployeeName,
+      @Id (Int32): 100,
+      @Name (String): CompanyName
     },
     Text:
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id0, @Name0);
+values                (@Id, @Name);
 
 insert  into Employees (Id, Age, CompanyId, Name)
-values                (@Id1, @Age, @CompanyId, @Name1)
+values                (@EmployeeId, @Age, @CompanyId, @EmployeeName)
   }
 }
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.DescriptiveParameterNamesDuplicate.verified.txt#L1-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.DescriptiveParameterNamesDuplicate.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+If the entity-prefixed name itself collides with an existing column name (eg `Company` + `Id` = `CompanyId` which is already a column on `Employee`), a counter suffix is used as a fallback.
 
 
 ## Missing OrderBy

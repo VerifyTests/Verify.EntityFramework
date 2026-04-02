@@ -3,7 +3,6 @@ global using System.Data.Common;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Linq.Expressions;
-global using System.Text.RegularExpressions;
 global using Argon;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;

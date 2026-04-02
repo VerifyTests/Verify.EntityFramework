@@ -9,13 +9,14 @@ class DescriptiveModificationCommand(in ModificationCommandParameters parameters
         }
 
         var columnName = parameters.ColumnName;
+        var entityName = parameters.Entry?.EntityType.ClrType.Name ?? "";
         var original = parameters.GenerateParameterName;
 
         var modified = parameters with
         {
             GenerateParameterName = () =>
             {
-                generator.SetColumnHint(columnName);
+                generator.SetColumnHint(entityName, columnName);
                 return original();
             }
         };
