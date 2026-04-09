@@ -8,9 +8,14 @@ class DescriptiveModificationCommand(in ModificationCommandParameters parameters
             return base.CreateColumnModification(parameters);
         }
 
+        return CreateDescriptiveColumnModification(parameters, generator);
+    }
+
+    IColumnModification CreateDescriptiveColumnModification(in ColumnModificationParameters parameters, DescriptiveParameterNameGenerator generator)
+    {
         var columnName = parameters.ColumnName;
         var entityName = parameters.Entry?.EntityType.ClrType.Name ?? "";
-        var original = parameters.GenerateParameterName;
+        var original = parameters.GenerateParameterName!;
 
         var modified = parameters with
         {
