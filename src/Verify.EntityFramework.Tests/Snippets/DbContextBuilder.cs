@@ -1,4 +1,4 @@
-﻿// LocalDb is used to make the sample simpler.
+// LocalDb is used to make the sample simpler.
 // Replace with a real DbContext
 
 public static class DbContextBuilder
@@ -14,7 +14,7 @@ public static class DbContextBuilder
             });
         descriptiveAliasSqlInstance = new(
             buildTemplate: CreateDb,
-            storage: Storage.FromSuffix<SampleDbContext>("DescriptiveTableAliases"),
+            storageSuffix: "DescriptiveTableAliases",
             constructInstance: builder =>
             {
                 builder.EnableRecording();
@@ -23,7 +23,7 @@ public static class DbContextBuilder
             });
         descriptiveParameterNamesSqlInstance = new(
             buildTemplate: CreateDb,
-            storage: Storage.FromSuffix<SampleDbContext>("DescriptiveParameterNames"),
+            storageSuffix: "DescriptiveParameterNames",
             constructInstance: builder =>
             {
                 builder.EnableRecording();
@@ -32,9 +32,9 @@ public static class DbContextBuilder
             });
     }
 
-    static SqlInstance<SampleDbContext> sqlInstance;
-    static SqlInstance<SampleDbContext> descriptiveAliasSqlInstance;
-    static SqlInstance<SampleDbContext> descriptiveParameterNamesSqlInstance;
+    static SqlInstanceProvider<SampleDbContext> sqlInstance;
+    static SqlInstanceProvider<SampleDbContext> descriptiveAliasSqlInstance;
+    static SqlInstanceProvider<SampleDbContext> descriptiveParameterNamesSqlInstance;
 
     static async Task CreateDb(SampleDbContext data)
     {
@@ -85,12 +85,12 @@ public static class DbContextBuilder
         await data.SaveChangesAsync();
     }
 
-    public static Task<SqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
+    public static Task<ISqlDatabase<SampleDbContext>> GetDatabase([CallerMemberName] string suffix = "")
         => sqlInstance.Build(suffix);
 
-    public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveAliasDatabase([CallerMemberName] string suffix = "")
+    public static Task<ISqlDatabase<SampleDbContext>> GetDescriptiveAliasDatabase([CallerMemberName] string suffix = "")
         => descriptiveAliasSqlInstance.Build(suffix);
 
-    public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveParameterNamesDatabase([CallerMemberName] string suffix = "")
+    public static Task<ISqlDatabase<SampleDbContext>> GetDescriptiveParameterNamesDatabase([CallerMemberName] string suffix = "")
         => descriptiveParameterNamesSqlInstance.Build(suffix);
 }

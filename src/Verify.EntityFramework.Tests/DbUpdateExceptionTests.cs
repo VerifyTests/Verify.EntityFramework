@@ -4,7 +4,7 @@ public class DbUpdateExceptionTests
     [Test]
     public async Task Run()
     {
-        var instance = new SqlInstance<TestDbContext>(builder => new(builder.Options));
+        var instance = new SqlInstanceProvider<TestDbContext>(builder => new(builder.Options));
         var id = Guid.NewGuid();
         var entity = new TestEntity
         {
