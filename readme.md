@@ -852,6 +852,23 @@ await Verify(target)
 <!-- endSnippet -->
 
 
+## DisableSqlFormatting
+
+By default SQL captured against SQL Server is reformatted via [SqlFormatter](https://github.com/SimonCropp/SqlFormatter) before being written to the snapshot. This applies to both [Recording](#recording) output and [Queryable](#queryable) `.sql` files.
+
+Reformatting can be disabled globally:
+
+<!-- snippet: DisableSqlFormatting -->
+<a id='snippet-DisableSqlFormatting'></a>
+```cs
+VerifyEntityFramework.DisableSqlFormatting = true;
+```
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L20-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+When disabled, the SQL is written verbatim as produced by EntityFramework.
+
+
 ## Icon
 
 [Database](https://thenounproject.com/term/database/310841/) designed by [Creative Stall](https://thenounproject.com/creativestall/) from [The Noun Project](https://thenounproject.com).

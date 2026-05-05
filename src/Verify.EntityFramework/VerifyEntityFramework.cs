@@ -54,6 +54,8 @@ public static class VerifyEntityFramework
         }
     }
 
+    public static bool DisableSqlFormatting { get; set; }
+
     public static void ScrubInlineEfDateTimes() =>
         VerifierSettings.ScrubInlineDateTimes("yyyy-MM-ddTHH:mm:ss.fffffffZ");
 
@@ -155,6 +157,11 @@ public static class VerifyEntityFramework
 
     internal static bool ShouldFormatSql(this IQueryable queryable)
     {
+        if (DisableSqlFormatting)
+        {
+            return false;
+        }
+
         var model = FindModel(queryable.Expression);
         return model != null && model.IsSqlServer();
     }
