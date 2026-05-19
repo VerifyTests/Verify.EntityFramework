@@ -1,11 +1,14 @@
-﻿global using System.ComponentModel.DataAnnotations.Schema;
+global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Net.Http.Json;
 global using Argon;
+global using DotNet.Testcontainers.Containers;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Data.SqlClient;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
+global using Testcontainers.MsSql;
