@@ -1,0 +1,10 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Text:
+SELECT [c].[Id], [c].[Name]
+FROM [Companies] AS [c]
+WHERE [c].[Name] = N'Title'
+  }
+}

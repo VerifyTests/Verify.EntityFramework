@@ -11,6 +11,7 @@
     <File Path="global.json" />
     <File Path="mdsnippets.json" />
   </Folder>
+  <Project Path="Verify.EntityFramework.StaticSettingsTests/Verify.EntityFramework.StaticSettingsTests.csproj" />
   <Project Path="Verify.EntityFramework.Tests/Verify.EntityFramework.Tests.csproj" />
   <Project Path="Verify.EntityFramework/Verify.EntityFramework.csproj" />
   <Project Path="Verify.EntityFrameworkClassic.Tests/Verify.EntityFrameworkClassic.Tests.csproj" />
