@@ -4,6 +4,7 @@ public class StaticSettingsTests
 {
     static SqlInstance<SampleDbContext> sqlInstance = new(
         buildTemplate: data => data.Database.EnsureCreatedAsync(),
+        storage: Storage.FromSuffix<SampleDbContext>("StaticSettings"),
         constructInstance: builder =>
         {
             builder.EnableRecording();
