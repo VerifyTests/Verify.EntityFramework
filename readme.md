@@ -863,7 +863,7 @@ Reformatting can be disabled globally:
 ```cs
 VerifyEntityFramework.DisableSqlFormatting = true;
 ```
-<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L20-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L21-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When disabled, the SQL is written verbatim as produced by EntityFramework.
