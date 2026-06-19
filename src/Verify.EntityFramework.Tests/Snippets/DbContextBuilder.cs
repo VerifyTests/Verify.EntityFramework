@@ -36,6 +36,11 @@ public static class DbContextBuilder
     static SqlInstance<SampleDbContext> descriptiveAliasSqlInstance;
     static SqlInstance<SampleDbContext> descriptiveParameterNamesSqlInstance;
 
+    static SqlInstance<SampleDbContext> webApplicationSqlInstance = new(
+        buildTemplate: data => data.Database.EnsureCreatedAsync(),
+        storage: Storage.FromSuffix<SampleDbContext>("WebApplicationFactory"),
+        constructInstance: builder => new(builder.Options));
+
     static async Task CreateDb(SampleDbContext data)
     {
         await data.Database.EnsureCreatedAsync();
@@ -93,4 +98,7 @@ public static class DbContextBuilder
 
     public static Task<SqlDatabase<SampleDbContext>> GetDescriptiveParameterNamesDatabase([CallerMemberName] string suffix = "")
         => descriptiveParameterNamesSqlInstance.Build(suffix);
+
+    public static Task<SqlDatabase<SampleDbContext>> GetWebApplicationDatabase([CallerMemberName] string suffix = "")
+        => webApplicationSqlInstance.Build(suffix);
 }

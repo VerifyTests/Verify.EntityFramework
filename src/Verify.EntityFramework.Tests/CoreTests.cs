@@ -312,7 +312,8 @@ public class CoreTests
         var options = DbContextOptions();
 
         await using var data = new SampleDbContext(options);
-        data.Add(new Employee
+        data.Add(
+            new Employee
         {
             Name = "before"
         });
@@ -624,16 +625,13 @@ public class CoreTests
         // Not actually the test name, the variable name is for README.md to make sense
         var testName = nameof(RecordingWebApplicationFactory) + run;
 
-        await using var connection = new SqliteConnection($"Data Source={testName};Mode=Memory;Cache=Shared");
-        await connection.OpenAsync();
+        await using var database = await DbContextBuilder.GetWebApplicationDatabase(testName);
 
-        var factory = new CustomWebApplicationFactory(testName);
+        var factory = new CustomWebApplicationFactory(testName, database.ConnectionString);
 
         await using (var scope = factory.Services.CreateAsyncScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
-
-            await context.Database.EnsureCreatedAsync();
 
             context.Add(
                 new Company
@@ -669,7 +667,7 @@ public class CoreTests
         #endregion
     }
 
-    class CustomWebApplicationFactory(string name) :
+    class CustomWebApplicationFactory(string name, string connectionString) :
         WebApplicationFactory<Startup>
     {
         #region EnableRecordingWithIdentifier
@@ -678,7 +676,7 @@ public class CoreTests
         {
             var dataBuilder = new DbContextOptionsBuilder<SampleDbContext>()
                 .EnableRecording(name)
-                .UseSqlite($"Data Source={name};Mode=Memory;Cache=Shared");
+                .UseSqlServer(connectionString);
             webBuilder.ConfigureTestServices(
                 _ => _.AddScoped(
                     _ => dataBuilder.Options));

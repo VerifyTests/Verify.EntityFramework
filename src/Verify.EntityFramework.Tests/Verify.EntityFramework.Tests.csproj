@@ -5,7 +5,6 @@
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
