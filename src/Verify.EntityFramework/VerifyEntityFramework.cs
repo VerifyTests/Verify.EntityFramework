@@ -115,6 +115,7 @@ public static class VerifyEntityFramework
     public static void Initialize(IModel? model = null) =>
         Initialize(model, recordCommands: true);
 
+    /// <param name="model">The <see cref="IModel" /> used to cache navigation property information. Can be null.</param>
     /// <param name="recordCommands">
     /// Allow <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext})" /> to add the interceptor that
     /// adds executed commands to <see cref="Recording" /> under the name `ef`. Disable when another package, for
