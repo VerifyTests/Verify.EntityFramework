@@ -105,9 +105,22 @@ public static class VerifyEntityFramework
     public static void Initialize(DbContext context) =>
         Initialize(context.Model);
 
+    public static void Initialize(DbContext context, bool recordCommands) =>
+        Initialize(context.Model, recordCommands);
+
     public static bool Initialized { get; private set; }
 
-    public static void Initialize(IModel? model = null)
+    static bool recordCommands = true;
+
+    public static void Initialize(IModel? model = null) =>
+        Initialize(model, recordCommands: true);
+
+    /// <param name="recordCommands">
+    /// Allow <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext})" /> to add the interceptor that
+    /// adds executed commands to <see cref="Recording" /> under the name `ef`. Disable when another package, for
+    /// example Verify.SqlServer, already records the same commands.
+    /// </param>
+    public static void Initialize(IModel? model, bool recordCommands)
     {
         if (Initialized)
         {
@@ -115,6 +128,7 @@ public static class VerifyEntityFramework
         }
 
         Initialized = true;
+        VerifyEntityFramework.recordCommands = recordCommands;
 
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         if (model != null)
@@ -191,8 +205,15 @@ public static class VerifyEntityFramework
         => builder.EnableRecording(null);
 
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
-        where TContext : DbContext =>
-        builder.AddInterceptors(new LogCommandInterceptor(identifier));
+        where TContext : DbContext
+    {
+        if (!recordCommands)
+        {
+            return builder;
+        }
+
+        return builder.AddInterceptors(new LogCommandInterceptor(identifier));
+    }
 
     static ConcurrentBag<Guid> recordingDisabledContextIds = [];
 
