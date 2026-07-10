@@ -81,7 +81,7 @@ Recording allows all commands executed by EF to be captured and then (optionally
 
 ### Enable
 
-Call `EfRecording.EnableRecording()` on `DbContextOptionsBuilder`.
+Call `EnableRecording()` on `DbContextOptionsBuilder`.
 
 <!-- snippet: EnableRecording -->
 <a id='snippet-EnableRecording'></a>
@@ -99,7 +99,7 @@ var data = new SampleDbContext(builder.Options);
 
 ### Usage
 
-To start recording call `EfRecording.StartRecording()`. The results will be automatically included in verified file.
+To start recording call `Recording.Start()`. The results will be automatically included in verified file.
 
 <!-- snippet: Recording -->
 <a id='snippet-Recording'></a>
@@ -144,7 +144,7 @@ where  c.Name = N'Title'
 <!-- endSnippet -->
 
 
-Sql entries can be explicitly read using `EfRecording.FinishRecording`, optionally filtered, and passed to Verify:
+Sql entries can be explicitly read using `Recording.Stop()`, optionally filtered, and passed to Verify:
 
 <!-- snippet: RecordingSpecific -->
 <a id='snippet-RecordingSpecific'></a>
@@ -178,7 +178,7 @@ await Verify(
 
 ### DbContext spanning
 
-`StartRecording` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
+`Recording.Start()` can be called on different DbContext instances (built from the same options) and the results will be aggregated.
 
 <!-- snippet: MultiDbContexts -->
 <a id='snippet-MultiDbContexts'></a>
@@ -289,6 +289,26 @@ where  c.Name = N'Title'
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/CoreTests.RecordingDisabledTest.verified.txt#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-CoreTests.RecordingDisabledTest.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+
+### Disabling Recording globally
+
+Recording is attached by `EnableRecording()`. Pass `recordCommands: false` to `Initialize` to leave that interceptor unattached, which makes every subsequent `EnableRecording()` call a no-op:
+
+<!-- snippet: DisableRecording -->
+<a id='snippet-DisableRecording'></a>
+```cs
+VerifyEntityFramework.Initialize(data, recordCommands: false);
+```
+<sup><a href='/src/Verify.EntityFramework.RecordingDisabledTests/ModuleInitializer.cs#L10-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableRecording' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only recording is disabled. The converters, and the queryable to SQL file converter, are still registered.
+
+This is useful when another package records the same commands. [Verify.SqlServer](https://github.com/VerifyTests/Verify.SqlServer) subscribes to the `Microsoft.Data.SqlClient` diagnostic listener and records under the name `sql`. Since EF Core executes its commands through `SqlCommand`, with both packages recording every command EF executes is captured twice: once as `ef` and once as `sql`. Disable one of the two:
+
+ * `VerifyEntityFramework.Initialize(model, recordCommands: false)` keeps the `sql` entries.
+ * `VerifySqlServer.Initialize(recordCommands: false)` keeps the `ef` entries, which also carry the command `Type` and transaction state. It has to be called before `VerifierSettings.InitializePlugins()`, otherwise plugin discovery initializes Verify.SqlServer first with recording enabled, and the explicit call throws `Already Initialized`.
 
 
 ## ChangeTracking

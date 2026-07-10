@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EfLocalDb" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="Verify" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
+    <Compile Include="..\Verify.EntityFramework.Tests\Snippets\DataContext\Company.cs" Link="DataContext\Company.cs" />
+    <Compile Include="..\Verify.EntityFramework.Tests\Snippets\DataContext\Employee.cs" Link="DataContext\Employee.cs" />
+    <Compile Include="..\Verify.EntityFramework.Tests\Snippets\DataContext\SampleDbContext.cs" Link="DataContext\SampleDbContext.cs" />
+  </ItemGroup>
+</Project>
