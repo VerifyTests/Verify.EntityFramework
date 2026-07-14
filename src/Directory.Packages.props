@@ -8,12 +8,12 @@
     <PackageVersion Include="EfLocalDb" Version="24.1.4" />
     <PackageVersion Include="EntityFramework" Version="6.5.2" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.4.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.37.3" />
     <PackageVersion Include="NUnit" Version="4.6.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.2.0" />
@@ -21,7 +21,7 @@
     <PackageVersion Include="ProjectDefaults" Version="1.0.174" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="Verify" Version="31.24.1" />
-    <PackageVersion Include="Verify.DiffPlex" Version="3.3.0" />
+    <PackageVersion Include="Verify.DiffPlex" Version="3.3.1" />
     <PackageVersion Include="Verify.NUnit" Version="31.24.1" />
     <PackageVersion Include="Verify.SqlServer" Version="12.2.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
