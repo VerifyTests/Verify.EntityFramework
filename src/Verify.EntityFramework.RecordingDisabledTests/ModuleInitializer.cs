@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata;
-
 public static class ModuleInitializer
 {
     [ModuleInitializer]
