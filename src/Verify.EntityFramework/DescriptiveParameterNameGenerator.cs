@@ -5,7 +5,7 @@ class DescriptiveParameterNameGenerator :
     Dictionary<string, (int count, string entityName)> names = new(StringComparer.OrdinalIgnoreCase);
 
     // All generated param names, for collision detection
-    HashSet<string> allGenerated = new(StringComparer.OrdinalIgnoreCase);
+    HashSet<string> allGenerated = [with(StringComparer.OrdinalIgnoreCase)];
 
     string? pendingColumnName;
     string? pendingEntityName;

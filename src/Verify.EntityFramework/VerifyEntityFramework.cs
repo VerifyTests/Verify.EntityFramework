@@ -144,11 +144,15 @@ public static class VerifyEntityFramework
             (target, _) => QueryableConverter.IsQueryable(target));
         VerifierSettings.IgnoreMembersWithType(typeof(IDbContextFactory<>));
         VerifierSettings.IgnoreMembersWithType<DbContext>();
-        var converters = DefaultContractResolver.Converters;
-        converters.Add(new DbUpdateExceptionConverter());
-        converters.Add(new TrackerConverter());
-        converters.Add(new QueryableConverter());
-        converters.Add(new LogEntryConverter());
+
+        VerifierSettings.AddExtraSettings(settings =>
+        {
+            var converters = settings.Converters;
+            converters.Add(new DbUpdateExceptionConverter());
+            converters.Add(new TrackerConverter());
+            converters.Add(new QueryableConverter());
+            converters.Add(new LogEntryConverter());
+        });
     }
     static bool IsSqlServer(this IModel model)
     {

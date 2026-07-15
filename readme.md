@@ -300,7 +300,7 @@ Recording is attached by `EnableRecording()`. Pass `recordCommands: false` to `I
 ```cs
 VerifyEntityFramework.Initialize(data, recordCommands: false);
 ```
-<sup><a href='/src/Verify.EntityFramework.RecordingDisabledTests/ModuleInitializer.cs#L10-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableRecording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.RecordingDisabledTests/ModuleInitializer.cs#L8-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableRecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Only recording is disabled. The converters, and the queryable to SQL file converter, are still registered.
