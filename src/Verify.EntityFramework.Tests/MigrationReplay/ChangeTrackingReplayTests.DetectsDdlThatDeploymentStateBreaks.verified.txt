@@ -1,0 +1,14 @@
+﻿{
+  Errors: [
+    {
+      Message: The primary key constraint 'PK_Tracked' on table 'Tracked' cannot be dropped because change tracking is enabled on the table. Change tracking requires a primary key constraint on the table. Disable change tracking before dropping the constraint.,
+      Number: 3735,
+      Line: 1
+    },
+    {
+      Message: Could not drop constraint. See previous errors.,
+      Number: 3727,
+      Line: 1
+    }
+  ]
+}

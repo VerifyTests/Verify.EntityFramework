@@ -1,0 +1,5 @@
+﻿{
+  Type: ArgumentOutOfRangeException,
+  Message: Must be greater than zero. (Parameter 'count'),
+  ParamName: count
+}

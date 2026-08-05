@@ -1,0 +1,7 @@
+﻿{
+  Type: InvalidOperationException,
+  Message:
+ReplayRecentMigrations requires a database with no migrations applied, since it migrates forward from an empty database.
+Migrating a database that is already up to date would revert migrations by running their Down.
+Currently applied: 20260101000001_ReplayInitialCreate, 20260101000002_ReplayAddOrders, 20260101000003_ReplayAddOrderStatus
+}
