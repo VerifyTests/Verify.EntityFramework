@@ -13,7 +13,7 @@ set implicit_transactions off;
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@p0, @p1)
+values                 (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
@@ -1228,7 +1228,7 @@ set implicit_transactions off;
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@p0, @p1)
+values                 (@p0, @p1)
     }
   ]
 }

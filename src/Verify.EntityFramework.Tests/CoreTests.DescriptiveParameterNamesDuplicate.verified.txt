@@ -14,9 +14,9 @@
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name);
+values                 (@Id, @Name);
 
 insert  into Employees (Id, Age, CompanyId, Name)
-values                (@EmployeeId, @Age, @CompanyId, @EmployeeName)
+values                 (@EmployeeId, @Age, @CompanyId, @EmployeeName)
   }
 }

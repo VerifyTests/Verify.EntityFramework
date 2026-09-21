@@ -12,6 +12,6 @@ set implicit_transactions off;
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name)
+values                 (@Id, @Name)
   }
 }

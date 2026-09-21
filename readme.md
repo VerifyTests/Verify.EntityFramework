@@ -225,7 +225,7 @@ set implicit_transactions off;
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@p0, @p1)
+values                 (@p0, @p1)
     },
     {
       Type: ReaderExecutedAsync,
@@ -772,7 +772,7 @@ set implicit_transactions off;
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name)
+values                 (@Id, @Name)
   }
 }
 ```
@@ -815,10 +815,10 @@ When multiple tables in the same batch have columns with the same name, subseque
 set nocount on;
 
 insert  into Companies (Id, Name)
-values                (@Id, @Name);
+values                 (@Id, @Name);
 
 insert  into Employees (Id, Age, CompanyId, Name)
-values                (@EmployeeId, @Age, @CompanyId, @EmployeeName)
+values                 (@EmployeeId, @Age, @CompanyId, @EmployeeName)
   }
 }
 ```
