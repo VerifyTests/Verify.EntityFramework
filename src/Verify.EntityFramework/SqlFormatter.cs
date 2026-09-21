@@ -2,7 +2,27 @@
 {
     static readonly FormattedScriptGenerator generator = new();
 
+    // Appended by EF ToQueryString when a query executes in split-query mode. It is not sql.
+    const string splitQueryNote = "This LINQ query is being executed in split-query mode";
+
     public static StringBuilder Format(string input)
+    {
+        var noteIndex = input.IndexOf(splitQueryNote, StringComparison.Ordinal);
+        if (noteIndex < 0)
+        {
+            return FormatSql(input);
+        }
+
+        var note = input[noteIndex..].Trim();
+        var builder = FormatSql(input[..noteIndex]);
+        builder.AppendLine();
+        builder.AppendLine();
+        builder.Append("-- ");
+        builder.Append(note);
+        return builder;
+    }
+
+    static StringBuilder FormatSql(string input)
     {
         var parser = new TSql170Parser(false);
         using var reader = new StringReader(input);
