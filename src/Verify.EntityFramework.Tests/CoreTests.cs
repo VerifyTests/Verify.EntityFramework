@@ -362,6 +362,24 @@ public class CoreTests
     }
 
     [Test]
+    public async Task SplitQueryable()
+    {
+        var database = await DbContextBuilder.GetDatabase();
+        await database.AddData(
+            new Company
+            {
+                Name = "company name"
+            });
+        var data = database.Context;
+
+        var queryable = data.Companies
+            .Include(_ => _.Employees)
+            .AsSplitQuery()
+            .Where(_ => _.Name == "company name");
+        await Verify(queryable);
+    }
+
+    [Test]
     public async Task SetSelect()
     {
         var database = await DbContextBuilder.GetDatabase();
