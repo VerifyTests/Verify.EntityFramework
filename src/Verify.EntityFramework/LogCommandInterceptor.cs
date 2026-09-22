@@ -46,6 +46,34 @@ class LogCommandInterceptor(string? identifier) :
         return new(result);
     }
 
+    // InMemory executes no DbCommand, so its queries come from RecordingQueryCompiler
+    public void AddQuery(string type, DbContext context, Expression query, Dictionary<string, object?> parameters)
+    {
+        if (!IsRecording() ||
+            context.IsRecordingDisabled())
+        {
+            return;
+        }
+
+        var entry = new QueryEntry(
+            type,
+            ExpressionPrinter.Print(query),
+            parameters.ToDictionary(_ => $"@{_.Key}", _ => _.Value));
+        Add(entry);
+    }
+
+    // InMemory executes no DbCommand, so what it saves comes from RecordingStateManager
+    public void AddSaveChanges(string type, DbContext context, IEnumerable<IUpdateEntry> entries)
+    {
+        if (!IsRecording() ||
+            context.IsRecordingDisabled())
+        {
+            return;
+        }
+
+        Add(new SaveChangesEntry(type, entries.Select(_ => _.ToEntityEntry())));
+    }
+
     void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
         var context = data.Context;
@@ -55,7 +83,11 @@ class LogCommandInterceptor(string? identifier) :
             return;
         }
 
-        var entry = new LogEntry(type, command, data, exception);
+        Add(new LogEntry(type, command, data, exception));
+    }
+
+    void Add(object entry)
+    {
         if (identifier is null)
         {
             Recording.TryAdd("ef", entry);
@@ -64,5 +96,15 @@ class LogCommandInterceptor(string? identifier) :
         {
             Recording.TryAdd(identifier, "ef", entry);
         }
+    }
+
+    bool IsRecording()
+    {
+        if (identifier is null)
+        {
+            return Recording.IsRecording();
+        }
+
+        return Recording.IsRecording(identifier);
     }
 }

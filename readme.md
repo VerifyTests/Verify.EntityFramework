@@ -311,6 +311,78 @@ This is useful when another package records the same commands. [Verify.SqlServer
  * `VerifySqlServer.Initialize(recordCommands: false)` keeps the `ef` entries, which also carry the command `Type` and transaction state. It has to be called before `VerifierSettings.InitializePlugins()`, otherwise plugin discovery initializes Verify.SqlServer first with recording enabled, and the explicit call throws `Already Initialized`.
 
 
+### InMemory
+
+The [InMemory provider](https://learn.microsoft.com/en-us/ef/core/providers/in-memory/) executes no SQL, so there are no commands to record. Instead `EnableRecording()` records:
+
+ * Each query, as the LINQ expression that EF executes, with captured variables extracted to `Parameters`.
+ * Each `SaveChanges`, as the entities being added, modified, and deleted, in the same format as [ChangeTracking](#changetracking).
+
+<!-- snippet: EnableRecordingInMemory -->
+<a id='snippet-EnableRecordingInMemory'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(databaseName);
+builder.EnableRecording();
+var data = new SampleDbContext(builder.Options);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingInMemory' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: RecordingInMemory -->
+<a id='snippet-RecordingInMemory'></a>
+```cs
+Recording.Start();
+
+data.Add(
+    new Company
+    {
+        Id = 1,
+        Name = "Title"
+    });
+await data.SaveChangesAsync();
+
+await data
+    .Companies
+    .Where(_ => _.Name == "Title")
+    .ToListAsync();
+
+await Verify();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L28-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingInMemory' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Will result in the following verified file:
+
+<!-- snippet: InMemoryRecordingTests.RecordingInMemory.verified.txt -->
+<a id='snippet-InMemoryRecordingTests.RecordingInMemory.verified.txt'></a>
+```txt
+{
+  ef: [
+    {
+      Type: SaveChangesAsync,
+      Added: {
+        Company: {
+          Id: 1,
+          Name: Title
+        }
+      }
+    },
+    {
+      Type: QueryAsync,
+      Text:
+DbSet<Company>()
+    .Where(_ => _.Name == "Title")
+    }
+  ]
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.RecordingInMemory.verified.txt#L1-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-InMemoryRecordingTests.RecordingInMemory.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Queries compiled with `EF.CompileQuery` or `EF.CompileAsyncQuery` are not recorded, since after being compiled they execute without passing through the query compiler.
+
+
 ## ChangeTracking
 
 Added, deleted, and Modified entities can be verified by performing changes on a DbContext and then verifying the instance of ChangeTracking. This approach leverages the [EntityFramework ChangeTracker](https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker).

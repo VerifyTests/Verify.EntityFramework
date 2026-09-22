@@ -1,0 +1,10 @@
+﻿{
+  ef: {
+    Type: QueryAsync,
+    Text:
+DbSet<Company>()
+    .Include(_ => _.Employees)
+    .OrderBy(_ => _.Name)
+    .ThenBy(_ => _.Id)
+  }
+}

@@ -1,0 +1,16 @@
+﻿{
+  ef: [
+    {
+      Type: QueryAsync,
+      Text:
+DbSet<Company>()
+    .Count()
+    },
+    {
+      Type: QueryAsync,
+      Text:
+DbSet<Company>()
+    .Any(_ => _.Name == "Title")
+    }
+  ]
+}

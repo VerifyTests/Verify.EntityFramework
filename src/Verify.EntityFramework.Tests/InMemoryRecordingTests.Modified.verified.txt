@@ -1,0 +1,22 @@
+﻿{
+  ef: [
+    {
+      Type: QueryAsync,
+      Text:
+DbSet<Company>()
+    .Single()
+    },
+    {
+      Type: SaveChangesAsync,
+      Modified: {
+        Company: {
+          Id: 1,
+          Name: {
+            Original: Before,
+            Current: After
+          }
+        }
+      }
+    }
+  ]
+}

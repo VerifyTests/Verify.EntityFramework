@@ -51,6 +51,31 @@ public class RecordingDisabledTests
         Assert.That(Recording.Stop("theIdentifier"), Is.Empty);
     }
 
+    [Test]
+    public async Task InMemoryIsNotRecorded()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(InMemoryIsNotRecorded));
+        builder.EnableRecording();
+        await using var data = new SampleDbContext(builder.Options);
+
+        Recording.Start();
+
+        data.Add(
+            new Company
+            {
+                Id = 1,
+                Name = "Title"
+            });
+        await data.SaveChangesAsync();
+        await data
+            .Companies
+            .Where(_ => _.Name == "Title")
+            .ToListAsync();
+
+        Assert.That(Recording.Stop(), Is.Empty);
+    }
+
     // recordCommands only disables the recording interceptor, not the converters
     [Test]
     public async Task ConvertersAreStillRegistered()
