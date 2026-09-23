@@ -1,0 +1,11 @@
+﻿{
+  Modified: {
+    Parent: {
+      Id: 1,
+      Content: {
+        Original: before,
+        Current: after
+      }
+    }
+  }
+}
