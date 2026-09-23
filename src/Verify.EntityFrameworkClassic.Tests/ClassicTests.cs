@@ -236,6 +236,16 @@ public class ClassicTests
         await Verify(data.Companies.Where(_ => _.Content == content));
     }
 
+    // a null value was inlined as '', which reads as an empty string
+    [Test]
+    public async Task NullParameter()
+    {
+        using var database = await DbContextBuilder.GetDatabase("NullParameter");
+        var data = database.Context;
+        string? content = null;
+        await Verify(data.Companies.Where(_ => _.Content == content));
+    }
+
     static ClassicTests() =>
         sqlInstance = new(
             constructInstance: connection => new(connection),

@@ -26,6 +26,11 @@ static class QueryableSerializer<TEntity>
     // Invariant culture, so that the sql does not depend on the culture of the machine
     static string Inline(object? value)
     {
+        if (value is null or DBNull)
+        {
+            return "NULL";
+        }
+
         var text = Convert.ToString(value, CultureInfo.InvariantCulture)!;
         return $"'{text.Replace("'", "''")}'";
     }
