@@ -74,8 +74,14 @@ class LogCommandInterceptor(string? identifier) :
         Add(new SaveChangesEntry(type, entries.Select(_ => _.ToEntityEntry())));
     }
 
+    // Checks IsRecording first, since this runs for every command, and building a LogEntry copies the parameters
     void Add(string type, DbCommand command, CommandEndEventData data, Exception? exception = null)
     {
+        if (!IsRecording())
+        {
+            return;
+        }
+
         var context = data.Context;
         if (context != null &&
             context.IsRecordingDisabled())
