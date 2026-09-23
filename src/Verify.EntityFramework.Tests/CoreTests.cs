@@ -325,6 +325,42 @@ public class CoreTests
         await Verify(data.ChangeTracker);
     }
 
+    // the original value of a primitive collection is a snapshot copy, so it was never Equals to the current value
+    [Test]
+    public async Task UpdateEntityWithPrimitiveCollection()
+    {
+        var builder = new DbContextOptionsBuilder<CollectionDbContext>();
+        builder.UseInMemoryDatabase(nameof(UpdateEntityWithPrimitiveCollection));
+        await using var data = new CollectionDbContext(builder.Options);
+        data.Add(
+            new ItemWithLabels
+            {
+                Name = "before",
+                Labels = ["a", "b"]
+            });
+        await data.SaveChangesAsync();
+
+        var item = data.Items.Single();
+        data.Update(item)
+            .Entity.Name = "after";
+        await Verify(data.ChangeTracker);
+    }
+
+    public class CollectionDbContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        public DbSet<ItemWithLabels> Items { get; set; } = null!;
+    }
+
+    public class ItemWithLabels
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
+
+        public required string Name { get; set; }
+        public List<string> Labels { get; set; } = [];
+    }
+
     [Test]
     public async Task AllData()
     {

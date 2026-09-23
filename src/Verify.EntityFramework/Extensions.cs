@@ -13,19 +13,9 @@
                     return false;
                 }
 
-                var original = entry.OriginalValue;
-                var current = entry.CurrentValue;
-                if (ReferenceEquals(original, current))
-                {
-                    return false;
-                }
-
-                if (original is null)
-                {
-                    return true;
-                }
-
-                return !original.Equals(current);
+                // EF's comparer, since the original value of a collection is a snapshot copy
+                var comparer = entry.Metadata.GetValueComparer();
+                return !comparer.Equals(entry.OriginalValue, entry.CurrentValue);
             });
 
     public static IEnumerable<(string name, object? value)> FindPrimaryKeyValues(this EntityEntry entry)
