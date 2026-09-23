@@ -1,0 +1,4 @@
+﻿SELECT 
+    [Extent1].[Id] AS [Id]
+    FROM [dbo].[Companies] AS [Extent1]
+    WHERE N'Company1' = [Extent1].[Content]

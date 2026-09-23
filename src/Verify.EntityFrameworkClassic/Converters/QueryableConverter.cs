@@ -1,4 +1,4 @@
-﻿class QueryableConverter :
+class QueryableConverter :
     WriteOnlyJsonConverter
 {
     public override void Write(VerifyJsonWriter writer, object data)
@@ -9,11 +9,8 @@
 
     public static string QueryToSql(object data)
     {
-        var entityType = data
-            .GetType()
-            .GetGenericArguments()
-            .Single();
-        var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(entityType);
+        var elementType = FindElementType(data.GetType())!;
+        var queryableSerializer = typeof(QueryableSerializer<>).MakeGenericType(elementType);
         return (string) queryableSerializer.InvokeMember(
             name: "ToSql",
             invokeAttr: BindingFlags.InvokeMethod,
@@ -22,22 +19,26 @@
             args: [data])!;
     }
 
-    // Was IsQueryable(type), which bound to IsQueryable(object) and tested the Type itself, so was always false
-    public override bool CanConvert(Type type)
+    public override bool CanConvert(Type type) =>
+        FindElementType(type) != null;
+
+    // Only EF queries can be converted to sql, so any other IQueryable, for example from AsQueryable(), is left
+    // to be serialized as a collection
+    public static bool IsQueryable(object target) =>
+        FindElementType(target.GetType()) != null;
+
+    // DbSet<> derives from DbQuery<>
+    static Type? FindElementType(Type type)
     {
         for (var current = type; current != null; current = current.BaseType)
         {
             if (current.IsGenericType &&
                 current.GetGenericTypeDefinition() == typeof(DbQuery<>))
             {
-                // QueryableSerializer requires a reference type
-                return !current.GenericTypeArguments[0].IsValueType;
+                return current.GenericTypeArguments[0];
             }
         }
 
-        return false;
+        return null;
     }
-
-    public static bool IsQueryable(object target)
-        => target is IQueryable;
 }
