@@ -1,5 +1,5 @@
-﻿static class QueryableSerializer<TEntity>
-    where TEntity : class
+﻿// No class constraint, so that a scalar projection, for example Select(_ => _.Id), can be converted
+static class QueryableSerializer<TEntity>
 {
     public static string ToSql(IQueryable<TEntity> query)
     {

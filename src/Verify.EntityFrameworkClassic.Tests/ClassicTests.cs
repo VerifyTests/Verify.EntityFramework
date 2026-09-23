@@ -155,6 +155,44 @@ public class ClassicTests
             });
     }
 
+    // QueryableSerializer had a class constraint, so a scalar projection threw
+    [Test]
+    public async Task ScalarProjection()
+    {
+        using var database = await DbContextBuilder.GetDatabase("ScalarProjection");
+        var data = database.Context;
+        var queryable = data.Companies
+            .Where(_ => _.Content == "Company1")
+            .Select(_ => _.Id);
+        await Verify(queryable);
+    }
+
+    [Test]
+    public async Task NestedScalarProjection()
+    {
+        using var database = await DbContextBuilder.GetDatabase("NestedScalarProjection");
+        var data = database.Context;
+        var queryable = data.Companies
+            .Where(_ => _.Content == "Company1")
+            .Select(_ => _.Id);
+        await Verify(
+            new
+            {
+                queryable
+            });
+    }
+
+    // any IQueryable was treated as an EF query, so a non EF queryable threw
+    [Test]
+    public Task NonEfQueryable() =>
+        Verify(
+            new List<string>
+                {
+                    "a",
+                    "b"
+                }
+                .AsQueryable());
+
     static ClassicTests() =>
         sqlInstance = new(
             constructInstance: connection => new(connection),
