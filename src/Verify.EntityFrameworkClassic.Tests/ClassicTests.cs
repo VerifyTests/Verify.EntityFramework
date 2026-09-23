@@ -141,6 +141,20 @@ public class ClassicTests
 
     #endregion
 
+    // CanConvert was always false, so a nested queryable was executed and written as results
+    [Test]
+    public async Task NestedQueryable()
+    {
+        using var database = await DbContextBuilder.GetDatabase("NestedQueryable");
+        var data = database.Context;
+        var queryable = data.Companies.Where(_ => _.Content == "Company1");
+        await Verify(
+            new
+            {
+                queryable
+            });
+    }
+
     static ClassicTests() =>
         sqlInstance = new(
             constructInstance: connection => new(connection),
