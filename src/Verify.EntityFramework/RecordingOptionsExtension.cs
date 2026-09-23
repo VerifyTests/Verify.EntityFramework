@@ -14,12 +14,12 @@ class RecordingOptionsExtension(LogCommandInterceptor interceptor) :
 
     // Only replace the implementation that EF registers, so a library that replaces or decorates the service keeps
     // working. No registration means the provider services are applied after this extension, and TryAdd will then
-    // skip registering the default.
+    // skip registering the default. The last registration is checked, since it is the one that is resolved.
     static void ReplaceDefault<TService, TDefault, TReplacement>(IServiceCollection services)
         where TService : class
         where TReplacement : class, TService
     {
-        var descriptor = services.FirstOrDefault(_ => _.ServiceType == typeof(TService));
+        var descriptor = services.LastOrDefault(_ => _.ServiceType == typeof(TService));
         if (descriptor == null ||
             descriptor.ImplementationType == typeof(TDefault))
         {
