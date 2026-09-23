@@ -141,6 +141,12 @@ public static class VerifyEntityFramework
             {
                 yield return new(type.ClrType, navigation.Name);
             }
+
+            // many-to-many navigations are skip navigations, which GetNavigations does not include
+            foreach (var navigation in type.GetSkipNavigations())
+            {
+                yield return new(type.ClrType, navigation.Name);
+            }
         }
     }
 
