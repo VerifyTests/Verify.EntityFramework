@@ -1,0 +1,22 @@
+﻿[
+  {
+    Id: 1,
+    Title: post
+  },
+  {
+    Id: 1,
+    Label: a
+  },
+  {
+    Id: 2,
+    Label: b
+  },
+  {
+    PostsId: 1,
+    TagsId: 1
+  },
+  {
+    PostsId: 1,
+    TagsId: 2
+  }
+]

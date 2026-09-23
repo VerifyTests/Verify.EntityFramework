@@ -6,28 +6,70 @@ public static class VerifyEntityFramework
 
     public static async IAsyncEnumerable<object> AllData(this DbContext data)
     {
+        // A query for the root of a hierarchy already returns the derived entities
         foreach (var entityType in data
-                     .EntityTypes()
-                     .OrderBy(_ => _.Name)
-                     .Where(_ => !_.IsOwned()))
+                     .Model
+                     .GetEntityTypes()
+                     .Where(_ => !_.IsOwned() &&
+                                 _.BaseType == null)
+                     .OrderBy(_ => _.Name))
         {
-            var clrType = entityType.ClrType;
-            var set = data.Set(clrType);
-            var queryable = set.AsNoTracking(clrType);
-
-            IEnumerable<object> list = await queryable.ToListAsync();
-            var idProperty = clrType.GetProperty("Id", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            if (idProperty != null)
-            {
-                list = list.OrderBy(idProperty.GetValue);
-            }
-
+            var query = queryEntities.MakeGenericMethod(entityType.ClrType);
+            var list = await (Task<List<object>>) query.Invoke(null, [data, entityType])!;
             foreach (var entity in list)
             {
                 yield return entity;
             }
         }
+    }
+
+    static MethodInfo queryEntities = typeof(VerifyEntityFramework)
+        .GetMethod(nameof(QueryEntities), BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    static MethodInfo efProperty = typeof(EF)
+        .GetMethod(nameof(EF.Property))!;
+
+    static async Task<List<object>> QueryEntities<T>(DbContext data, IEntityType entityType)
+        where T : class
+    {
+        IQueryable<T> queryable;
+        // A shared-type entity, for example an implicit many-to-many join entity, can only be accessed by name
+        if (entityType.HasSharedClrType)
+        {
+            queryable = data.Set<T>(entityType.Name);
+        }
+        else
+        {
+            queryable = data.Set<T>();
+        }
+
+        queryable = queryable.AsNoTracking();
+
+        var key = entityType.FindPrimaryKey();
+        if (key != null)
+        {
+            var method = nameof(Queryable.OrderBy);
+            foreach (var property in key.Properties)
+            {
+                var parameter = Expression.Parameter(typeof(T));
+                var body = Expression.Call(
+                    efProperty.MakeGenericMethod(property.ClrType),
+                    parameter,
+                    Expression.Constant(property.Name));
+                var lambda = Expression.Lambda(body, parameter);
+                queryable = queryable.Provider.CreateQuery<T>(
+                    Expression.Call(
+                        typeof(Queryable),
+                        method,
+                        [typeof(T), property.ClrType],
+                        queryable.Expression,
+                        Expression.Quote(lambda)));
+                method = nameof(Queryable.ThenBy);
+            }
+        }
+
+        var list = await queryable.ToListAsync();
+        return [.. list];
     }
 
     public static void IgnoreNavigationProperties(this VerifySettings settings, DbContext context) =>
