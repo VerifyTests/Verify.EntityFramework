@@ -1,0 +1,17 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Parameters: {
+      @FirstName (String): name,
+      @Id (Int32): 1
+    },
+    Text:
+set implicit_transactions off;
+
+set nocount on;
+
+insert  into People (Id, First Name)
+values              (@Id, @FirstName)
+  }
+}
