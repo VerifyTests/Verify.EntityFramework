@@ -1,0 +1,13 @@
+﻿[
+  {
+    $type: AllDataTests.Dog,
+    Breed: lab,
+    Id: 1,
+    Name: rex
+  },
+  {
+    $type: AllDataTests.Animal,
+    Id: 2,
+    Name: generic
+  }
+]

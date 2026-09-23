@@ -1,30 +1,8 @@
 ﻿static class Extensions
 {
-    static MethodInfo setMethod = typeof(DbContext)
-        .GetMethod("Set", [])!;
-
-    static MethodInfo asNoTracking = typeof(EntityFrameworkQueryableExtensions).GetMethod("AsNoTracking")!;
-
-    public static IQueryable<object> AsNoTracking(this IQueryable<object> set, Type clrType)
-    {
-        var genericNoTracking = asNoTracking.MakeGenericMethod(clrType);
-        return (IQueryable<object>) genericNoTracking.Invoke(null, [set])!;
-    }
-
-    public static IQueryable<object> Set(this DbContext data, Type t) =>
-        (IQueryable<object>) setMethod
-            .MakeGenericMethod(t)
-            .Invoke(data, null)!;
-
     // same check as EF's IsInMemory(), without a dependency on Microsoft.EntityFrameworkCore.InMemory
     public static bool IsInMemory(this DbContext data) =>
         data.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
-
-    public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data) =>
-        data
-            .Model
-            .GetEntityTypes()
-            .OrderBy(_ => _.Name);
 
     public static IEnumerable<PropertyEntry> ChangedProperties(this EntityEntry entry) =>
         entry.Properties

@@ -1,0 +1,14 @@
+﻿[
+  {
+    GroupKey: 1,
+    UserKey: 1
+  },
+  {
+    GroupKey: 1,
+    UserKey: 2
+  },
+  {
+    GroupKey: 2,
+    UserKey: 1
+  }
+]
