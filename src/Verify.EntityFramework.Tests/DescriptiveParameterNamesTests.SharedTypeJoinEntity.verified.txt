@@ -1,0 +1,31 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: true,
+    Parameters: {
+      @Id (Int32): 1,
+      @Id1 (Int32): 2,
+      @Label (String): a,
+      @PostsId (Int32): 1,
+      @PostTagPostsId (Int32): 1,
+      @PostTagTagsId (Int32): 2,
+      @TagId (Int32): 1,
+      @TagLabel (String): b,
+      @TagsId (Int32): 1,
+      @Title (String): post
+    },
+    Text:
+set nocount on;
+
+insert  into Posts (Id, Title)
+values             (@Id, @Title);
+
+insert  into Tags (Id, Label)
+values            (@TagId, @Label),
+                  (@Id1, @TagLabel);
+
+insert  into PostTag (PostsId, TagsId)
+values               (@PostsId, @TagsId),
+                     (@PostTagPostsId, @PostTagTagsId)
+  }
+}

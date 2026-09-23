@@ -14,7 +14,7 @@ class DescriptiveModificationCommand(in ModificationCommandParameters parameters
     IColumnModification CreateDescriptiveColumnModification(in ColumnModificationParameters parameters, DescriptiveParameterNameGenerator generator)
     {
         var columnName = parameters.ColumnName;
-        var entityName = parameters.Entry?.EntityType.ClrType.Name ?? "";
+        var entityName = parameters.Entry?.EntityType.ShortName() ?? "";
         var original = parameters.GenerateParameterName!;
 
         var modified = parameters with

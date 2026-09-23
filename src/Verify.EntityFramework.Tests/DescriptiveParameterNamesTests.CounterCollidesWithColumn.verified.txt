@@ -1,0 +1,26 @@
+﻿{
+  ef: {
+    Type: ReaderExecutedAsync,
+    HasTransaction: false,
+    Parameters: {
+      @ContactId (Int32): 2,
+      @ContactPhone (String): c,
+      @ContactPhone2 (String): d,
+      @Id (Int32): 1,
+      @Id1 (Int32): 3,
+      @Phone (String): a,
+      @Phone1 (String): e,
+      @Phone2 (String): b,
+      @Phone21 (String): f
+    },
+    Text:
+set implicit_transactions off;
+
+set nocount on;
+
+insert  into Contacts (Id, Phone, Phone2)
+values                (@Id, @Phone, @Phone2),
+                      (@ContactId, @ContactPhone, @ContactPhone2),
+                      (@Id1, @Phone1, @Phone21)
+  }
+}
