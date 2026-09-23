@@ -1,0 +1,5 @@
+﻿SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[Content] AS [Content]
+    FROM [dbo].[Companies] AS [Extent1]
+    WHERE ([Extent1].[Content] = 'v0') OR (([Extent1].[Content] IS NULL) AND ('v0' IS NULL)) OR ([Extent1].[Content] = 'v1') OR (([Extent1].[Content] IS NULL) AND ('v1' IS NULL)) OR ([Extent1].[Content] = 'v2') OR (([Extent1].[Content] IS NULL) AND ('v2' IS NULL)) OR ([Extent1].[Content] = 'v3') OR (([Extent1].[Content] IS NULL) AND ('v3' IS NULL)) OR ([Extent1].[Content] = 'v4') OR (([Extent1].[Content] IS NULL) AND ('v4' IS NULL)) OR ([Extent1].[Content] = 'v5') OR (([Extent1].[Content] IS NULL) AND ('v5' IS NULL)) OR ([Extent1].[Content] = 'v6') OR (([Extent1].[Content] IS NULL) AND ('v6' IS NULL)) OR ([Extent1].[Content] = 'v7') OR (([Extent1].[Content] IS NULL) AND ('v7' IS NULL)) OR ([Extent1].[Content] = 'v8') OR (([Extent1].[Content] IS NULL) AND ('v8' IS NULL)) OR ([Extent1].[Content] = 'v9') OR (([Extent1].[Content] IS NULL) AND ('v9' IS NULL)) OR ([Extent1].[Content] = 'v10') OR (([Extent1].[Content] IS NULL) AND ('v10' IS NULL))

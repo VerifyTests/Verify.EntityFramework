@@ -5,7 +5,29 @@ static class QueryableSerializer<TEntity>
     {
         var linq = GetObjectQuery((DbQuery<TEntity>) query);
         var sql = linq.ToTraceString();
-        return linq.Parameters.Aggregate(sql, (current, p) => current.Replace("@" + p.Name, "\'" + p.Value + "\'"));
+        var parameters = linq.Parameters.ToDictionary(_ => _.Name, _ => _.Value);
+
+        // Match whole parameter names, since replacing @p__linq__1 would also replace the start of @p__linq__10
+        return parameterRegex.Replace(
+            sql,
+            match =>
+            {
+                if (parameters.TryGetValue(match.Groups[1].Value, out var value))
+                {
+                    return Inline(value);
+                }
+
+                return match.Value;
+            });
+    }
+
+    static Regex parameterRegex = new(@"@(\w+)");
+
+    // Invariant culture, so that the sql does not depend on the culture of the machine
+    static string Inline(object? value)
+    {
+        var text = Convert.ToString(value, CultureInfo.InvariantCulture)!;
+        return $"'{text.Replace("'", "''")}'";
     }
 
     static object Private(object obj, string privateField)
