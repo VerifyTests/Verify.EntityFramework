@@ -1,7 +1,7 @@
 ﻿{
   ef: [
     {
-      Type: SaveChanges,
+      Type: SaveChangesAsync,
       Added: {
         Company: {
           Id: 1,
