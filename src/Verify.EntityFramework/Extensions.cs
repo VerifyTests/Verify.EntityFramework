@@ -16,6 +16,10 @@
             .MakeGenericMethod(t)
             .Invoke(data, null)!;
 
+    // same check as EF's IsInMemory(), without a dependency on Microsoft.EntityFrameworkCore.InMemory
+    public static bool IsInMemory(this DbContext data) =>
+        data.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+
     public static IOrderedEnumerable<IEntityType> EntityTypes(this DbContext data) =>
         data
             .Model

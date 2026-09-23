@@ -1,0 +1,11 @@
+﻿{
+  ef: {
+    Type: SaveChangesAsync,
+    Added: {
+      Company: {
+        Id: 1,
+        Name: TITLE
+      }
+    }
+  }
+}

@@ -152,6 +152,7 @@ public static class VerifyEntityFramework
             converters.Add(new TrackerConverter());
             converters.Add(new QueryableConverter());
             converters.Add(new LogEntryConverter());
+            converters.Add(new SaveChangesEntryConverter());
         });
     }
     static bool IsSqlServer(this IModel model)
@@ -217,7 +218,9 @@ public static class VerifyEntityFramework
             return builder;
         }
 
-        return builder.AddInterceptors(new LogCommandInterceptor(identifier));
+        var interceptor = new LogCommandInterceptor(identifier);
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new RecordingOptionsExtension(interceptor));
+        return builder.AddInterceptors(interceptor);
     }
 
     static ConcurrentBag<Guid> recordingDisabledContextIds = [];

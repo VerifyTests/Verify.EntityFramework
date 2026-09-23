@@ -52,7 +52,7 @@ Tests use `[ModuleInitializer]` to call `VerifyEntityFramework.Initialize(model)
 
 1. **Converters** - Custom JSON converters inherit from `WriteOnlyJsonConverter<T>` and are registered globally via `VerifierSettings.RegisterFileConverter()` or added to `DefaultContractResolver.Converters`.
 
-2. **Recording System** - `LogCommandInterceptor` implements `DbCommandInterceptor` to capture SQL operations. Enable via `builder.EnableRecording()` on `DbContextOptionsBuilder`.
+2. **Recording System** - `LogCommandInterceptor` implements `DbCommandInterceptor` to capture SQL operations. Enable via `builder.EnableRecording()` on `DbContextOptionsBuilder`. The InMemory provider executes no `DbCommand`, so `EnableRecording()` also adds `RecordingOptionsExtension`, which swaps in `RecordingQueryCompiler` (records queries as LINQ expressions) and `RecordingStateManager` (records SaveChanges). Both only record for InMemory, and only replace EF's default implementations.
 
 3. **Queryable Verification** - When verifying an `IQueryable`, generates both a `.txt` file (query results) and a `.sql` file (the SQL query).
 

@@ -1,0 +1,25 @@
+﻿{
+  ef: [
+    {
+      Type: SaveChanges,
+      Added: {
+        Company: {
+          Id: 1,
+          Name: Title
+        }
+      }
+    },
+    {
+      Type: Query,
+      Text:
+DbSet<Company>()
+    .Where(_ => _.Name == "Title")
+    },
+    {
+      Type: Query,
+      Text:
+DbSet<Company>()
+    .Count()
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+﻿[
+  {
+    ef: {
+      Type: SaveChangesAsync,
+      Added: {
+        Company: {
+          Id: 1,
+          Name: Title
+        }
+      }
+    }
+  },
+  {
+    ef: {
+      Type: QueryAsync,
+      Text:
+DbSet<Company>()
+    .Where(_ => _.Name == "Title")
+    }
+  }
+]

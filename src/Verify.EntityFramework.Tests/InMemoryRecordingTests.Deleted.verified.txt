@@ -1,0 +1,13 @@
+﻿{
+  ef: {
+    Type: SaveChangesAsync,
+    Deleted: {
+      Company: {
+        Id: 1
+      },
+      Employee: {
+        Id: 2
+      }
+    }
+  }
+}

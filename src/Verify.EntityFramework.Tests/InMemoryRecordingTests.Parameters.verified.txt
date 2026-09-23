@@ -1,0 +1,18 @@
+﻿{
+  ef: {
+    Type: QueryAsync,
+    Parameters: {
+      @ids: [
+        1,
+        2,
+        4,
+        6
+      ],
+      @name: Title
+    },
+    Text:
+DbSet<Company>()
+    .Where(_ => _.Name == @name && @ids
+        .Contains(_.Id))
+  }
+}
