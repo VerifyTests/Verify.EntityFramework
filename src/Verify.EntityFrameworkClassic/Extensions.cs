@@ -23,9 +23,10 @@
         }
     }
 
+    // An entity loaded from the database can be a dynamic proxy, named for example Company_E9EC9F...
     public static string Name(this DbEntityEntry entry) =>
-        entry.Entity
-            .GetType()
+        ObjectContext
+            .GetObjectType(entry.Entity.GetType())
             .Name;
 
     public static IEnumerable<(string name, object value)> FindPrimaryKeyValues(this DbContext context, DbEntityEntry entry)
