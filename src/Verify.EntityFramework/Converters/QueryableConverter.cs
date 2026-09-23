@@ -29,11 +29,7 @@
 
     public static bool TryExecuteQueryable(IQueryable queryable, [NotNullWhen(true)] out IList? result)
     {
-        var entityType = queryable
-            .GetType()
-            .GenericTypeArguments.First();
-
-        var executeQueryable = executeQueryableDefinition.MakeGenericMethod(entityType);
+        var executeQueryable = executeQueryableDefinition.MakeGenericMethod(queryable.ElementType);
         try
         {
             result = (IList) executeQueryable.Invoke(null, [queryable])!;
@@ -60,13 +56,39 @@
 
     static bool IsQueryable(Type type)
     {
-        if (!type.IsGenericType)
+        if (type.IsGenericType)
         {
-            return false;
+            var genericType = type.GetGenericTypeDefinition();
+            if (genericType == typeof(EntityQueryable<>) ||
+                genericType == typeof(IQueryable<>))
+            {
+                return true;
+            }
         }
 
-        var genericType = type.GetGenericTypeDefinition();
-        return genericType == typeof(EntityQueryable<>) ||
-               genericType == typeof(IQueryable<>);
+        // Include and ThenInclude return IIncludableQueryable, implemented by a private type
+        if (type
+            .GetInterfaces()
+            .Any(_ => _.IsGenericType &&
+                      _.GetGenericTypeDefinition() == typeof(IIncludableQueryable<,>)))
+        {
+            return true;
+        }
+
+        return IsDbSet(type);
+    }
+
+    static bool IsDbSet(Type type)
+    {
+        for (var current = type; current != null; current = current.BaseType)
+        {
+            if (current.IsGenericType &&
+                current.GetGenericTypeDefinition() == typeof(DbSet<>))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

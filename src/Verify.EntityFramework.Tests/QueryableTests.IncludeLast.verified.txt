@@ -1,0 +1,20 @@
+﻿[
+  {
+    Id: 1,
+    Name: Company1,
+    Employees: [
+      {
+        Id: 2,
+        CompanyId: 1,
+        Name: Employee1,
+        Age: 25
+      },
+      {
+        Id: 3,
+        CompanyId: 1,
+        Name: Employee2,
+        Age: 31
+      }
+    ]
+  }
+]
