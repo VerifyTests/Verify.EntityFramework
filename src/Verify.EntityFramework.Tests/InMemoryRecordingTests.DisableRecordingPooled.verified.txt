@@ -1,0 +1,8 @@
+﻿{
+  ef: {
+    Type: QueryAsync,
+    Text:
+DbSet<Company>()
+    .Where(_ => _.Name == "Title")
+  }
+}

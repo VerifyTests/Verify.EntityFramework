@@ -265,13 +265,15 @@ public static class VerifyEntityFramework
         return builder.AddInterceptors(interceptor);
     }
 
-    static ConcurrentBag<Guid> recordingDisabledContextIds = [];
+    // Keyed on the whole ContextId, since a pooled context keeps its InstanceId and only increments its Lease.
+    // A dictionary, since ConcurrentBag.Contains copies the bag, under a lock, for every command.
+    static ConcurrentDictionary<DbContextId, byte> recordingDisabledContextIds = [];
 
     public static void DisableRecording<TContext>(this TContext context)
         where TContext : DbContext =>
-        recordingDisabledContextIds.Add(context.ContextId.InstanceId);
+        recordingDisabledContextIds.TryAdd(context.ContextId, 0);
 
     internal static bool IsRecordingDisabled<TContext>(this TContext context)
         where TContext : DbContext =>
-        recordingDisabledContextIds.Contains(context.ContextId.InstanceId);
+        recordingDisabledContextIds.ContainsKey(context.ContextId);
 }
