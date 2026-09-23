@@ -127,7 +127,7 @@ public static class VerifyEntityFramework
                 return modelNavigations;
             }
 
-            throw new("The `model` parameter must be provided wither on this method or on VerifyEntityFramework.Enable()");
+            throw new("The `model` parameter must be provided either on this method or on VerifyEntityFramework.Initialize()");
         }
 
         return model.GetNavigations();
