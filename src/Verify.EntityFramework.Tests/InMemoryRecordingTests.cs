@@ -240,6 +240,37 @@ public class InMemoryRecordingTests
         await Verify();
     }
 
+    // a pooled context keeps its InstanceId, so disabling was carried over to every later lease
+    [Test]
+    public async Task DisableRecordingPooled()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(DisableRecordingPooled));
+        builder.EnableRecording();
+        var factory = new PooledDbContextFactory<SampleDbContext>(builder.Options);
+
+        SampleDbContext disabled;
+        await using (var data = factory.CreateDbContext())
+        {
+            disabled = data;
+            data.DisableRecording();
+        }
+
+        await using (var data = factory.CreateDbContext())
+        {
+            Assert.That(data, Is.SameAs(disabled));
+
+            Recording.Start();
+
+            await data
+                .Companies
+                .Where(_ => _.Name == "Title")
+                .ToListAsync();
+
+            await Verify();
+        }
+    }
+
     [Test]
     public async Task Identifier()
     {
