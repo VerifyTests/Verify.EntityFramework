@@ -372,6 +372,50 @@ public class InMemoryRecordingTests
         Assert.That(data.GetService<IQueryCompiler>(), Is.TypeOf<QueryCompiler>());
     }
 
+    // a library that adds, rather than replaces, its IQueryCompiler leaves EF's default as the first registration.
+    // Replacing that would remove the default and put RecordingQueryCompiler last, displacing the library's.
+    [Test]
+    public void KeepsAddedQueryCompiler()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(KeepsAddedQueryCompiler));
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AddQueryCompilerExtension());
+        builder.EnableRecording();
+        using var data = new SampleDbContext(builder.Options);
+
+        Assert.That(data.GetService<IQueryCompiler>(), Is.TypeOf<QueryCompiler>());
+    }
+
+    class AddQueryCompilerExtension :
+        IDbContextOptionsExtension
+    {
+        public DbContextOptionsExtensionInfo Info => field ??= new ExtensionInfo(this);
+
+        public void ApplyServices(IServiceCollection services) =>
+            services.AddScoped<IQueryCompiler>(_ => ActivatorUtilities.CreateInstance<QueryCompiler>(_));
+
+        public void Validate(IDbContextOptions options)
+        {
+        }
+
+        class ExtensionInfo(IDbContextOptionsExtension extension) :
+            DbContextOptionsExtensionInfo(extension)
+        {
+            public override bool IsDatabaseProvider => false;
+
+            public override string LogFragment => "";
+
+            public override int GetServiceProviderHashCode() => 0;
+
+            public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) =>
+                other is ExtensionInfo;
+
+            public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
+            {
+            }
+        }
+    }
+
     // mimics a library, for example EntityFrameworkCore.Projectables, that replaces IQueryCompiler
     class QueryCompilerExtension :
         IDbContextOptionsExtension
