@@ -193,6 +193,49 @@ public class ClassicTests
                 }
                 .AsQueryable());
 
+    // replacing @p__linq__1 also replaced the start of @p__linq__10
+    [Test]
+    public async Task ElevenParameters()
+    {
+        using var database = await DbContextBuilder.GetDatabase("ElevenParameters");
+        var data = database.Context;
+        string v0 = "v0", v1 = "v1", v2 = "v2", v3 = "v3", v4 = "v4", v5 = "v5",
+            v6 = "v6", v7 = "v7", v8 = "v8", v9 = "v9", v10 = "v10";
+        var queryable = data.Companies.Where(_ =>
+            _.Content == v0 || _.Content == v1 || _.Content == v2 || _.Content == v3 ||
+            _.Content == v4 || _.Content == v5 || _.Content == v6 || _.Content == v7 ||
+            _.Content == v8 || _.Content == v9 || _.Content == v10);
+        await Verify(queryable);
+    }
+
+    // values were formatted with the current culture, so 30.5 was written as 30,5 on a de-DE machine
+    [Test]
+    public async Task ParameterCulture()
+    {
+        using var database = await DbContextBuilder.GetDatabase("ParameterCulture");
+        var data = database.Context;
+        var culture = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = new("de-DE");
+        try
+        {
+            var age = 30.5;
+            await Verify(data.Employees.Where(_ => _.Age > age));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = culture;
+        }
+    }
+
+    [Test]
+    public async Task ParameterWithQuote()
+    {
+        using var database = await DbContextBuilder.GetDatabase("ParameterWithQuote");
+        var data = database.Context;
+        var content = "O'Brien";
+        await Verify(data.Companies.Where(_ => _.Content == content));
+    }
+
     static ClassicTests() =>
         sqlInstance = new(
             constructInstance: connection => new(connection),

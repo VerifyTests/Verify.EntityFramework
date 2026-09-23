@@ -1,0 +1,7 @@
+﻿SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[CompanyId] AS [CompanyId], 
+    [Extent1].[Content] AS [Content], 
+    [Extent1].[Age] AS [Age]
+    FROM [dbo].[Employees] AS [Extent1]
+    WHERE  CAST( [Extent1].[Age] AS float) > '30.5'
