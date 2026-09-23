@@ -326,7 +326,7 @@ builder.UseInMemoryDatabase(databaseName);
 builder.EnableRecording();
 var data = new SampleDbContext(builder.Options);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingInMemory' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingInMemory' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: RecordingInMemory -->
@@ -349,7 +349,7 @@ await data
 
 await Verify();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L28-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingInMemory' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/InMemoryRecordingTests.cs#L23-L42' title='Snippet source file'>snippet source</a> | <a href='#snippet-RecordingInMemory' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Will result in the following verified file:
@@ -977,7 +977,7 @@ static SqlInstance<MyDbContext> sqlInstance = new(
     constructInstance: builder => new(builder.Options),
     buildTemplate: _ => Task.CompletedTask);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayInstance' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayInstance' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: MigrationReplayUsage -->
@@ -989,7 +989,7 @@ await database.Context.ReplayRecentMigrations(
     count: 5,
     afterEachMigration: ApplyDeploymentState);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L19-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayUsage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L16-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayUsage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The callback applies whatever the deployment applies after migrating.
@@ -1002,7 +1002,7 @@ The callback applies whatever the deployment applies after migrating.
 static Task ApplyDeploymentState(MyDbContext data) =>
     Task.CompletedTask;
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L30-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayAfterEach' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/MigrationReplay/MigrationReplaySnippets.cs#L27-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-MigrationReplayAfterEach' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Everything before the window is applied in a single hop, since those migrations are not under test. From there each migration is applied on its own, with the callback in between.

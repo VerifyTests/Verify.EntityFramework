@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
-
 public class TrackedDbContext(DbContextOptions options) :
     DbContext(options)
 {

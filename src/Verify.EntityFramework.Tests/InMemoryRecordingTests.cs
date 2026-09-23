@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class InMemoryRecordingTests
@@ -107,12 +102,14 @@ public class InMemoryRecordingTests
                 Id = 1,
                 Name = "Title"
             });
-        data.SaveChanges();
+        await data.SaveChangesAsync();
 
         data
             .Companies
             .Where(_ => _.Name == "Title")
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
             .ToList();
+        // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
         data.Companies.Count();
 
         await Verify();

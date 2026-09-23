@@ -1,6 +1,3 @@
-using EfLocalDb;
-using VerifyTests;
-
 // ReSharper disable UnusedParameter.Local
 
 public class MigrationReplaySnippets

@@ -1,8 +1,3 @@
-using System.Data;
-using EfLocalDb;
-using Microsoft.Data.SqlClient;
-using VerifyTests;
-
 /// <summary>
 /// The case the feature exists for. A migration that is valid against an empty database fails
 /// against a deployed one, because deployment state conflicts with the DDL.

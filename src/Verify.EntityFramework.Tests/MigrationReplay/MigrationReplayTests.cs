@@ -1,6 +1,3 @@
-using EfLocalDb;
-using VerifyTests;
-
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class MigrationReplayTests
