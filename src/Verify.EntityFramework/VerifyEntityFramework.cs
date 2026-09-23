@@ -139,6 +139,14 @@ public static class VerifyEntityFramework
         {
             foreach (var navigation in type.GetNavigations())
             {
+                // An owned type is part of its owner's data, like a complex property, so the navigation from the
+                // owner to it is kept. The navigation from an owned type back to its owner is still ignored.
+                if (navigation.ForeignKey.IsOwnership &&
+                    !navigation.IsOnDependent)
+                {
+                    continue;
+                }
+
                 yield return new(type.ClrType, navigation.Name);
             }
 

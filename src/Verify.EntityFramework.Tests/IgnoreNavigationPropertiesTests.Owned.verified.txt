@@ -1,0 +1,12 @@
+﻿{
+  Id: 1,
+  Name: shop,
+  Address: {
+    Street: main st
+  },
+  Phones: [
+    {
+      Number: 123
+    }
+  ]
+}
