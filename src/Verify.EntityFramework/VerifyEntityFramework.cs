@@ -173,7 +173,7 @@ public static class VerifyEntityFramework
 
     /// <param name="model">The <see cref="IModel" /> used to cache navigation property information. Can be null.</param>
     /// <param name="recordCommands">
-    /// Allow <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext})" /> to add the interceptor that
+    /// Allow <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext}, string?, bool?)" /> to add the interceptor that
     /// adds executed commands to <see cref="Recording" /> under the name `ef`. Disable when another package, for
     /// example Verify.SqlServer, already records the same commands.
     /// </param>
@@ -262,13 +262,27 @@ public static class VerifyEntityFramework
             .ReplaceService<IParameterNameGeneratorFactory, DescriptiveParameterFactory>()
             .ReplaceService<IModificationCommandFactory, DescriptiveParameterFactory>();
 
-    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
-        where TContext : DbContext
-        => builder.EnableRecording(null);
+    /// <summary>
+    /// The default for the `throwOnAntiPatterns` parameter of
+    /// <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext}, string?, bool?)" />.
+    /// </summary>
+    public static bool ThrowOnAntiPatternsByDefault { get; set; } = true;
 
-    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
+    /// <param name="identifier">Record under this identifier, so a test can start and stop its own recording.</param>
+    /// <param name="throwOnAntiPatterns">
+    /// Apply <see cref="ThrowOnAntiPatterns{TContext}" />. Defaults to <see cref="ThrowOnAntiPatternsByDefault" />.
+    /// </param>
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(
+        this DbContextOptionsBuilder<TContext> builder,
+        string? identifier = null,
+        bool? throwOnAntiPatterns = null)
         where TContext : DbContext
     {
+        if (throwOnAntiPatterns ?? ThrowOnAntiPatternsByDefault)
+        {
+            builder.ThrowOnAntiPatterns();
+        }
+
         if (!recordCommands)
         {
             return builder;
@@ -277,6 +291,21 @@ public static class VerifyEntityFramework
         var interceptor = new LogCommandInterceptor(identifier);
         ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new RecordingOptionsExtension(interceptor));
         return builder.AddInterceptors(interceptor);
+    }
+
+    /// <summary>
+    /// Throw when a query that uses an anti-pattern is compiled. Detects:
+    /// <list type="bullet">
+    ///   <item>An Include, ThenInclude, or tracking option that EF ignores, since the query returns no entity. For example it ends in a projection, or a scalar like Count.</item>
+    ///   <item>An ordering that EF discards, since it is followed by another OrderBy.</item>
+    ///   <item>The query anti-patterns that EF detects but only logs, for example Take without OrderBy. To allow one, call ConfigureWarnings after this method.</item>
+    /// </list>
+    /// </summary>
+    public static DbContextOptionsBuilder<TContext> ThrowOnAntiPatterns<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext
+    {
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AntiPatternOptionsExtension());
+        return builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
     }
 
     // Keyed on the whole ContextId, since a pooled context keeps its InstanceId and only increments its Lease.

@@ -61,10 +61,11 @@ Tests use `[ModuleInitializer]` to call `VerifyEntityFramework.Initialize(model)
 - `Initialize(IModel)` - Required setup, caches model metadata
 - `AllData()` - DbContext extension to enumerate all database entities
 - `IgnoreNavigationProperties()` - Exclude EF navigation properties from serialization
-- `EnableRecording()` - Enable SQL command recording on DbContextOptionsBuilder
+- `EnableRecording()` - Enable SQL command recording on DbContextOptionsBuilder. Also applies `ThrowOnAntiPatterns()` unless `throwOnAntiPatterns: false` or `VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false`
 - `DisableRecording()` - Stop recording for a specific context instance
 - `UseDescriptiveTableAliases()` - Replace single-char SQL table aliases with full table names via custom `ISqlAliasManagerFactory`
 - `ScrubInlineEfDateTimes()` - Sanitize DateTime values in SQL
+- `ThrowOnAntiPatterns()` - Adds `AntiPatternOptionsExtension`, which registers `AntiPatternInterceptor` (an `IQueryExpressionInterceptor`) as an `IInterceptor` service (not via `AddInterceptors`, which EF rejects with `UseInternalServiceProvider`). It throws when a query is compiled: `IgnoredEntityOperatorDetector` (Include/tracking options on a query that returns no entity) and `DiscardedOrderByDetector` (OrderBy followed by OrderBy). Also configures EF's own query warnings (`AntiPatternInterceptor.Warnings`) to throw
 
 ## Testing Conventions
 

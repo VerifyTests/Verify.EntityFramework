@@ -1,0 +1,34 @@
+// Registers AntiPatternInterceptor in the service provider that EF builds. AddInterceptors is not used, since EF
+// rejects a singleton interceptor added that way when the context uses UseInternalServiceProvider. EF does not apply
+// extension services to such a provider, so the interceptor is then skipped instead.
+// Since the extension is part of the service provider identity, a context without it never shares compiled queries
+// with one that has it.
+class AntiPatternOptionsExtension :
+    IDbContextOptionsExtension
+{
+    public DbContextOptionsExtensionInfo Info => field ??= new ExtensionInfo(this);
+
+    public void ApplyServices(IServiceCollection services) =>
+        services.AddSingleton<IInterceptor>(AntiPatternInterceptor.Instance);
+
+    public void Validate(IDbContextOptions options)
+    {
+    }
+
+    class ExtensionInfo(IDbContextOptionsExtension extension) :
+        DbContextOptionsExtensionInfo(extension)
+    {
+        public override bool IsDatabaseProvider => false;
+
+        public override string LogFragment => "";
+
+        public override int GetServiceProviderHashCode() => 0;
+
+        public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) =>
+            other is ExtensionInfo;
+
+        public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
+        {
+        }
+    }
+}

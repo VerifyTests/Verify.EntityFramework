@@ -905,6 +905,152 @@ If the entity-prefixed name itself collides with an existing column name (eg `Co
 To detect and correct missing `OrderBy` clauses in EF queries, use [EntityFramework.OrderBy](https://github.com/SimonCropp/EntityFramework.OrderBy).
 
 
+## Anti-patterns
+
+Queries that contain an anti-pattern throw when they are compiled. This works with any provider, and also applies to `ToQueryString()`, so verifying a [Queryable](#queryable) also throws.
+
+`EnableRecording()` enables this by default. For a context that does not use recording, use `ThrowOnAntiPatterns()`:
+
+<!-- snippet: ThrowOnAntiPatterns -->
+<a id='snippet-ThrowOnAntiPatterns'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseSqlServer(connectionString);
+builder.ThrowOnAntiPatterns();
+var data = new SampleDbContext(builder.Options);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A context that uses `UseInternalServiceProvider` is not checked, since EF does not apply extension services to that provider.
+
+
+### Opting out
+
+For a single context:
+
+<!-- snippet: EnableRecordingAllowAntiPatterns -->
+<a id='snippet-EnableRecordingAllowAntiPatterns'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(EnableRecordingOptOut));
+builder.EnableRecording(throwOnAntiPatterns: false);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L461-L467' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingAllowAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+For all contexts, at assembly load time and before any context is built:
+
+<!-- snippet: ThrowOnAntiPatternsByDefault -->
+<a id='snippet-ThrowOnAntiPatternsByDefault'></a>
+```cs
+VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
+```
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L24-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsByDefault' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+To allow one of the [EF warnings](#ef-warnings), use `ConfigureWarnings`. See below.
+
+
+### Ignored Include and tracking options
+
+EF only applies `Include` and `ThenInclude` to the entities returned by a query, and only tracks those entities. When a query ends in a projection, or a scalar like `Count` or `Any`, that returns no entity, EF silently ignores `Include`, `ThenInclude`, `AsNoTracking`, `AsNoTrackingWithIdentityResolution`, and `AsTracking`. A projection already loads the related data it references, so the ignored operator only misleads the reader.
+
+<!-- snippet: IgnoredInclude -->
+<a id='snippet-IgnoredInclude'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Include(_ => _.Employees)
+            .Select(_ => new
+            {
+                _.Name,
+                EmployeeCount = _.Employees.Count
+            })
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L26-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredInclude' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.IncludeThenProjection.verified.txt -->
+<a id='snippet-AntiPatternTests.IncludeThenProjection.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: Include(_ => _.Employees) is ignored, since it is followed by Select, which returns no entity. EF only applies Include to entities returned by the query, and a projection already loads the related data it references. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeThenProjection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeThenProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`.
+
+
+### Discarded OrderBy
+
+An `OrderBy` replaces any earlier ordering, so the earlier ordering is discarded. `ThenBy` was usually intended. An ordering followed by a row limiting operator, like `Take` or `Skip`, is kept. Queries inside lambdas, for example in a projection, are also checked.
+
+<!-- snippet: DiscardedOrderBy -->
+<a id='snippet-DiscardedOrderBy'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .OrderBy(_ => _.Name)
+            .OrderBy(_ => _.Id)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L325-L334' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscardedOrderBy' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.OrderByThenOrderBy.verified.txt -->
+<a id='snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Id). Use ThenBy(_ => _.Id) to add a secondary ordering, or remove the first ordering.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.OrderByThenOrderBy.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### EF warnings
+
+EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()` configures these to throw:
+
+ * `RelationalEventId.MultipleCollectionIncludeWarning`: more than one collection `Include` in a single query, which multiplies the rows returned. Use `AsSplitQuery()`, or configure a query splitting behavior.
+ * `CoreEventId.RowLimitingOperationWithoutOrderByWarning`: `Take` or `Skip` without `OrderBy`, which returns unpredictable rows.
+ * `CoreEventId.FirstWithoutOrderByAndFilterWarning`: `First` without `OrderBy` or a filter.
+ * `CoreEventId.DistinctAfterOrderByWithoutRowLimitingOperatorWarning`: `Distinct` after `OrderBy`, which erases the ordering.
+ * `CoreEventId.PossibleUnintendedReferenceComparisonWarning`: entities compared by reference.
+ * `CoreEventId.PossibleUnintendedCollectionNavigationNullComparisonWarning`: a collection navigation compared to null.
+ * `RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning`: `Equals` between values of different types.
+ * `CoreEventId.NavigationBaseIncludeIgnored`: an `Include` of a navigation that fix-up already populates.
+ * `CoreEventId.LazyLoadOnDisposedContextWarning` and `CoreEventId.DetachedLazyLoadingWarning`: lazy loading that does nothing.
+
+Some of these are only logged by relational providers.
+
+To allow one, call `ConfigureWarnings` after `ThrowOnAntiPatterns()`:
+
+<!-- snippet: AllowAntiPatternWarning -->
+<a id='snippet-AllowAntiPatternWarning'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseSqlServer(connectionString);
+builder.ThrowOnAntiPatterns();
+builder.ConfigureWarnings(_ =>
+    _.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L427-L435' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAntiPatternWarning' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ## ScrubInlineEfDateTimes
 
 In some scenarios EntityFrmaeowrk does not parameterise DateTimes. For example when querying [temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables).
@@ -955,7 +1101,7 @@ Reformatting can be disabled globally:
 ```cs
 VerifyEntityFramework.DisableSqlFormatting = true;
 ```
-<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L21-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L45-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When disabled, the SQL is written verbatim as produced by EntityFramework.

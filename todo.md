@@ -61,6 +61,11 @@ Status: **merged** (PR number), **pushed** (branch not yet merged), or open.
 
 ## Release notes
 
+Breaking changes:
+
+- `EnableRecording()` now throws on query anti-patterns (ignored `Include`/tracking options, discarded `OrderBy`, and EF's own query warnings such as `Take` without `OrderBy`). Opt out per context with `EnableRecording(throwOnAntiPatterns: false)`, or globally with `VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false`. `ThrowOnAntiPatterns()` enables it for contexts that do not record.
+- `EnableRecording()` and `EnableRecording(string? identifier)` merged into `EnableRecording(string? identifier = null, bool? throwOnAntiPatterns = null)`. Source compatible, not binary compatible.
+
 Behaviour changes that alter existing snapshots:
 
 - Owned types are kept by `IgnoreNavigationProperties`.
