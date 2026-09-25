@@ -1,0 +1,11 @@
+﻿[
+  {
+    Id: 1,
+    Model: with owner,
+    OwnerId: 1
+  },
+  {
+    Id: 2,
+    Model: without owner
+  }
+]

@@ -1,0 +1,16 @@
+﻿[
+  {
+    Id: 1,
+    Model: with owner,
+    OwnerId: 1,
+    Owner: {
+      Id: 1,
+      Name: owner,
+      Cars: []
+    }
+  },
+  {
+    Id: 2,
+    Model: without owner
+  }
+]

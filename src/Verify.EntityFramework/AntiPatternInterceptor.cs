@@ -28,6 +28,7 @@ class AntiPatternInterceptor :
         if (context != null)
         {
             IgnoredEntityOperatorDetector.ThrowIfIgnored(query, context.Model);
+            RedundantNullCheckDetector.ThrowIfRedundant(query, context.Model);
         }
 
         return query;

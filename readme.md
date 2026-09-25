@@ -1020,6 +1020,38 @@ Throws:
 <!-- endSnippet -->
 
 
+### Redundant null check
+
+EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.
+
+<!-- snippet: RedundantNullCheck -->
+<a id='snippet-RedundantNullCheck'></a>
+```cs
+await ThrowsTask(() =>
+        data.Cars
+            .Where(_ => _.Owner != null && _.Owner.Name == "owner")
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.cs#L46-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantNullCheck' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: NullableNavigationTests.RedundantNullCheck.verified.txt -->
+<a id='snippet-NullableNavigationTests.RedundantNullCheck.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null. Remove the null check.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.RedundantNullCheck.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-NullableNavigationTests.RedundantNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only comparisons with a non null constant using `==`, `>`, `>=`, `<`, or `<=` are detected. With `!=`, or a value that can be null, a null navigation can match, so the null check changes the result and is kept.
+
+
 ### EF warnings
 
 EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()` configures these to throw:
