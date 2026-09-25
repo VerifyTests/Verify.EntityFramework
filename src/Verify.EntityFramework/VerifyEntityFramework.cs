@@ -298,6 +298,7 @@ public static class VerifyEntityFramework
     /// <list type="bullet">
     ///   <item>An Include, ThenInclude, or tracking option that EF ignores, since the query returns no entity. For example it ends in a projection, or a scalar like Count.</item>
     ///   <item>An ordering that EF discards, since it is followed by another OrderBy.</item>
+    ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
     ///   <item>A redundant navigation null check, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`.</item>
     ///   <item>The query anti-patterns that EF detects but only logs, for example Take without OrderBy. To allow one, call ConfigureWarnings after this method.</item>
     /// </list>

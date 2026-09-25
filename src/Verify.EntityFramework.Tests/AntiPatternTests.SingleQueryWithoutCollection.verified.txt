@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: AsSingleQuery() is ignored, since the query loads no collection. Query splitting only changes how collection Includes and collections in a projection are loaded. Remove it.
+}

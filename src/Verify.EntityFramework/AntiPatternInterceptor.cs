@@ -29,6 +29,7 @@ class AntiPatternInterceptor :
         if (context != null)
         {
             IgnoredEntityOperatorDetector.ThrowIfIgnored(query, context.Model);
+            IgnoredQuerySplittingDetector.ThrowIfIgnored(query, context.Model);
         }
 
         return query;

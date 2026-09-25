@@ -473,6 +473,67 @@ public class AntiPatternTests
             .ToListAsync();
     }
 
+    [Test]
+    public async Task SplitQueryWithoutCollection()
+    {
+        await using var data = BuildSqlServerData();
+
+        #region IgnoredSplitQuery
+
+        await Throws(() =>
+                data.Employees
+                    .Include(_ => _.Company)
+                    .AsSplitQuery()
+                    .ToQueryString())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task SingleQueryWithoutCollection()
+    {
+        await using var data = BuildSqlServerData();
+        await Throws(() =>
+                data.Companies
+                    .AsSingleQuery()
+                    .Where(_ => _.Name != "")
+                    .ToQueryString())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public void SplitQueryKept()
+    {
+        using var data = BuildSqlServerData();
+
+        // a single collection is split from its parent
+        data.Companies
+            .Include(_ => _.Employees)
+            .AsSplitQuery()
+            .ToQueryString();
+
+        data.Employees
+            .Include(_ => _.Company)
+            .ThenInclude(_ => _.Employees)
+            .AsSplitQuery()
+            .ToQueryString();
+
+        data.Companies
+            .AsSplitQuery()
+            .Select(_ => new
+            {
+                _.Name,
+                Employees = _.Employees.ToList()
+            })
+            .ToQueryString();
+
+        data.Companies
+            .Include("Employees")
+            .AsSplitQuery()
+            .ToQueryString();
+    }
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();

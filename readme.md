@@ -989,6 +989,37 @@ Throws:
 The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`.
 
 
+### Ignored query splitting
+
+`AsSplitQuery()` and `AsSingleQuery()` only change how collections are loaded, by a collection `Include` or a collection in a projection. On a query that loads no collection they do nothing. A single collection is enough for `AsSplitQuery()` to have an effect, since it then avoids repeating the parent columns for each child row.
+
+<!-- snippet: IgnoredSplitQuery -->
+<a id='snippet-IgnoredSplitQuery'></a>
+```cs
+await Throws(() =>
+        data.Employees
+            .Include(_ => _.Company)
+            .AsSplitQuery()
+            .ToQueryString())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L481-L490' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.SplitQueryWithoutCollection.verified.txt -->
+<a id='snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: AsSplitQuery() is ignored, since the query loads no collection. Query splitting only changes how collection Includes and collections in a projection are loaded. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.SplitQueryWithoutCollection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ### Discarded OrderBy
 
 An `OrderBy` replaces any earlier ordering, so the earlier ordering is discarded. `ThenBy` was usually intended. An ordering followed by a row limiting operator, like `Take` or `Skip`, is kept. Queries inside lambdas, for example in a projection, are also checked.
