@@ -1,16 +1,18 @@
-using BinaryExpression = System.Linq.Expressions.BinaryExpression;
+﻿using BinaryExpression = System.Linq.Expressions.BinaryExpression;
 using UnaryExpression = System.Linq.Expressions.UnaryExpression;
 
-// In `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant. EF evaluates a member of a null
-// navigation as null, and null compared to a non null constant is false, so the comparison already excludes a
-// null navigation. This holds in any context, including negated, since the comparison is false exactly when the
-// check is. Only comparisons with a non null constant are matched: with != or a value that can be null, a null
-// navigation can match, so the check changes the result.
-class RedundantNullCheckDetector(IModel model) :
+// In `_.Owner != null && _.Owner.Name == "owner"` or `_.Age != null && _.Age > 5` the null check is redundant. EF
+// evaluates a member of a null navigation as null, and null compared to a non null constant is false, so the
+// comparison already excludes null. This holds in any context, including negated, since the comparison is false
+// exactly when the check is. Only comparisons with a non null constant are matched: with != or a value that can be
+// null, null can match, so the check changes the result.
+class RedundantNullCheckDetector :
     ExpressionVisitor
 {
-    public static void ThrowIfRedundant(Expression query, IModel model) =>
-        new RedundantNullCheckDetector(model).Visit(query);
+    static RedundantNullCheckDetector instance = new();
+
+    public static void ThrowIfRedundant(Expression query) =>
+        instance.Visit(query);
 
     protected override Expression VisitBinary(BinaryExpression node)
     {
@@ -20,16 +22,16 @@ class RedundantNullCheckDetector(IModel model) :
             AddConditions(node, conditions);
             foreach (var check in conditions)
             {
-                var navigation = CheckedNavigation(check);
-                if (navigation == null)
+                var value = CheckedValue(check);
+                if (value == null)
                 {
                     continue;
                 }
 
-                var comparison = conditions.FirstOrDefault(_ => ComparesMember(_, navigation));
+                var comparison = conditions.FirstOrDefault(_ => Compares(_, value));
                 if (comparison != null)
                 {
-                    throw new($"The null check `{Describe(check)}` is redundant, since `{Describe(comparison)}` is false when {navigation} is null. Remove the null check.");
+                    throw new($"The null check `{Describe(check)}` is redundant, since `{Describe(comparison)}` is false when {value} is null. Remove the null check.");
                 }
             }
         }
@@ -37,17 +39,24 @@ class RedundantNullCheckDetector(IModel model) :
         return base.VisitBinary(node);
     }
 
-    // BinaryExpression.ToString wraps the expression in parentheses
+    // without the parentheses and conversions that BinaryExpression.ToString adds
     static string Describe(Expression expression)
     {
-        var text = expression.ToString();
-        if (text.StartsWith('(') &&
-            text.EndsWith(')'))
+        if (expression is not BinaryExpression binary)
         {
-            return text[1..^1];
+            return expression.ToString();
         }
 
-        return text;
+        var operation = binary.NodeType switch
+        {
+            ExpressionType.Equal => "==",
+            ExpressionType.NotEqual => "!=",
+            ExpressionType.GreaterThan => ">",
+            ExpressionType.GreaterThanOrEqual => ">=",
+            ExpressionType.LessThan => "<",
+            _ => "<="
+        };
+        return $"{Describe(Unconvert(binary.Left))} {operation} {Describe(Unconvert(binary.Right))}";
     }
 
     static void AddConditions(Expression expression, List<Expression> conditions)
@@ -62,9 +71,15 @@ class RedundantNullCheckDetector(IModel model) :
         conditions.Add(expression);
     }
 
-    // the navigation in `navigation != null` or `null != navigation`
-    Expression? CheckedNavigation(Expression expression)
+    // the value in `value != null`, `null != value`, or `value.HasValue`
+    static Expression? CheckedValue(Expression expression)
     {
+        if (expression is MemberExpression { Member.Name: "HasValue", Expression: { } nullable } &&
+            IsNullable(nullable.Type))
+        {
+            return CheckableValue(nullable);
+        }
+
         if (expression is not BinaryExpression { NodeType: ExpressionType.NotEqual } binary)
         {
             return null;
@@ -72,27 +87,36 @@ class RedundantNullCheckDetector(IModel model) :
 
         var left = Unconvert(binary.Left);
         var right = Unconvert(binary.Right);
-        if (IsNull(right) &&
-            IsNavigation(left))
+        if (IsNull(right))
         {
-            return left;
+            return CheckableValue(left);
         }
 
-        if (IsNull(left) &&
-            IsNavigation(right))
+        if (IsNull(left))
         {
-            return right;
+            return CheckableValue(right);
         }
 
         return null;
     }
 
-    bool IsNavigation(Expression expression) =>
-        expression is MemberExpression &&
-        model.FindEntityType(expression.Type) != null;
+    // a member that can be null, for example a navigation, a string, or an int?
+    static Expression? CheckableValue(Expression expression)
+    {
+        if (expression is MemberExpression &&
+            (!expression.Type.IsValueType || IsNullable(expression.Type)))
+        {
+            return expression;
+        }
 
-    // `navigation.Member == constant`, or another comparison that is false when the member is null
-    static bool ComparesMember(Expression expression, Expression navigation)
+        return null;
+    }
+
+    static bool IsNullable(Type type) =>
+        Nullable.GetUnderlyingType(type) != null;
+
+    // `value == constant`, `value.Member == constant`, or another comparison that is false when value is null
+    static bool Compares(Expression expression, Expression value)
     {
         if (expression is not BinaryExpression
             {
@@ -108,17 +132,21 @@ class RedundantNullCheckDetector(IModel model) :
 
         var left = Unconvert(binary.Left);
         var right = Unconvert(binary.Right);
-        return (IsNonNullConstant(right) && IsMemberOf(left, navigation)) ||
-               (IsNonNullConstant(left) && IsMemberOf(right, navigation));
+        return (IsNonNullConstant(right) && IsValueOrMember(left, value)) ||
+               (IsNonNullConstant(left) && IsValueOrMember(right, value));
     }
 
-    // a member of the navigation, at any depth, for example navigation.Address.City
-    static bool IsMemberOf(Expression expression, Expression navigation)
+    static bool IsValueOrMember(Expression expression, Expression value) =>
+        ExpressionEqualityComparer.Instance.Equals(expression, value) ||
+        IsMemberOf(expression, value);
+
+    // a member of the value, at any depth, for example _.Owner.Address.City, or _.Age.Value
+    static bool IsMemberOf(Expression expression, Expression value)
     {
         while (expression is MemberExpression { Expression: not null } member)
         {
             expression = Unconvert(member.Expression);
-            if (ExpressionEqualityComparer.Instance.Equals(expression, navigation))
+            if (ExpressionEqualityComparer.Instance.Equals(expression, value))
             {
                 return true;
             }

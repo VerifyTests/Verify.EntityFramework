@@ -1024,6 +1024,20 @@ Throws:
 
 EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.
 
+The same applies to nullable scalars, like an `int?` or a `string`, including checks using `HasValue`:
+
+<!-- snippet: RedundantNullCheckNullableScalar -->
+<a id='snippet-RedundantNullCheckNullableScalar'></a>
+```cs
+await ThrowsTask(() =>
+        data.Cars
+            .Where(_ => _.OwnerId != null && _.OwnerId > 0)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.cs#L98-L106' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantNullCheckNullableScalar' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
 <!-- snippet: RedundantNullCheck -->
 <a id='snippet-RedundantNullCheck'></a>
 ```cs

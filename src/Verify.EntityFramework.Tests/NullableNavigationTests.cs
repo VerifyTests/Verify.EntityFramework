@@ -91,6 +91,56 @@ public class NullableNavigationTests
     }
 
     [Test]
+    public async Task RedundantNullCheckNullableScalar()
+    {
+        await using var data = await BuildData(nameof(RedundantNullCheckNullableScalar));
+
+        #region RedundantNullCheckNullableScalar
+
+        await ThrowsTask(() =>
+                data.Cars
+                    .Where(_ => _.OwnerId != null && _.OwnerId > 0)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task RedundantNullCheckHasValue()
+    {
+        await using var data = await BuildData(nameof(RedundantNullCheckHasValue));
+        await ThrowsTask(() =>
+                data.Cars
+                    .Where(_ => _.OwnerId.HasValue && _.OwnerId.Value == 1)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task RedundantNullCheckString()
+    {
+        await using var data = await BuildData(nameof(RedundantNullCheckString));
+        await ThrowsTask(() =>
+                data.Cars
+                    .Where(_ => _.Model != null && _.Model == "with owner")
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    // a null OwnerId matches `!=`, so the check changes the result
+    [Test]
+    public async Task NullableScalarCheckKeptForNotEqual()
+    {
+        await using var data = await BuildData(nameof(NullableScalarCheckKeptForNotEqual));
+
+        var cars = await data.Cars
+            .Where(_ => _.OwnerId != null && _.OwnerId != 2)
+            .ToListAsync();
+        Assert.That(cars, Has.Count.EqualTo(1));
+    }
+
+    [Test]
     public async Task AllData()
     {
         await using var data = await BuildData(nameof(AllData));

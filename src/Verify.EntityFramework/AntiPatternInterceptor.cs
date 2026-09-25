@@ -23,12 +23,12 @@ class AntiPatternInterceptor :
     public Expression QueryCompilationStarting(Expression query, QueryExpressionEventData data)
     {
         DiscardedOrderByDetector.ThrowIfDiscarded(query);
+        RedundantNullCheckDetector.ThrowIfRedundant(query);
 
         var context = data.Context;
         if (context != null)
         {
             IgnoredEntityOperatorDetector.ThrowIfIgnored(query, context.Model);
-            RedundantNullCheckDetector.ThrowIfRedundant(query, context.Model);
         }
 
         return query;
