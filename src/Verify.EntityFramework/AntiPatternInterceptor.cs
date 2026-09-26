@@ -29,7 +29,6 @@ class AntiPatternInterceptor :
         DiscardedOrderByDetector.ThrowIfDiscarded(query);
         RedundantNullCheckDetector.ThrowIfRedundant(query);
         CountComparisonDetector.ThrowIfCountCompared(query);
-        CaseConversionDetector.ThrowIfColumnConverted(query);
 
         var context = data.Context;
         if (context != null)
@@ -37,6 +36,12 @@ class AntiPatternInterceptor :
             IgnoredEntityOperatorDetector.ThrowIfIgnored(query, context.Model);
             IgnoredQuerySplittingDetector.ThrowIfIgnored(query, context.Model);
             RedundantDistinctDetector.ThrowIfRedundant(query, context.Model);
+
+            var options = context.GetService<IDbContextOptions>().FindExtension<AntiPatternOptionsExtension>()?.Options;
+            if (options is { ThrowOnColumnCaseConversion: true })
+            {
+                CaseConversionDetector.ThrowIfColumnConverted(query);
+            }
         }
 
         return query;

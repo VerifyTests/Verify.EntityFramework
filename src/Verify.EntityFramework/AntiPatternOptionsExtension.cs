@@ -3,8 +3,9 @@
 // extension services to such a provider, so the interceptor is then skipped instead.
 // Since the extension is part of the service provider identity, a context without it never shares compiled queries
 // with one that has it.
-// The options are read from each context's options at runtime, so contexts with different options can share a
-// service provider.
+// The runtime options are read from each context's options, so contexts that differ only in those share a service
+// provider. An option checked while a query is compiled is part of the service provider identity, since compiled
+// queries are cached per service provider, and a query compiled without the check would never be checked.
 class AntiPatternOptionsExtension(AntiPatternOptions options) :
     IDbContextOptionsExtension
 {
@@ -32,10 +33,14 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
 
         public override string LogFragment => "";
 
-        public override int GetServiceProviderHashCode() => 0;
+        bool ColumnCaseConversion => ((AntiPatternOptionsExtension) Extension).Options.ThrowOnColumnCaseConversion;
+
+        public override int GetServiceProviderHashCode() =>
+            ColumnCaseConversion.GetHashCode();
 
         public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) =>
-            other is ExtensionInfo;
+            other is ExtensionInfo info &&
+            info.ColumnCaseConversion == ColumnCaseConversion;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
         {

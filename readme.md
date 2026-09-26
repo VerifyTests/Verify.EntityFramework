@@ -1145,7 +1145,19 @@ Only sources that return each entity once are detected: an entity set, or a coll
 
 ### Case conversion of a column
 
-`ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too:
+`ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too.
+
+This check is opt in, since whether the conversion is needed depends on the column's collation, and many databases are case sensitive by default:
+
+<!-- snippet: ThrowOnColumnCaseConversion -->
+<a id='snippet-ThrowOnColumnCaseConversion'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(databaseName);
+builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L892-L898' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 <!-- snippet: ToLowerInWhere -->
 <a id='snippet-ToLowerInWhere'></a>

@@ -827,7 +827,7 @@ public class AntiPatternTests
     [Test]
     public async Task ToLowerInWhere()
     {
-        await using var data = BuildData();
+        await using var data = BuildCaseConversionData();
 
         #region ToLowerInWhere
 
@@ -843,7 +843,7 @@ public class AntiPatternTests
     [Test]
     public async Task ToUpperInvariantInOrderBy()
     {
-        await using var data = BuildData();
+        await using var data = BuildCaseConversionData();
         await ThrowsTask(() =>
                 data.Companies
                     .OrderBy(_ => _.Name.ToUpperInvariant())
@@ -854,7 +854,7 @@ public class AntiPatternTests
     [Test]
     public async Task ToLowerInNestedPredicate()
     {
-        await using var data = BuildData();
+        await using var data = BuildCaseConversionData();
         Assert.ThrowsAsync<Exception>(() =>
             data.Companies
                 .Where(_ => _.Employees.Any(employee => employee.Company.Name.ToLower() == "company1"))
@@ -864,7 +864,7 @@ public class AntiPatternTests
     [Test]
     public async Task CaseConversionKept()
     {
-        await using var data = BuildData();
+        await using var data = BuildCaseConversionData();
 
         // a variable is sent as a parameter
         var name = "Company1";
@@ -876,6 +876,28 @@ public class AntiPatternTests
         await data.Companies
             .Select(_ => _.Name.ToUpper())
             .ToListAsync();
+    }
+
+    [Test]
+    public async Task CaseConversionNotEnabled()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .Where(_ => _.Name.ToLower() == "company1")
+            .ToListAsync();
+    }
+
+    static SampleDbContext BuildCaseConversionData([CallerMemberName] string databaseName = "")
+    {
+        #region ThrowOnColumnCaseConversion
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(databaseName);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
+
+        #endregion
+
+        return new(builder.Options);
     }
 
 #pragma warning restore CA1862

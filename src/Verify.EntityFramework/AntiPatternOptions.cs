@@ -1,7 +1,7 @@
-namespace VerifyTests;
+﻿namespace VerifyTests;
 
 /// <summary>
-/// Opt in checks for anti-patterns that are only visible while a context runs. Each is off by default.
+/// Opt in anti-pattern checks. Each is off by default.
 /// </summary>
 public sealed class AntiPatternOptions
 {
@@ -55,6 +55,14 @@ public sealed class AntiPatternOptions
     /// AsNoTracking would have avoided the tracking cost. Not checked for pooled contexts, which are not disposed.
     /// </summary>
     public bool ThrowOnUnmodifiedTracking { get; set; }
+
+    /// <summary>
+    /// Throw when ToLower, ToUpper, ToLowerInvariant, or ToUpperInvariant is called on a column in a filter, ordering,
+    /// join, or predicate, which stops the database using an index on it. Opt in, since whether the conversion is
+    /// needed depends on the column's collation: SQL Server's default is case insensitive, but many databases are case
+    /// sensitive.
+    /// </summary>
+    public bool ThrowOnColumnCaseConversion { get; set; }
 
     internal AntiPatternOptions Clone() =>
         (AntiPatternOptions) MemberwiseClone();
