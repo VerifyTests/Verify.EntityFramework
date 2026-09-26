@@ -209,6 +209,7 @@ public static class VerifyEntityFramework
             converters.Add(new QueryableConverter());
             converters.Add(new LogEntryConverter());
             converters.Add(new SaveChangesEntryConverter());
+            converters.Add(new QueryEntryConverter());
         });
     }
     static bool IsSqlServer(this IModel model)
