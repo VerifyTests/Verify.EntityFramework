@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: `_.Employees.Count() > 0` counts every row, when only whether one exists is needed. Use `_.Employees.Any()`, which stops at the first.
+}

@@ -622,6 +622,110 @@ public class AntiPatternTests
         public string? City { get; set; }
     }
 
+    [Test]
+    public async Task OrderByThenCount()
+    {
+        await using var data = BuildData();
+
+        #region OrderByThenCount
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => _.Name)
+                    .CountAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task OrderByThenWhereThenAny()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => _.Name)
+                    .Where(_ => _.Name != "")
+                    .AnyAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task OrderByThenCountInProjection()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .Select(_ => new
+                    {
+                        _.Name,
+                        Count = _.Employees
+                            .OrderBy(_ => _.Age)
+                            .Count()
+                    })
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    // the ordering selects which rows Take counts
+    [Test]
+    public async Task OrderByThenTakeThenCount()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .OrderBy(_ => _.Name)
+            .Take(10)
+            .CountAsync();
+    }
+
+    [Test]
+    public async Task CountGreaterThanZero()
+    {
+        await using var data = BuildData();
+
+        #region CountGreaterThanZero
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .Where(_ => _.Employees.Count() > 0)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task CountEqualsZero()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .Where(_ => _.Employees.Count(_ => _.Age > 30) == 0)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task CountPropertyReversed()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .Where(_ => 1 <= _.Employees.Count)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    // the count itself is needed
+    [Test]
+    public async Task CountComparedToOtherValue()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .Where(_ => _.Employees.Count() > 1 && _.Employees.Count >= 2)
+            .ToListAsync();
+    }
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();

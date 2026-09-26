@@ -1,5 +1,6 @@
-// An OrderBy replaces any earlier ordering, unless a row limiting operator, like Take, is between them.
-// ThenBy was usually intended. Checks every query in the expression, including those inside lambdas.
+﻿// An OrderBy replaces any earlier ordering, unless a row limiting operator, like Take, is between them.
+// ThenBy was usually intended. An operator whose result does not depend on order, like Count or Any, also discards
+// the ordering. Checks every query in the expression, including those inside lambdas.
 class DiscardedOrderByDetector :
     ExpressionVisitor
 {
@@ -16,6 +17,14 @@ class DiscardedOrderByDetector :
             if (discarded != null)
             {
                 throw new($"{Describe(discarded)} is discarded, since it is followed by {node.Describe()}. Use {ThenBy(node)} to add a secondary ordering, or remove the first ordering.");
+            }
+        }
+        else if (IsOrderIndependent(node.Method))
+        {
+            var discarded = FindOrdering(node.Arguments[0]);
+            if (discarded != null)
+            {
+                throw new($"{Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, whose result does not depend on order. Remove the ordering.");
             }
         }
 
@@ -97,6 +106,19 @@ class DiscardedOrderByDetector :
          method.Name is
              nameof(Queryable.ThenBy) or
              nameof(Queryable.ThenByDescending));
+
+    static bool IsOrderIndependent(MethodInfo method) =>
+        IsLinq(method) &&
+        method.Name is
+            nameof(Queryable.Count) or
+            nameof(Queryable.LongCount) or
+            nameof(Queryable.Any) or
+            nameof(Queryable.All) or
+            nameof(Queryable.Contains) or
+            nameof(Queryable.Sum) or
+            nameof(Queryable.Average) or
+            nameof(Queryable.Min) or
+            nameof(Queryable.Max);
 
     static bool IsRowLimiting(MethodInfo method) =>
         IsLinq(method) &&
