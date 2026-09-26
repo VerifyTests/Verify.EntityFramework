@@ -104,8 +104,7 @@ class RedundantDistinctDetector(IModel model) :
     // the name of the member in `parameter.Member` or `EF.Property(parameter, "Member")`
     static string? MemberOf(Expression expression, ParameterExpression parameter)
     {
-        if (expression is MemberExpression member &&
-            member.Expression != null &&
+        if (expression is MemberExpression {Expression: not null} member &&
             Unconvert(member.Expression) == parameter)
         {
             return member.Member.Name;

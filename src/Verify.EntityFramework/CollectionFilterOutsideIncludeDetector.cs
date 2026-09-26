@@ -55,8 +55,7 @@ static class CollectionFilterOutsideIncludeDetector
     // filtered Include already limits what it loads, so is not matched.
     static string? IncludedCollection(MethodCallExpression include)
     {
-        if (include.Arguments[1].Unquote() is not LambdaExpression lambda ||
-            lambda.Body is not MemberExpression member ||
+        if (include.Arguments[1].Unquote() is not LambdaExpression {Body: MemberExpression member} lambda ||
             member.Expression != lambda.Parameters[0] ||
             member.Type == typeof(string) ||
             !typeof(IEnumerable).IsAssignableFrom(member.Type))

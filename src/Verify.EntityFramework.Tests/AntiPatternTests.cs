@@ -3,6 +3,7 @@
 public class AntiPatternTests
 {
     // ReSharper disable once UnusedVariable
+    // ReSharper disable once UnusedParameter.Local
     static void Build(string databaseName)
     {
         #region ThrowOnAntiPatterns

@@ -61,26 +61,37 @@ class RedundantNullCheckDetector :
 
     static void AddConditions(Expression expression, List<Expression> conditions)
     {
-        if (expression is BinaryExpression { NodeType: ExpressionType.AndAlso } binary)
+        while (true)
         {
-            AddConditions(binary.Left, conditions);
-            AddConditions(binary.Right, conditions);
-            return;
-        }
+            if (expression is BinaryExpression {NodeType: ExpressionType.AndAlso} binary)
+            {
+                AddConditions(binary.Left, conditions);
+                expression = binary.Right;
+                continue;
+            }
 
-        conditions.Add(expression);
+            conditions.Add(expression);
+            break;
+        }
     }
 
     // the value in `value != null`, `null != value`, or `value.HasValue`
     static Expression? CheckedValue(Expression expression)
     {
-        if (expression is MemberExpression { Member.Name: "HasValue", Expression: { } nullable } &&
+        if (expression is MemberExpression
+            {
+                Member.Name: "HasValue",
+                Expression: { } nullable
+            } &&
             IsNullable(nullable.Type))
         {
             return CheckableValue(nullable);
         }
 
-        if (expression is not BinaryExpression { NodeType: ExpressionType.NotEqual } binary)
+        if (expression is not BinaryExpression
+            {
+                NodeType: ExpressionType.NotEqual
+            } binary)
         {
             return null;
         }
@@ -163,7 +174,10 @@ class RedundantNullCheckDetector :
 
     static Expression Unconvert(Expression expression)
     {
-        while (expression is UnaryExpression { NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked } unary)
+        while (expression is UnaryExpression
+               {
+                   NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked
+               } unary)
         {
             expression = unary.Operand;
         }

@@ -51,8 +51,7 @@ class GroupByKeyDetector :
     {
         var finder = new UseFinder(group);
         finder.Visit(body);
-        return finder.KeyUses > 0 &&
-               finder.OtherUses == 0;
+        return finder is {KeyUses: > 0, OtherUses: 0};
     }
 
     static bool Uses(Expression body, ParameterExpression parameter)
