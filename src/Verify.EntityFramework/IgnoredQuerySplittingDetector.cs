@@ -9,7 +9,12 @@ static class IgnoredQuerySplittingDetector
         MethodCallExpression? splitting = null;
         var finder = new CollectionFinder(model);
         var expression = query;
-        while (expression is MethodCallExpression { Method.IsStatic: true, Arguments.Count: > 0 } call)
+        while (expression is
+               MethodCallExpression
+               {
+                   Method.IsStatic: true,
+                   Arguments.Count: > 0
+               } call)
         {
             if (IsSplitting(call.Method))
             {

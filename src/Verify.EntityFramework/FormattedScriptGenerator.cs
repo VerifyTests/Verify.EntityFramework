@@ -18,13 +18,14 @@
 
         foreach (var orderBy in collector.Clauses)
         {
-            if (orderBy.OrderByElements.Count <= 1)
+            var orderByElements = orderBy.OrderByElements;
+            if (orderByElements.Count <= 1)
             {
                 continue;
             }
 
-            var elements = new List<string>(orderBy.OrderByElements.Count);
-            foreach (var element in orderBy.OrderByElements)
+            var elements = new List<string>(orderByElements.Count);
+            foreach (var element in orderByElements)
             {
                 generator.GenerateScript(element, out var text);
                 elements.Add(text);

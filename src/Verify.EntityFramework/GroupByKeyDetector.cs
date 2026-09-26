@@ -11,22 +11,37 @@ class GroupByKeyDetector :
 
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
-        if (IsLinq(node.Method))
+        var method = node.Method;
+        if (IsLinq(method))
         {
+            var arguments = node.Arguments;
             // GroupBy(source, key).Select(source, group => ...)
-            if (node.Method.Name == nameof(Queryable.Select) &&
-                node.Arguments[0] is MethodCallExpression { Method.Name: nameof(Queryable.GroupBy), Arguments.Count: 2 } groupBy &&
+            if (method.Name == nameof(Queryable.Select) &&
+                arguments[0] is
+                    MethodCallExpression
+                    {
+                        Method.Name: nameof(Queryable.GroupBy),
+                        Arguments.Count: 2
+                    } groupBy &&
                 IsLinq(groupBy.Method) &&
-                node.Arguments[1].Unquote() is LambdaExpression { Parameters.Count: 1 } selector &&
+                arguments[1].Unquote()
+                    is LambdaExpression
+                    {
+                        Parameters.Count: 1
+                    } selector &&
                 OnlyUsesKey(selector.Body, selector.Parameters[0]))
             {
                 Throw(groupBy);
             }
 
             // GroupBy(source, key, (key, elements) => ...)
-            if (node.Method.Name == nameof(Queryable.GroupBy) &&
-                node.Arguments.Count == 3 &&
-                node.Arguments[2].Unquote() is LambdaExpression { Parameters.Count: 2 } resultSelector &&
+            if (method.Name == nameof(Queryable.GroupBy) &&
+                arguments.Count == 3 &&
+                arguments[2].Unquote()
+                    is LambdaExpression
+                    {
+                        Parameters.Count: 2
+                    } resultSelector &&
                 !Uses(resultSelector.Body, resultSelector.Parameters[1]))
             {
                 Throw(node);
@@ -51,7 +66,11 @@ class GroupByKeyDetector :
     {
         var finder = new UseFinder(group);
         finder.Visit(body);
-        return finder is {KeyUses: > 0, OtherUses: 0};
+        return finder is
+        {
+            KeyUses: > 0,
+            OtherUses: 0
+        };
     }
 
     static bool Uses(Expression body, ParameterExpression parameter)

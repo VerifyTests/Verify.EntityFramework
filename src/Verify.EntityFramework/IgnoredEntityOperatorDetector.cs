@@ -12,7 +12,12 @@ static class IgnoredEntityOperatorDetector
         // the operators applied to the query, from the root outwards
         var calls = new List<MethodCallExpression>();
         var expression = query;
-        while (expression is MethodCallExpression { Method.IsStatic: true, Arguments.Count: > 0 } call)
+        while (expression is
+               MethodCallExpression
+               {
+                   Method.IsStatic: true,
+                   Arguments.Count: > 0
+               } call)
         {
             calls.Add(call);
             expression = call.Arguments[0];
@@ -97,8 +102,9 @@ static class IgnoredEntityOperatorDetector
 
     static bool ReturnsEntities(MethodCallExpression call, bool sourceReturnsEntities, IModel model)
     {
+        var arguments = call.Arguments;
         // operators like Where, OrderBy, Take, and First return elements of the source
-        if (ElementOrSelf(call.Type) == ElementOrSelf(call.Arguments[0].Type))
+        if (ElementOrSelf(call.Type) == ElementOrSelf(arguments[0].Type))
         {
             return sourceReturnsEntities;
         }
@@ -109,7 +115,7 @@ static class IgnoredEntityOperatorDetector
         }
 
         // a result selector, for example of Select or Join, can return an entity inside a new type
-        var selector = call.Arguments
+        var selector = arguments
             .Skip(1)
             .Select(_ => _.Unquote())
             .OfType<LambdaExpression>()
@@ -269,7 +275,10 @@ static class IgnoredEntityOperatorDetector
         {
             while (node is UnaryExpression
                    {
-                       NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked or ExpressionType.TypeAs
+                       NodeType:
+                       ExpressionType.Convert or
+                       ExpressionType.ConvertChecked or
+                       ExpressionType.TypeAs
                    } unary)
             {
                 node = unary.Operand;
