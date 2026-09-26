@@ -1112,6 +1112,11 @@ EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()
  * `RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning`: `Equals` between values of different types.
  * `CoreEventId.NavigationBaseIncludeIgnored`: an `Include` of a navigation that fix-up already populates.
  * `CoreEventId.LazyLoadOnDisposedContextWarning` and `CoreEventId.DetachedLazyLoadingWarning`: lazy loading that does nothing.
+ * `RelationalEventId.BoolWithDefaultWarning`: a `bool` property with a database-generated default and no sentinel value, for example `HasDefaultValueSql("1")`. EF treats `false` as unset, so it can never insert `false`.
+ * `RelationalEventId.ModelValidationKeyDefaultValueWarning`: a key property with a database default, which EF treats as unset when it has the CLR default value.
+ * `RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning`: an optional dependent, sharing a table, with no required property, so EF can not tell an instance with all null values from a missing one.
+
+The model warnings are logged when the model is built, which happens once per context type. If a context type is first used without `ThrowOnAntiPatterns()`, later contexts reuse that model and are not checked.
 
 Some of these are only logged by relational providers.
 

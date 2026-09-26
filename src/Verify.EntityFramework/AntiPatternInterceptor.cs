@@ -17,7 +17,11 @@ class AntiPatternInterceptor :
         RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning,
         CoreEventId.NavigationBaseIncludeIgnored,
         CoreEventId.LazyLoadOnDisposedContextWarning,
-        CoreEventId.DetachedLazyLoadingWarning
+        CoreEventId.DetachedLazyLoadingWarning,
+        // model anti-patterns, logged when the model is built
+        RelationalEventId.BoolWithDefaultWarning,
+        RelationalEventId.ModelValidationKeyDefaultValueWarning,
+        RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning
     ];
 
     public Expression QueryCompilationStarting(Expression query, QueryExpressionEventData data)

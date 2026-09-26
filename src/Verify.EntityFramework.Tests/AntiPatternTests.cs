@@ -534,6 +534,35 @@ public class AntiPatternTests
             .ToQueryString();
     }
 
+    // a model anti-pattern, logged when the model is built
+    [Test]
+    public async Task BoolWithDefault()
+    {
+        var builder = new DbContextOptionsBuilder<BoolWithDefaultContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        await using var data = new BoolWithDefaultContext(builder.Options);
+
+        await Throws(() => data.Model)
+            .IgnoreStackTrace();
+    }
+
+    class BoolWithDefaultContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        protected override void OnModelCreating(ModelBuilder model) =>
+            model
+                .Entity<Flagged>()
+                .Property(_ => _.Enabled)
+                .HasDefaultValueSql("1");
+    }
+
+    class Flagged
+    {
+        public int Id { get; set; }
+        public bool Enabled { get; set; }
+    }
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
