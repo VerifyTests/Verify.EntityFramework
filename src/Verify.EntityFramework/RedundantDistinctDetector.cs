@@ -32,12 +32,19 @@ class RedundantDistinctDetector(IModel model) :
     {
         var selected = source;
         LambdaExpression? selector = null;
-        if (selected is MethodCallExpression { Method.Name: nameof(Queryable.Select), Arguments.Count: 2 } select &&
+        if (selected is MethodCallExpression
+            {
+                Method.Name: nameof(Queryable.Select),
+                Arguments.Count: 2
+            } select &&
             IsLinq(select.Method))
         {
             selector = select.Arguments[1].Unquote() as LambdaExpression;
             // the overload with an index has a second parameter
-            if (selector is not { Parameters.Count: 1 })
+            if (selector is not
+                {
+                    Parameters.Count: 1
+                })
             {
                 return null;
             }
@@ -94,8 +101,11 @@ class RedundantDistinctDetector(IModel model) :
 
         if (body is MemberInitExpression init)
         {
-            return init.NewExpression.Arguments
-                .Concat(init.Bindings.OfType<MemberAssignment>().Select(_ => _.Expression));
+            var expressions = init.Bindings.OfType<MemberAssignment>().Select(_ => _.Expression);
+            return init
+                .NewExpression
+                .Arguments
+                .Concat(expressions);
         }
 
         return [body];
@@ -104,16 +114,30 @@ class RedundantDistinctDetector(IModel model) :
     // the name of the member in `parameter.Member` or `EF.Property(parameter, "Member")`
     static string? MemberOf(Expression expression, ParameterExpression parameter)
     {
-        if (expression is MemberExpression {Expression: not null} member &&
+        if (expression is MemberExpression
+            {
+                Expression: not null
+            } member &&
             Unconvert(member.Expression) == parameter)
         {
             return member.Member.Name;
         }
 
-        if (expression is MethodCallExpression { Method.Name: nameof(EF.Property) } call &&
-            call.Method.DeclaringType == typeof(EF) &&
-            Unconvert(call.Arguments[0]) == parameter &&
-            call.Arguments[1] is ConstantExpression { Value: string name })
+        if (expression is not MethodCallExpression
+            {
+                Method.Name: nameof(EF.Property)
+            } call)
+        {
+            return null;
+        }
+
+        var arguments = call.Arguments;
+        if (call.Method.DeclaringType == typeof(EF) &&
+            Unconvert(arguments[0]) == parameter &&
+            arguments[1] is ConstantExpression
+            {
+                Value: string name
+            })
         {
             return name;
         }
@@ -128,7 +152,11 @@ class RedundantDistinctDetector(IModel model) :
         {
             switch (current)
             {
-                case MethodCallExpression { Method.IsStatic: true, Arguments.Count: > 0 } call when KeepsRows(call.Method):
+                case MethodCallExpression
+                {
+                    Method.IsStatic: true,
+                    Arguments.Count: > 0
+                } call when KeepsRows(call.Method):
                     current = call.Arguments[0];
                     continue;
                 // raw SQL and temporal queries are derived root types, and can return an entity more than once
@@ -194,7 +222,13 @@ class RedundantDistinctDetector(IModel model) :
 
     static Expression Unconvert(Expression expression)
     {
-        while (expression is UnaryExpression { NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked or ExpressionType.TypeAs } unary)
+        while (expression is UnaryExpression
+               {
+                   NodeType:
+                   ExpressionType.Convert or
+                   ExpressionType.ConvertChecked or
+                   ExpressionType.TypeAs
+               } unary)
         {
             expression = unary.Operand;
         }

@@ -1,26 +1,17 @@
 // InMemory executes no DbCommand, so LogCommandInterceptor never sees its queries. They are recorded here instead,
 // once EF has extracted the parameters. An IQueryExpressionInterceptor cannot be used, since it only sees a query
 // the first time it is compiled, and compiled queries are cached.
-class RecordingQueryCompiler :
-    QueryCompiler
-{
-    DbContext context;
-    LogCommandInterceptor? interceptor;
-    bool? isInMemory;
-    string type = "Query";
-
-    public RecordingQueryCompiler(
-        IQueryContextFactory queryContextFactory,
-        ICompiledQueryCache compiledQueryCache,
-        ICompiledQueryCacheKeyGenerator compiledQueryCacheKeyGenerator,
-        IDatabase database,
-        IDiagnosticsLogger<DbLoggerCategory.Query> logger,
-        ICurrentDbContext currentContext,
-        IEvaluatableExpressionFilter evaluatableExpressionFilter,
-        IModel model,
-        IDbContextOptions options) :
-        base(
-            queryContextFactory,
+class RecordingQueryCompiler(
+    IQueryContextFactory queryContextFactory,
+    ICompiledQueryCache compiledQueryCache,
+    ICompiledQueryCacheKeyGenerator compiledQueryCacheKeyGenerator,
+    IDatabase database,
+    IDiagnosticsLogger<DbLoggerCategory.Query> logger,
+    ICurrentDbContext currentContext,
+    IEvaluatableExpressionFilter evaluatableExpressionFilter,
+    IModel model,
+    IDbContextOptions options) :
+        QueryCompiler(queryContextFactory,
             compiledQueryCache,
             compiledQueryCacheKeyGenerator,
             database,
@@ -28,10 +19,11 @@ class RecordingQueryCompiler :
             currentContext,
             evaluatableExpressionFilter,
             model)
-    {
-        context = currentContext.Context;
-        interceptor = options.FindExtension<RecordingOptionsExtension>()?.Interceptor;
-    }
+{
+    DbContext context = currentContext.Context;
+    LogCommandInterceptor? interceptor = options.FindExtension<RecordingOptionsExtension>()?.Interceptor;
+    bool? isInMemory;
+    string type = "Query";
 
     public override TResult Execute<TResult>(Expression query)
     {
@@ -54,7 +46,12 @@ class RecordingQueryCompiler :
     {
         // read before extracting, since extracting can evaluate code that runs another query
         var entryType = type;
-        var extracted = base.ExtractParameters(query, parameters, logger, compiledQuery, generateContextAccessors);
+        var extracted = base.ExtractParameters(
+            query,
+            parameters,
+            logger,
+            compiledQuery,
+            generateContextAccessors);
 
         // a compiled query is extracted once, when compiled, and then executes without passing through here
         if (!compiledQuery &&
