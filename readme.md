@@ -905,6 +905,11 @@ If the entity-prefixed name itself collides with an existing column name (eg `Co
 To detect and correct missing `OrderBy` clauses in EF queries, use [EntityFramework.OrderBy](https://github.com/SimonCropp/EntityFramework.OrderBy).
 
 
+
+## Query complexity
+
+To detect and limit overly large or expensive EF queries, for example unbounded results, huge `Contains` lists, or deeply nested includes, use [EfQueryComplexity](https://github.com/SimonCropp/EfQueryComplexity).
+
 ## Anti-patterns
 
 Queries that contain an anti-pattern throw when they are compiled. This works with any provider, and also applies to `ToQueryString()`, so verifying a [Queryable](#queryable) also throws.

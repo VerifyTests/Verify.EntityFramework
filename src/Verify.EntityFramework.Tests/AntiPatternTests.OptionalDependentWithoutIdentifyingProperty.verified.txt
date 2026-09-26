@@ -1,0 +1,4 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: An error was generated for warning 'Microsoft.EntityFrameworkCore.Model.Validation.OptionalDependentWithoutIdentifyingPropertyWarning': The entity type 'Address' is an optional dependent using table sharing without any required non shared column that could be used to identify whether the entity exists. If all nullable properties contain a 'null' value in database then an object instance won't be created in the query. Add a required property to create instances with 'null' values for other properties or mark the incoming navigation as required to always create an instance. This exception can be suppressed or logged by passing event ID 'RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+}

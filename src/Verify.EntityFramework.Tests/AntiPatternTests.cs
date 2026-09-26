@@ -563,6 +563,65 @@ public class AntiPatternTests
         public bool Enabled { get; set; }
     }
 
+    [Test]
+    public async Task KeyWithDefault()
+    {
+        var builder = new DbContextOptionsBuilder<KeyWithDefaultContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        await using var data = new KeyWithDefaultContext(builder.Options);
+
+        await Throws(() => data.Model)
+            .IgnoreStackTrace();
+    }
+
+    class KeyWithDefaultContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        protected override void OnModelCreating(ModelBuilder model) =>
+            model
+                .Entity<Keyed>()
+                .Property(_ => _.Id)
+                .HasDefaultValue(1);
+    }
+
+    class Keyed
+    {
+        public int Id { get; set; }
+    }
+
+    [Test]
+    public async Task OptionalDependentWithoutIdentifyingProperty()
+    {
+        var builder = new DbContextOptionsBuilder<OptionalDependentContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        await using var data = new OptionalDependentContext(builder.Options);
+
+        await Throws(() => data.Model)
+            .IgnoreStackTrace();
+    }
+
+    class OptionalDependentContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        protected override void OnModelCreating(ModelBuilder model) =>
+            model
+                .Entity<Person>()
+                .OwnsOne(_ => _.Address);
+    }
+
+    class Person
+    {
+        public int Id { get; set; }
+        public Address? Address { get; set; }
+    }
+
+    class Address
+    {
+        public string? City { get; set; }
+    }
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
