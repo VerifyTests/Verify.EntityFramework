@@ -71,15 +71,27 @@ static class IgnoredEntityOperatorDetector
         builder.Append($"{string.Join('.', calls.Select(_ => _.Describe()))} is ignored, since {reason}.");
         if (calls.Any(_ => IsInclude(_.Method)))
         {
-            builder.Append(" EF only applies Include to entities returned by the query, and a projection already loads the related data it references.");
+            builder.Append(
+                """
+
+                EF only applies Include to entities returned by the query, and a projection already loads the related data it references.
+                """);
         }
 
         if (calls.Any(_ => IsTracking(_.Method)))
         {
-            builder.Append(" EF only tracks entities, so tracking options do nothing on a query that returns none.");
+            builder.Append(
+                """
+
+                EF only tracks entities, so tracking options do nothing on a query that returns none.
+                """);
         }
 
-        builder.Append(" Remove it.");
+        builder.Append(
+            """
+
+            Remove it.
+            """);
         return new(builder.ToString());
     }
 

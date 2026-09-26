@@ -20,7 +20,11 @@ class RedundantDistinctDetector(IModel model) :
             var key = UniqueKey(node.Arguments[0]);
             if (key != null)
             {
-                throw new($"Distinct() is redundant, since each row includes the key of {key}, so the rows are already unique. Remove it.");
+                throw new(
+                    $"""
+                     Distinct() is redundant, since each row includes the key of {key}, so the rows are already unique.
+                     Remove it.
+                     """);
             }
         }
 

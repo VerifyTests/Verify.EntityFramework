@@ -42,10 +42,17 @@ static class IgnoredQuerySplittingDetector
             expression = call.Arguments[0];
         }
 
-        if (splitting != null)
+        if (splitting == null)
         {
-            throw new($"{splitting.Describe()} is ignored, since the query loads no collection. Query splitting only changes how collection Includes and collections in a projection are loaded. Remove it.");
+            return;
         }
+
+        throw new(
+            $"""
+             {splitting.Describe()} is ignored, since the query loads no collection.
+             Query splitting only changes how collection Includes and collections in a projection are loaded.
+             Remove it.
+             """);
     }
 
     static bool IsSplitting(MethodInfo method) =>

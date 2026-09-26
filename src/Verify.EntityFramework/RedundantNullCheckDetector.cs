@@ -29,10 +29,16 @@ class RedundantNullCheckDetector :
                 }
 
                 var comparison = conditions.FirstOrDefault(_ => Compares(_, value));
-                if (comparison != null)
+                if (comparison == null)
                 {
-                    throw new($"The null check `{Describe(check)}` is redundant, since `{Describe(comparison)}` is false when {value} is null. Remove the null check.");
+                    continue;
                 }
+
+                throw new(
+                    $"""
+                     The null check `{Describe(check)}` is redundant, since `{Describe(comparison)}` is false when {value} is null.
+                     Remove the null check.
+                     """);
             }
         }
 

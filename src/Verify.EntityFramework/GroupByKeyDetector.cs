@@ -54,7 +54,11 @@ class GroupByKeyDetector :
     static void Throw(MethodCallExpression groupBy)
     {
         var key = groupBy.Arguments[1].Unquote();
-        throw new($"GroupBy({key}) only returns the distinct keys, since the groups are only used for their Key. Use Select({key}).Distinct(), which states that directly.");
+        throw new(
+            $"""
+             GroupBy({key}) only returns the distinct keys, since the groups are only used for their Key.
+             Use Select({key}).Distinct(), which states that directly.
+             """);
     }
 
     static bool IsLinq(MethodInfo method) =>

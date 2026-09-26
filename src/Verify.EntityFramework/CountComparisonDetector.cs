@@ -39,7 +39,11 @@ class CountComparisonDetector :
                 any = $"!{any}";
             }
 
-            throw new($"`{Describe(node, left, right)}` counts every row, when only whether one exists is needed. Use `{any}`, which stops at the first.");
+            throw new(
+                $"""
+                 `{Describe(node, left, right)}` counts every row, when only whether one exists is needed.
+                 Use `{any}`, which stops at the first.
+                 """);
         }
 
         return base.VisitBinary(node);

@@ -16,7 +16,11 @@ class DiscardedOrderByDetector :
             var discarded = FindOrdering(node.Arguments[0]);
             if (discarded != null)
             {
-                throw new($"{Describe(discarded)} is discarded, since it is followed by {node.Describe()}. Use {ThenBy(node)} to add a secondary ordering, or remove the first ordering.");
+                throw new(
+                    $"""
+                     {Describe(discarded)} is discarded, since it is followed by {node.Describe()}.
+                     Use {ThenBy(node)} to add a secondary ordering, or remove the first ordering.
+                     """);
             }
         }
         else if (IsOrderIndependent(node.Method))
@@ -24,7 +28,11 @@ class DiscardedOrderByDetector :
             var discarded = FindOrdering(node.Arguments[0]);
             if (discarded != null)
             {
-                throw new($"{Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, whose result does not depend on order. Remove the ordering.");
+                throw new(
+                    $"""
+                     {Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, whose result does not depend on order.
+                     Remove the ordering.
+                     """);
             }
         }
 

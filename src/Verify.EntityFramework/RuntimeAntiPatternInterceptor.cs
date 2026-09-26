@@ -54,7 +54,11 @@ class RuntimeAntiPatternInterceptor :
 
         if (state.Options.ThrowOnSynchronousCalls)
         {
-            throw new("SaveChanges executed synchronously. Use SaveChangesAsync.");
+            throw new(
+                """
+                SaveChanges executed synchronously.
+                Use SaveChangesAsync.
+                """);
         }
 
         CheckSave(context, state);
@@ -97,7 +101,11 @@ class RuntimeAntiPatternInterceptor :
             return;
         }
 
-        throw new($"A {data.CommandSource} command executed synchronously. Use the async method, for example ToListAsync, SaveChangesAsync, or ExecuteDeleteAsync.");
+        throw new(
+            $"""
+             A {data.CommandSource} command executed synchronously.
+             Use the async method, for example ToListAsync, SaveChangesAsync, or ExecuteDeleteAsync.
+             """);
     }
 
     // commands that EF runs itself, like migrations and value generation, are not the caller's choice
@@ -114,7 +122,10 @@ class RuntimeAntiPatternInterceptor :
     {
         var context = data.Context;
         if (context == null ||
-            data.CommandSource is not (CommandSource.LinqQuery or CommandSource.FromSqlQuery))
+            data.CommandSource
+                is not (
+                CommandSource.LinqQuery or
+                CommandSource.FromSqlQuery))
         {
             return;
         }
@@ -130,7 +141,12 @@ class RuntimeAntiPatternInterceptor :
         var count = state.CountQuery(command.CommandText);
         if (count > options.RepeatedQueryThreshold)
         {
-            throw new($"The same query executed {count} times in one context, which usually means a query in a loop (N+1). Load the data in one query, for example with Include, a projection, or Contains. Query:{Environment.NewLine}{command.CommandText}");
+            throw new(
+                $"""
+                 The same query executed {count} times in one context, which usually means a query in a loop (N+1).
+                 Load the data in one query, for example with Include, a projection, or Contains.
+                 Query:{Environment.NewLine}{command.CommandText}
+                 """);
         }
     }
 
@@ -151,7 +167,11 @@ class RuntimeAntiPatternInterceptor :
             var saves = state.CountSave();
             if (saves > options.RepeatedSaveChangesThreshold)
             {
-                throw new($"SaveChanges saved changes {saves} times in one context, which usually means SaveChanges in a loop. Make all the changes, then call SaveChanges once.");
+                throw new(
+                    $"""
+                     SaveChanges saved changes {saves} times in one context, which usually means SaveChanges in a loop.
+                     Make all the changes, then call SaveChanges once.
+                     """);
             }
         }
 
@@ -161,7 +181,11 @@ class RuntimeAntiPatternInterceptor :
             var saves = state.CountSingleRowSave();
             if (saves > options.SingleRowSavesThreshold)
             {
-                throw new($"SaveChanges saved a single entity {saves} times in one context, which usually means saving one entity per iteration of a loop. Add or change all the entities, then call SaveChanges once.");
+                throw new(
+                    $"""
+                     SaveChanges saved a single entity {saves} times in one context, which usually means saving one entity per iteration of a loop.
+                     Add or change all the entities, then call SaveChanges once.
+                     """);
             }
         }
 
@@ -183,7 +207,11 @@ class RuntimeAntiPatternInterceptor :
         var name = entityType.DisplayName();
         if (entries.All(_ => _.State == EntityState.Deleted))
         {
-            throw new($"SaveChanges deleted {entries.Count} {name} entities, and made no other change. ExecuteDeleteAsync deletes them in one statement, without loading them.");
+            throw new(
+                $"""
+                 SaveChanges deleted {entries.Count} {name} entities, and made no other change.
+                 ExecuteDeleteAsync deletes them in one statement, without loading them.
+                 """);
         }
 
         if (entries.Any(_ => _.State != EntityState.Modified))
@@ -197,7 +225,11 @@ class RuntimeAntiPatternInterceptor :
             return;
         }
 
-        throw new($"SaveChanges changed {properties} on {entries.Count} {name} entities, and made no other change. ExecuteUpdateAsync updates them in one statement, without loading them.");
+        throw new(
+            $"""
+             SaveChanges changed {properties} on {entries.Count} {name} entities, and made no other change.
+             ExecuteUpdateAsync updates them in one statement, without loading them.
+             """);
     }
 
     static string ModifiedProperties(EntityEntry entry) =>

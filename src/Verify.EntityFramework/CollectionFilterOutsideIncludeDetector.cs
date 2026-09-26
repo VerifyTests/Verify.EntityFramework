@@ -47,7 +47,12 @@ static class CollectionFilterOutsideIncludeDetector
             }
 
             var include = included[filtered];
-            throw new($"{call.Describe()} filters by {filtered}, but {include.Describe()} still loads all {filtered} of the rows returned. To load only the matching {filtered}, filter inside the Include, for example Include(_ => _.{filtered}.Where(...)). If filtering the rows by {filtered} is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.");
+            throw new(
+                $"""
+                 {call.Describe()} filters by {filtered}, but {include.Describe()} still loads all {filtered} of the rows returned.
+                 To load only the matching {filtered}, filter inside the Include, for example Include(_ => _.{filtered}.Where(...)).
+                 If filtering the rows by {filtered} is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
+                 """);
         }
     }
 
