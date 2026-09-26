@@ -1140,6 +1140,73 @@ builder.ConfigureWarnings(_ =>
 <!-- endSnippet -->
 
 
+### Runtime checks
+
+Some anti-patterns are only visible while a context runs. Each has its own opt in flag on `AntiPatternOptions`, passed to `ThrowOnAntiPatterns`. The options are applied on top of those from an earlier call, so this works before or after `EnableRecording()`:
+
+<!-- snippet: ThrowOnAntiPatternsRuntime -->
+<a id='snippet-ThrowOnAntiPatternsRuntime'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(OptionsKeptByEnableRecording));
+builder.EnableRecording();
+builder.ThrowOnAntiPatterns(
+    _ =>
+    {
+        _.ThrowOnSynchronousCalls = true;
+        _.ThrowOnSingleRowSaves = true;
+        _.SingleRowSavesThreshold = 5;
+    });
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L312-L325' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsRuntime' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+| Flag | Throws when | Threshold |
+| --- | --- | --- |
+| `ThrowOnLazyLoading` | A navigation is lazy loaded. Each lazy load is a query, so reading a navigation in a loop runs one query per item. | |
+| `ThrowOnSynchronousCalls` | A query, `SaveChanges`, or raw SQL executes synchronously. Commands that EF runs itself, like migrations, are not checked. For InMemory only `SaveChanges` is checked. | |
+| `ThrowOnRepeatedQueries` | One context executes the same query SQL more than the threshold, which usually means a query in a loop (N+1). Relational providers only. | `RepeatedQueryThreshold`, 10 |
+| `ThrowOnRepeatedSaveChanges` | One context saves changes more times than the threshold. A `SaveChanges` with nothing to save is not counted. | `RepeatedSaveChangesThreshold`, 10 |
+| `ThrowOnSingleRowSaves` | One context has more `SaveChanges` calls that each save a single entity than the threshold. | `SingleRowSavesThreshold`, 10 |
+| `ThrowOnLoadThenModify` | A `SaveChanges` only deletes, or only makes the same change to, more entities of one type than the threshold. `ExecuteDelete` or `ExecuteUpdate` does that in one statement. | `LoadThenModifyThreshold`, 10 |
+| `ThrowOnUnmodifiedTracking` | A context is disposed after loading entities with tracking queries, but never saved a change, so `AsNoTracking` would have done. Throws from `Dispose`. Not checked for pooled contexts, which are not disposed. | |
+
+For example, with `ThrowOnRepeatedQueries` and a `RepeatedQueryThreshold` of 2:
+
+<!-- snippet: RepeatedQueries -->
+<a id='snippet-RepeatedQueries'></a>
+```cs
+await ThrowsTask(async () =>
+    {
+        foreach (var id in new[] { 1, 4, 6 })
+        {
+            await data.Companies
+                .Where(_ => _.Id == id)
+                .ToListAsync();
+        }
+    })
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L95-L108' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: RuntimeAntiPatternTests.RepeatedQueries.verified.txt -->
+<a id='snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+The same query executed 3 times in one context, which usually means a query in a loop (N+1). Load the data in one query, for example with Include, a projection, or Contains. Query:
+SELECT [c].[Id], [c].[Name]
+FROM [Companies] AS [c]
+WHERE [c].[Id] = @id
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RepeatedQueries.verified.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
 ## ScrubInlineEfDateTimes
 
 In some scenarios EntityFrmaeowrk does not parameterise DateTimes. For example when querying [temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables).

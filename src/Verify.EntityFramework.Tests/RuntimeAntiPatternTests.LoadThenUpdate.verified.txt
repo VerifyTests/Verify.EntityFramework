@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: SaveChanges changed Name on 3 Company entities, and made no other change. ExecuteUpdateAsync updates them in one statement, without loading them.
+}

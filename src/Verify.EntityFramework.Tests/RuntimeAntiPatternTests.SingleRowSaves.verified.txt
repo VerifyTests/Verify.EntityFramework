@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: SaveChanges saved a single entity 3 times in one context, which usually means saving one entity per iteration of a loop. Add or change all the entities, then call SaveChanges once.
+}

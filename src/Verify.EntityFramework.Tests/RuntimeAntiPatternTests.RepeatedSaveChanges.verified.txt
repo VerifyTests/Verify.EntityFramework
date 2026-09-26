@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: SaveChanges saved changes 3 times in one context, which usually means SaveChanges in a loop. Make all the changes, then call SaveChanges once.
+}

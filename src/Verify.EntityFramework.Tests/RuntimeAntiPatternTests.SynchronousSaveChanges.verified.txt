@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: SaveChanges executed synchronously. Use SaveChangesAsync.
+}

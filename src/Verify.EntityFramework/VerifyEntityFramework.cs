@@ -303,11 +303,25 @@ public static class VerifyEntityFramework
     ///   <item>The query anti-patterns that EF detects but only logs, for example Take without OrderBy. To allow one, call ConfigureWarnings after this method.</item>
     /// </list>
     /// </summary>
-    public static DbContextOptionsBuilder<TContext> ThrowOnAntiPatterns<TContext>(this DbContextOptionsBuilder<TContext> builder)
+    /// <param name="configure">
+    /// Opts in to the checks that are only visible while a context runs. Applied on top of the options from an earlier
+    /// call, including the one made by EnableRecording.
+    /// </param>
+    public static DbContextOptionsBuilder<TContext> ThrowOnAntiPatterns<TContext>(
+        this DbContextOptionsBuilder<TContext> builder,
+        Action<AntiPatternOptions>? configure = null)
         where TContext : DbContext
     {
-        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AntiPatternOptionsExtension());
-        return builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
+        var options = builder.Options.FindExtension<AntiPatternOptionsExtension>()?.Options.Clone() ?? new();
+        configure?.Invoke(options);
+        ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AntiPatternOptionsExtension(options));
+        builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
+        if (options.ThrowOnLazyLoading)
+        {
+            builder.ConfigureWarnings(_ => _.Throw(CoreEventId.NavigationLazyLoading));
+        }
+
+        return builder;
     }
 
     // Keyed on the whole ContextId, since a pooled context keeps its InstanceId and only increments its Lease.
