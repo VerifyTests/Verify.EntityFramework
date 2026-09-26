@@ -325,6 +325,7 @@ public class RuntimeAntiPatternTests
         #endregion
 
         builder.EnableRecording();
+        builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
         data.Add(NewCompany(1));
         Assert.Throws<Exception>(() => data.SaveChanges());
@@ -371,6 +372,7 @@ public class RuntimeAntiPatternTests
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(RuntimeAntiPatternTests) + name, databaseRoot);
         builder.ThrowOnAntiPatterns(configure);
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 
@@ -379,6 +381,7 @@ public class RuntimeAntiPatternTests
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseSqlServer(database.Connection);
         builder.ThrowOnAntiPatterns(configure);
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 
@@ -387,6 +390,7 @@ public class RuntimeAntiPatternTests
         var builder = new DbContextOptionsBuilder<LazyContext>();
         builder.UseInMemoryDatabase(nameof(RuntimeAntiPatternTests) + name, databaseRoot);
         builder.ThrowOnAntiPatterns(configure);
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 

@@ -33,14 +33,17 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
 
         public override string LogFragment => "";
 
-        bool ColumnCaseConversion => ((AntiPatternOptionsExtension) Extension).Options.ThrowOnColumnCaseConversion;
+        AntiPatternOptions Options => ((AntiPatternOptionsExtension) Extension).Options;
+
+        // the options checked while a query is compiled
+        (bool, bool) CompileOptions => (Options.ThrowOnColumnCaseConversion, Options.ThrowOnCollectionFilterOutsideInclude);
 
         public override int GetServiceProviderHashCode() =>
-            ColumnCaseConversion.GetHashCode();
+            CompileOptions.GetHashCode();
 
         public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) =>
             other is ExtensionInfo info &&
-            info.ColumnCaseConversion == ColumnCaseConversion;
+            info.CompileOptions == CompileOptions;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
         {

@@ -240,6 +240,7 @@ public class AntiPatternTests
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(NotEnabled));
+        builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
 
         await data.Companies
@@ -434,6 +435,7 @@ public class AntiPatternTests
 
         #endregion
 
+        builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
         data.Companies
             .Take(10)
@@ -446,6 +448,7 @@ public class AntiPatternTests
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(EnabledByEnableRecording));
         builder.EnableRecording();
+        builder.EnableServiceProviderCaching(false);
         using var data = new SampleDbContext(builder.Options);
 
         Assert.ThrowsAsync<Exception>(() =>
@@ -466,6 +469,7 @@ public class AntiPatternTests
 
         #endregion
 
+        builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
         await data.Companies
             .Include(_ => _.Employees)
@@ -541,6 +545,7 @@ public class AntiPatternTests
         var builder = new DbContextOptionsBuilder<BoolWithDefaultContext>();
         builder.UseSqlServer(connectionString);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
         await using var data = new BoolWithDefaultContext(builder.Options);
 
         await Throws(() => data.Model)
@@ -569,6 +574,7 @@ public class AntiPatternTests
         var builder = new DbContextOptionsBuilder<KeyWithDefaultContext>();
         builder.UseSqlServer(connectionString);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
         await using var data = new KeyWithDefaultContext(builder.Options);
 
         await Throws(() => data.Model)
@@ -596,6 +602,7 @@ public class AntiPatternTests
         var builder = new DbContextOptionsBuilder<OptionalDependentContext>();
         builder.UseSqlServer(connectionString);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
         await using var data = new OptionalDependentContext(builder.Options);
 
         await Throws(() => data.Model)
@@ -960,16 +967,165 @@ public class AntiPatternTests
 
         #endregion
 
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 
 #pragma warning restore CA1862
+
+    [Test]
+    public async Task DecimalWithoutPrecision()
+    {
+        var builder = new DbContextOptionsBuilder<DecimalContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new DecimalContext(builder.Options);
+
+        await Throws(() => data.Model)
+            .IgnoreStackTrace();
+    }
+
+    class DecimalContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        public DbSet<Priced> Items { get; set; } = null!;
+    }
+
+    class Priced
+    {
+        public int Id { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    [Test]
+    public async Task RequiredNavigationWithQueryFilter()
+    {
+        var builder = new DbContextOptionsBuilder<QueryFilterContext>();
+        builder.UseInMemoryDatabase(nameof(RequiredNavigationWithQueryFilter));
+        builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new QueryFilterContext(builder.Options);
+
+        await Throws(() => data.Model)
+            .IgnoreStackTrace();
+    }
+
+    class QueryFilterContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        protected override void OnModelCreating(ModelBuilder model)
+        {
+            model
+                .Entity<FilteredBlog>()
+                .HasQueryFilter(_ => _.Active);
+            model
+                .Entity<FilteredPost>()
+                .HasOne(_ => _.Blog)
+                .WithMany()
+                .IsRequired();
+        }
+    }
+
+    class FilteredBlog
+    {
+        public int Id { get; set; }
+        public bool Active { get; set; }
+    }
+
+    class FilteredPost
+    {
+        public int Id { get; set; }
+        public FilteredBlog Blog { get; set; } = null!;
+    }
+
+    // logged by SaveChanges, while it builds the commands, so before connecting
+    [Test]
+    public async Task OptionalDependentWithAllNullProperties()
+    {
+        var builder = new DbContextOptionsBuilder<OptionalDependentContext>();
+        builder.UseSqlServer("Server=unreachable;Database=AntiPatterns;Trusted_Connection=True;Connect Timeout=1");
+        builder.ThrowOnAntiPatterns();
+        builder.ConfigureWarnings(_ =>
+            _.Ignore(RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning));
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new OptionalDependentContext(builder.Options);
+
+        data.Add(
+            new Person
+            {
+                Id = 1,
+                Address = new()
+            });
+        await ThrowsTask(() => data.SaveChangesAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task CollectionFilterOutsideInclude()
+    {
+        await using var data = BuildCollectionFilterData();
+
+        #region CollectionFilterOutsideInclude
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .Include(_ => _.Employees)
+                    .Where(_ => _.Employees.Any(_ => _.Age > 30))
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task CollectionFilterOutsideIncludeKept()
+    {
+        await using var data = BuildCollectionFilterData();
+
+        // the Include already filters what it loads
+        await data.Companies
+            .Include(_ => _.Employees.Where(_ => _.Age > 30))
+            .Where(_ => _.Employees.Any(_ => _.Age > 30))
+            .ToListAsync();
+
+        // the Where does not read the included collection
+        await data.Companies
+            .Include(_ => _.Employees)
+            .Where(_ => _.Name != "")
+            .ToListAsync();
+    }
+
+    [Test]
+    public async Task CollectionFilterOutsideIncludeNotEnabled()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .Include(_ => _.Employees)
+            .Where(_ => _.Employees.Any(_ => _.Age > 30))
+            .ToListAsync();
+    }
+
+    static SampleDbContext BuildCollectionFilterData([CallerMemberName] string databaseName = "")
+    {
+        #region ThrowOnCollectionFilterOutsideInclude
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(databaseName);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
+
+        #endregion
+
+        builder.EnableServiceProviderCaching(false);
+        return new(builder.Options);
+    }
 
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseSqlServer(connectionString);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 
@@ -978,6 +1134,7 @@ public class AntiPatternTests
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(databaseName);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
 }

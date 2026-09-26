@@ -64,6 +64,14 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnColumnCaseConversion { get; set; }
 
+    /// <summary>
+    /// Throw when a query Includes a collection, and also filters by that collection in a Where, for example
+    /// <c>Include(_ => _.Employees).Where(_ => _.Employees.Any(...))</c>. The Where filters the parents, but the
+    /// Include still loads every child, which is often meant as a filtered Include. Opt in, since filtering the parents
+    /// by their children is also a correct query.
+    /// </summary>
+    public bool ThrowOnCollectionFilterOutsideInclude { get; set; }
+
     internal AntiPatternOptions Clone() =>
         (AntiPatternOptions) MemberwiseClone();
 }
