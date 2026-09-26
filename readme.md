@@ -1058,6 +1058,53 @@ Throws:
 <!-- endSnippet -->
 
 
+An operator whose result does not depend on order, like `Count`, `Any`, `All`, `Contains`, `Sum`, `Average`, `Min`, or `Max`, also discards an ordering before it:
+
+<!-- snippet: OrderByThenCount -->
+<a id='snippet-OrderByThenCount'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .OrderBy(_ => _.Name)
+            .CountAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L630-L638' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Count compared to zero
+
+`_.Employees.Count() > 0` counts every matching row, when only whether one exists is needed. `_.Employees.Any()` stops at the first, and EF translates it to `EXISTS`. Comparisons with `0` or `1` that only test existence are detected, in either order, for `Count()`, `LongCount()`, and the `Count` property of a collection:
+
+<!-- snippet: CountGreaterThanZero -->
+<a id='snippet-CountGreaterThanZero'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Employees.Count() > 0)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L686-L694' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.CountGreaterThanZero.verified.txt -->
+<a id='snippet-AntiPatternTests.CountGreaterThanZero.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: `_.Employees.Count() > 0` counts every row, when only whether one exists is needed. Use `_.Employees.Any()`, which stops at the first.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CountGreaterThanZero.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CountGreaterThanZero.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only comparisons inside a query are detected. `query.Count() > 0` compares in C#, after the query has run.
+
+
 ### Redundant null check
 
 EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.
