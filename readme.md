@@ -1365,7 +1365,7 @@ builder.ThrowOnAntiPatterns(
         _.SingleRowSavesThreshold = 5;
     });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L312-L325' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsRuntime' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L314-L327' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsRuntime' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 | Flag | Throws when | Threshold |
@@ -1410,7 +1410,7 @@ Assert.ThrowsAsync<Exception>(async () =>
 
 Recording.Stop();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L346-L369' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternsOnlyWhileRecording' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L349-L372' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternsOnlyWhileRecording' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To check everything a context does, set `OnlyWhileRecording = false`.
@@ -1431,7 +1431,7 @@ await ThrowsTask(async () =>
     })
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L131-L144' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L132-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:

@@ -123,7 +123,9 @@ public class NullableNavigationTests
         await using var data = await BuildData(nameof(RedundantNullCheckString));
         await ThrowsTask(() =>
                 data.Cars
-                    .Where(_ => _.Model != null && _.Model == "with owner")
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                    .Where(_ => _.Model != null &&
+                                _.Model == "with owner")
                     .ToListAsync())
             .IgnoreStackTrace();
     }

@@ -100,7 +100,7 @@ public class RuntimeAntiPatternTests
         await using var database = await DbContextBuilder.GetDatabase();
         await using var data = BuildSqlServer(database, _ => _.ThrowOnSynchronousCalls = true);
 
-        // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+        // ReSharper disable once ReturnValueOfPureMethodIsNotUsed, MethodHasAsyncOverload
         await Throws(() => data.Companies.ToList())
             .IgnoreStackTrace();
         await data.Companies.ToListAsync();
@@ -111,6 +111,7 @@ public class RuntimeAntiPatternTests
     {
         await using var data = BuildInMemory(_ => _.ThrowOnSynchronousCalls = true);
         data.Add(NewCompany(1));
+        // ReSharper disable once MethodHasAsyncOverload
         await Throws(() => data.SaveChanges())
             .IgnoreStackTrace();
         await data.SaveChangesAsync();
@@ -297,6 +298,7 @@ public class RuntimeAntiPatternTests
         for (var id = 1; id <= 20; id++)
         {
             data.Add(NewCompany(id));
+            // ReSharper disable once MethodHasAsyncOverload
             data.SaveChanges();
         }
 
@@ -329,6 +331,7 @@ public class RuntimeAntiPatternTests
         await using var data = new SampleDbContext(builder.Options);
         data.Add(NewCompany(1));
         Recording.Start();
+        // ReSharper disable once MethodHasAsyncOverload
         Assert.Throws<Exception>(() => data.SaveChanges());
         Recording.Stop();
     }
@@ -379,6 +382,7 @@ public class RuntimeAntiPatternTests
         await using var data = new SampleDbContext(builder.Options);
 
         data.Add(NewCompany(1));
+        // ReSharper disable once MethodHasAsyncOverload
         data.SaveChanges();
     }
 
@@ -396,11 +400,13 @@ public class RuntimeAntiPatternTests
 
         Recording.Start();
         data.Add(NewCompany(1));
+        // ReSharper disable once MethodHasAsyncOverload
         data.SaveChanges();
         Recording.Stop();
 
         Recording.Start(identifier);
         data.Add(NewCompany(2));
+        // ReSharper disable once MethodHasAsyncOverload
         Assert.Throws<Exception>(() => data.SaveChanges());
         Recording.Stop(identifier);
     }
