@@ -1143,6 +1143,39 @@ Throws:
 Only sources that return each entity once are detected: an entity set, or a collection navigation, followed by operators like `Where`, `OrderBy`, `Take`, and `Include`. A `Join`, `SelectMany`, `GroupBy`, raw SQL, or temporal query can return an entity more than once, so its `Distinct()` is kept. So is `Distinct()` with a comparer.
 
 
+### GroupBy that only uses the Key
+
+A `GroupBy` whose groups are only used for their `Key` returns the distinct keys, which `Select(...).Distinct()` states directly. That covers a `Select` that only reads `Key` or its members, and the `GroupBy` overload with a result selector that ignores the elements:
+
+<!-- snippet: GroupByOnlyKey -->
+<a id='snippet-GroupByOnlyKey'></a>
+```cs
+await ThrowsTask(() =>
+        data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.Key)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L830-L839' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.GroupByOnlyKey.verified.txt -->
+<a id='snippet-AntiPatternTests.GroupByOnlyKey.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: GroupBy(_ => _.CompanyId) only returns the distinct keys, since the groups are only used for their Key. Use Select(_ => _.CompanyId).Distinct(), which states that directly.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.GroupByOnlyKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.GroupByOnlyKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A selector that uses the groups, for example `_.Count()`, is not detected.
+
+
 ### Case conversion of a column
 
 `ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too.
@@ -1156,7 +1189,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L892-L898' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L955-L961' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: ToLowerInWhere -->
@@ -1168,7 +1201,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L832-L840' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L895-L903' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:

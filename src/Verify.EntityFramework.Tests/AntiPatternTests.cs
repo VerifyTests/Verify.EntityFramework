@@ -105,14 +105,14 @@ public class AntiPatternTests
     }
 
     [Test]
-    public async Task IncludeThenGroupByKey()
+    public async Task IncludeThenGroupByCount()
     {
         await using var data = BuildData();
         await ThrowsTask(() =>
                 data.Employees
                     .Include(_ => _.Company)
                     .GroupBy(_ => _.CompanyId)
-                    .Select(_ => _.Key)
+                    .Select(_ => _.Count())
                     .ToListAsync())
             .IgnoreStackTrace();
     }
@@ -817,8 +817,71 @@ public class AntiPatternTests
         // GroupBy returns rows for the groups, not the employees
         await data.Employees
             .GroupBy(_ => _.CompanyId)
-            .Select(_ => _.Key)
+            .Select(_ => _.Count())
             .Distinct()
+            .ToListAsync();
+    }
+
+    [Test]
+    public async Task GroupByOnlyKey()
+    {
+        await using var data = BuildData();
+
+        #region GroupByOnlyKey
+
+        await ThrowsTask(() =>
+                data.Employees
+                    .GroupBy(_ => _.CompanyId)
+                    .Select(_ => _.Key)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task GroupByOnlyKeyMembers()
+    {
+        await using var data = BuildData();
+        Assert.ThrowsAsync<Exception>(() =>
+            data.Employees
+                .GroupBy(_ => new
+                {
+                    _.CompanyId,
+                    _.Age
+                })
+                .Select(_ => new
+                {
+                    _.Key.CompanyId,
+                    _.Key.Age
+                })
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task GroupByResultSelectorIgnoresElements()
+    {
+        await using var data = BuildData();
+        Assert.ThrowsAsync<Exception>(() =>
+            data.Employees
+                .GroupBy(_ => _.CompanyId, (companyId, employees) => companyId)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task GroupByUsesGroups()
+    {
+        await using var data = BuildData();
+        await data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => new
+            {
+                _.Key,
+                Count = _.Count()
+            })
+            .ToListAsync();
+        await data.Employees
+            .GroupBy(_ => _.CompanyId, (companyId, employees) => employees.Count())
             .ToListAsync();
     }
 
