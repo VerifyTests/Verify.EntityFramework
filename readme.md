@@ -905,6 +905,552 @@ If the entity-prefixed name itself collides with an existing column name (eg `Co
 To detect and correct missing `OrderBy` clauses in EF queries, use [EntityFramework.OrderBy](https://github.com/SimonCropp/EntityFramework.OrderBy).
 
 
+
+## Query complexity
+
+To detect and limit overly large or expensive EF queries, for example unbounded results, huge `Contains` lists, or deeply nested includes, use [EfQueryComplexity](https://github.com/SimonCropp/EfQueryComplexity).
+
+## Anti-patterns
+
+Queries that contain an anti-pattern throw when they are compiled. This works with any provider, and also applies to `ToQueryString()`, so verifying a [Queryable](#queryable) also throws.
+
+`EnableRecording()` enables this by default. For a context that does not use recording, use `ThrowOnAntiPatterns()`:
+
+<!-- snippet: ThrowOnAntiPatterns -->
+<a id='snippet-ThrowOnAntiPatterns'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseSqlServer(connectionString);
+builder.ThrowOnAntiPatterns();
+var data = new SampleDbContext(builder.Options);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L9-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A context that uses `UseInternalServiceProvider` is not checked, since EF does not apply extension services to that provider.
+
+These checks find queries that are written wrong, whatever data they run against. To limit how large or expensive a query can be, for example the number of values in a `Contains` list, the number of rows, or the number of includes, use [EfQueryComplexity](https://github.com/SimonCropp/EfQueryComplexity).
+
+
+### Opting out
+
+For a single context:
+
+<!-- snippet: EnableRecordingAllowAntiPatterns -->
+<a id='snippet-EnableRecordingAllowAntiPatterns'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(EnableRecordingOptOut));
+builder.EnableRecording(throwOnAntiPatterns: false);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L465-L471' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingAllowAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+For all contexts, at assembly load time and before any context is built:
+
+<!-- snippet: ThrowOnAntiPatternsByDefault -->
+<a id='snippet-ThrowOnAntiPatternsByDefault'></a>
+```cs
+VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
+```
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L24-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsByDefault' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+To allow one of the [EF warnings](#ef-warnings), use `ConfigureWarnings`. See below.
+
+
+### Ignored Include and tracking options
+
+EF only applies `Include` and `ThenInclude` to the entities returned by a query, and only tracks those entities. When a query ends in a projection, or a scalar like `Count` or `Any`, that returns no entity, EF silently ignores `Include`, `ThenInclude`, `AsNoTracking`, `AsNoTrackingWithIdentityResolution`, and `AsTracking`. A projection already loads the related data it references, so the ignored operator only misleads the reader.
+
+<!-- snippet: IgnoredInclude -->
+<a id='snippet-IgnoredInclude'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Include(_ => _.Employees)
+            .Select(_ => new
+            {
+                _.Name,
+                EmployeeCount = _.Employees.Count
+            })
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L27-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredInclude' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.IncludeThenProjection.verified.txt -->
+<a id='snippet-AntiPatternTests.IncludeThenProjection.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: Include(_ => _.Employees) is ignored, since it is followed by Select, which returns no entity. EF only applies Include to entities returned by the query, and a projection already loads the related data it references. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeThenProjection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeThenProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`.
+
+
+### Ignored query splitting
+
+`AsSplitQuery()` and `AsSingleQuery()` only change how collections are loaded, by a collection `Include` or a collection in a projection. On a query that loads no collection they do nothing. A single collection is enough for `AsSplitQuery()` to have an effect, since it then avoids repeating the parent columns for each child row.
+
+<!-- snippet: IgnoredSplitQuery -->
+<a id='snippet-IgnoredSplitQuery'></a>
+```cs
+await Throws(() =>
+        data.Employees
+            .Include(_ => _.Company)
+            .AsSplitQuery()
+            .ToQueryString())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L486-L495' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.SplitQueryWithoutCollection.verified.txt -->
+<a id='snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: AsSplitQuery() is ignored, since the query loads no collection. Query splitting only changes how collection Includes and collections in a projection are loaded. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.SplitQueryWithoutCollection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Discarded OrderBy
+
+An `OrderBy` replaces any earlier ordering, so the earlier ordering is discarded. `ThenBy` was usually intended. An ordering followed by a row limiting operator, like `Take` or `Skip`, is kept. Queries inside lambdas, for example in a projection, are also checked.
+
+<!-- snippet: DiscardedOrderBy -->
+<a id='snippet-DiscardedOrderBy'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .OrderBy(_ => _.Name)
+            .OrderBy(_ => _.Id)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L327-L336' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscardedOrderBy' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.OrderByThenOrderBy.verified.txt -->
+<a id='snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Id). Use ThenBy(_ => _.Id) to add a secondary ordering, or remove the first ordering.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.OrderByThenOrderBy.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+An operator whose result does not depend on order, like `Count`, `Any`, `All`, `Contains`, `Sum`, `Average`, `Min`, or `Max`, also discards an ordering before it:
+
+<!-- snippet: OrderByThenCount -->
+<a id='snippet-OrderByThenCount'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .OrderBy(_ => _.Name)
+            .CountAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L638-L646' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Count compared to zero
+
+`_.Employees.Count() > 0` counts every matching row, when only whether one exists is needed. `_.Employees.Any()` stops at the first, and EF translates it to `EXISTS`. Comparisons with `0` or `1` that only test existence are detected, in either order, for `Count()`, `LongCount()`, and the `Count` property of a collection:
+
+<!-- snippet: CountGreaterThanZero -->
+<a id='snippet-CountGreaterThanZero'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Employees.Count() > 0)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L694-L702' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.CountGreaterThanZero.verified.txt -->
+<a id='snippet-AntiPatternTests.CountGreaterThanZero.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: `_.Employees.Count() > 0` counts every row, when only whether one exists is needed. Use `_.Employees.Any()`, which stops at the first.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CountGreaterThanZero.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CountGreaterThanZero.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only comparisons inside a query are detected. `query.Count() > 0` compares in C#, after the query has run.
+
+
+### Redundant Distinct
+
+`Distinct()` is redundant when each row comes from a single entity and includes its primary key, since the key already makes each row unique. That covers a projection that selects every key property, the entity itself, or the key alone:
+
+<!-- snippet: DistinctOnKey -->
+<a id='snippet-DistinctOnKey'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Name != "")
+            .Select(_ => new
+            {
+                _.Id,
+                _.Name
+            })
+            .Distinct()
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L742-L756' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.DistinctOnKey.verified.txt -->
+<a id='snippet-AntiPatternTests.DistinctOnKey.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.DistinctOnKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.DistinctOnKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only sources that return each entity once are detected: an entity set, or a collection navigation, followed by operators like `Where`, `OrderBy`, `Take`, and `Include`. A `Join`, `SelectMany`, `GroupBy`, raw SQL, or temporal query can return an entity more than once, so its `Distinct()` is kept. So is `Distinct()` with a comparer.
+
+
+### GroupBy that only uses the Key
+
+A `GroupBy` whose groups are only used for their `Key` returns the distinct keys, which `Select(...).Distinct()` states directly. That covers a `Select` that only reads `Key` or its members, and the `GroupBy` overload with a result selector that ignores the elements:
+
+<!-- snippet: GroupByOnlyKey -->
+<a id='snippet-GroupByOnlyKey'></a>
+```cs
+await ThrowsTask(() =>
+        data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.Key)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L838-L847' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.GroupByOnlyKey.verified.txt -->
+<a id='snippet-AntiPatternTests.GroupByOnlyKey.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: GroupBy(_ => _.CompanyId) only returns the distinct keys, since the groups are only used for their Key. Use Select(_ => _.CompanyId).Distinct(), which states that directly.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.GroupByOnlyKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.GroupByOnlyKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A selector that uses the groups, for example `_.Count()`, is not detected.
+
+
+### Collection filter outside the Include
+
+In `Include(_ => _.Employees).Where(_ => _.Employees.Any(...))` the `Where` filters the companies, but the `Include` still loads every employee of each company returned. That is often meant as a filtered `Include`, like `Include(_ => _.Employees.Where(...))`. Filtering the parents by their children is also a correct query, so this check is opt in:
+
+<!-- snippet: ThrowOnCollectionFilterOutsideInclude -->
+<a id='snippet-ThrowOnCollectionFilterOutsideInclude'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(databaseName);
+builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1112-L1118' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: CollectionFilterOutsideInclude -->
+<a id='snippet-CollectionFilterOutsideInclude'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Include(_ => _.Employees)
+            .Where(_ => _.Employees.Any(_ => _.Age > 30))
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1070-L1079' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.CollectionFilterOutsideInclude.verified.txt -->
+<a id='snippet-AntiPatternTests.CollectionFilterOutsideInclude.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: Where(_ => _.Employees.Any(_ => (_.Age > 30))) filters by Employees, but Include(_ => _.Employees) still loads all Employees of the rows returned. To load only the matching Employees, filter inside the Include, for example Include(_ => _.Employees.Where(...)). If filtering the rows by Employees is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CollectionFilterOutsideInclude.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CollectionFilterOutsideInclude.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A filtered `Include`, and a `Where` that does not read the included collection, are not detected.
+
+
+### Case conversion of a column
+
+`ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too.
+
+This check is opt in, since whether the conversion is needed depends on the column's collation, and many databases are case sensitive by default:
+
+<!-- snippet: ThrowOnColumnCaseConversion -->
+<a id='snippet-ThrowOnColumnCaseConversion'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(databaseName);
+builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L963-L969' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: ToLowerInWhere -->
+<a id='snippet-ToLowerInWhere'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Name.ToLower() == "company1")
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L903-L911' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.ToLowerInWhere.verified.txt -->
+<a id='snippet-AntiPatternTests.ToLowerInWhere.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: `_.Name.ToLower()` in Where converts the column, so the database can not use an index on it. SQL Server compares case insensitively with its default collation, so compare the column directly. For a case sensitive column, use EF.Functions.Collate with a case insensitive collation.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.ToLowerInWhere.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.ToLowerInWhere.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A conversion of a variable is not detected, since EF sends it as a parameter, and neither is one in a projection, since it only changes the output. For a column with a case sensitive collation, use `EF.Functions.Collate` with a case insensitive collation.
+
+
+### Redundant null check
+
+EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.
+
+The same applies to nullable scalars, like an `int?` or a `string`, including checks using `HasValue`:
+
+<!-- snippet: RedundantNullCheckNullableScalar -->
+<a id='snippet-RedundantNullCheckNullableScalar'></a>
+```cs
+await ThrowsTask(() =>
+        data.Cars
+            .Where(_ => _.OwnerId != null && _.OwnerId > 0)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.cs#L98-L106' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantNullCheckNullableScalar' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: RedundantNullCheck -->
+<a id='snippet-RedundantNullCheck'></a>
+```cs
+await ThrowsTask(() =>
+        data.Cars
+            .Where(_ => _.Owner != null && _.Owner.Name == "owner")
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.cs#L46-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantNullCheck' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: NullableNavigationTests.RedundantNullCheck.verified.txt -->
+<a id='snippet-NullableNavigationTests.RedundantNullCheck.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null. Remove the null check.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.RedundantNullCheck.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-NullableNavigationTests.RedundantNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only comparisons with a non null constant using `==`, `>`, `>=`, `<`, or `<=` are detected. With `!=`, or a value that can be null, a null navigation can match, so the null check changes the result and is kept.
+
+
+### EF warnings
+
+EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()` configures these to throw:
+
+ * `RelationalEventId.MultipleCollectionIncludeWarning`: more than one collection `Include` in a single query, which multiplies the rows returned. Use `AsSplitQuery()`, or configure a query splitting behavior.
+ * `CoreEventId.RowLimitingOperationWithoutOrderByWarning`: `Take` or `Skip` without `OrderBy`, which returns unpredictable rows.
+ * `CoreEventId.FirstWithoutOrderByAndFilterWarning`: `First` without `OrderBy` or a filter.
+ * `CoreEventId.DistinctAfterOrderByWithoutRowLimitingOperatorWarning`: `Distinct` after `OrderBy`, which erases the ordering.
+ * `CoreEventId.PossibleUnintendedReferenceComparisonWarning`: entities compared by reference.
+ * `CoreEventId.PossibleUnintendedCollectionNavigationNullComparisonWarning`: a collection navigation compared to null.
+ * `RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning`: `Equals` between values of different types.
+ * `CoreEventId.NavigationBaseIncludeIgnored`: an `Include` of a navigation that fix-up already populates.
+ * `RelationalEventId.BoolWithDefaultWarning`: a `bool` property with a database-generated default and no sentinel value, for example `HasDefaultValueSql("1")`. EF treats `false` as unset, so it can never insert `false`.
+ * `RelationalEventId.ModelValidationKeyDefaultValueWarning`: a key property with a database default, which EF treats as unset when it has the CLR default value.
+ * `RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning`: an optional dependent, sharing a table, with no required property, so EF can not tell an instance with all null values from a missing one.
+ * `CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning`: a required navigation to an entity with a query filter. When the filter excludes that entity, the entities that require it disappear from queries too.
+ * `SqlServerEventId.DecimalTypeDefaultWarning`: a `decimal` property with no precision or column type, whose values SQL Server silently truncates to the default precision.
+ * `RelationalEventId.OptionalDependentWithAllNullPropertiesWarning`: logged by `SaveChanges` when it saves an optional dependent, sharing a table, whose properties are all null, so it can not be read back.
+
+The model warnings are logged when the model is built, which happens once per context type. If a context type is first used without `ThrowOnAntiPatterns()`, later contexts reuse that model and are not checked.
+
+Some of these are only logged by relational providers.
+
+To allow one, call `ConfigureWarnings` after `ThrowOnAntiPatterns()`:
+
+<!-- snippet: AllowAntiPatternWarning -->
+<a id='snippet-AllowAntiPatternWarning'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseSqlServer(connectionString);
+builder.ThrowOnAntiPatterns();
+builder.ConfigureWarnings(_ =>
+    _.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L429-L437' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAntiPatternWarning' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Runtime checks
+
+Some anti-patterns are only visible while a context runs. Each has its own opt in flag on `AntiPatternOptions`, passed to `ThrowOnAntiPatterns`. The options are applied on top of those from an earlier call, so this works before or after `EnableRecording()`:
+
+<!-- snippet: ThrowOnAntiPatternsRuntime -->
+<a id='snippet-ThrowOnAntiPatternsRuntime'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(OptionsKeptByEnableRecording));
+builder.EnableRecording();
+builder.ThrowOnAntiPatterns(
+    _ =>
+    {
+        _.ThrowOnSynchronousCalls = true;
+        _.ThrowOnSingleRowSaves = true;
+        _.SingleRowSavesThreshold = 5;
+    });
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L314-L327' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsRuntime' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+| Flag | Throws when | Threshold |
+| --- | --- | --- |
+| `ThrowOnLazyLoading` | A navigation is lazy loaded, or lazy loading does nothing since the entity is detached. Each lazy load is a query, so reading a navigation in a loop runs one query per item. Checked whether or not Verify is recording. | |
+| `ThrowOnSynchronousCalls` | A query, `SaveChanges`, or raw SQL executes synchronously. Commands that EF runs itself, like migrations, are not checked. For InMemory only `SaveChanges` is checked. | |
+| `ThrowOnRepeatedQueries` | One context executes the same query SQL more than the threshold, which usually means a query in a loop (N+1). Relational providers only. | `RepeatedQueryThreshold`, 2 |
+| `ThrowOnRepeatedSaveChanges` | One context saves changes more times than the threshold. A `SaveChanges` with nothing to save is not counted. | `RepeatedSaveChangesThreshold`, 2 |
+| `ThrowOnSingleRowSaves` | One context has more `SaveChanges` calls that each save a single entity than the threshold. | `SingleRowSavesThreshold`, 2 |
+| `ThrowOnLoadThenModify` | A `SaveChanges` only deletes, or only makes the same change to, more entities of one type than the threshold. `ExecuteDelete` or `ExecuteUpdate` does that in one statement. | `LoadThenModifyThreshold`, 1 |
+
+The thresholds are low, since test data is usually small: an N+1 over three rows runs only three queries.
+
+Verify reads every navigation when it serializes an entity, so with `ThrowOnLazyLoading` use [IgnoreNavigationProperties](#ignorenavigationproperties) when verifying entities that lazy load. Entity Framework itself throws, by default, for a lazy load after the context is disposed.
+
+
+#### Only while recording
+
+A test usually runs setup, then the code under test, then assertions, all with one context, and the code under test is often only part of a unit of work. So by default the checks other than `ThrowOnLazyLoading` only count, and throw, while Verify is recording, which is the code under test. They use the recording that `EnableRecording` set up, including its identifier, or otherwise the default recording:
+
+<!-- snippet: AntiPatternsOnlyWhileRecording -->
+<a id='snippet-AntiPatternsOnlyWhileRecording'></a>
+```cs
+// setup, which is not counted
+for (var id = 1; id <= 3; id++)
+{
+    data.Add(NewCompany(id));
+    await data.SaveChangesAsync();
+}
+
+Recording.Start();
+
+// the code under test
+Assert.ThrowsAsync<Exception>(async () =>
+{
+    for (var id = 11; id <= 13; id++)
+    {
+        data.Add(NewCompany(id));
+        await data.SaveChangesAsync();
+    }
+});
+
+Recording.Stop();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L349-L372' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternsOnlyWhileRecording' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+To check everything a context does, set `OnlyWhileRecording = false`.
+
+For example, with `ThrowOnRepeatedQueries` and a `RepeatedQueryThreshold` of 2:
+
+<!-- snippet: RepeatedQueries -->
+<a id='snippet-RepeatedQueries'></a>
+```cs
+await ThrowsTask(async () =>
+    {
+        foreach (var id in new[] { 1, 4, 6 })
+        {
+            await data.Companies
+                .Where(_ => _.Id == id)
+                .ToListAsync();
+        }
+    })
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L132-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: RuntimeAntiPatternTests.RepeatedQueries.verified.txt -->
+<a id='snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+The same query executed 3 times in one context, which usually means a query in a loop (N+1). Load the data in one query, for example with Include, a projection, or Contains. Query:
+SELECT [c].[Id], [c].[Name]
+FROM [Companies] AS [c]
+WHERE [c].[Id] = @id
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RepeatedQueries.verified.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
 ## ScrubInlineEfDateTimes
 
 In some scenarios EntityFrmaeowrk does not parameterise DateTimes. For example when querying [temporal tables](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables).
@@ -955,7 +1501,7 @@ Reformatting can be disabled globally:
 ```cs
 VerifyEntityFramework.DisableSqlFormatting = true;
 ```
-<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L21-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L45-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When disabled, the SQL is written verbatim as produced by EntityFramework.

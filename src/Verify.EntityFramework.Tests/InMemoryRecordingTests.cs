@@ -1,4 +1,4 @@
-[TestFixture]
+﻿[TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class InMemoryRecordingTests
 {
@@ -342,8 +342,9 @@ public class InMemoryRecordingTests
         await Verify();
     }
 
-    // EF does not apply extension services to an internal service provider, so nothing is recorded,
-    // but it also rejects ReplaceService there, which EnableRecording must not use
+    // EF does not apply extension services to an internal service provider, so nothing is recorded and anti-patterns
+    // are not detected. But it also rejects ReplaceService, and AddInterceptors with a singleton interceptor, there,
+    // which EnableRecording must not use
     [Test]
     public async Task InternalServiceProvider()
     {

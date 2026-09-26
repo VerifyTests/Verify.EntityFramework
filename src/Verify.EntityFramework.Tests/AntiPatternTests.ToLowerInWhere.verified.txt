@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: `_.Name.ToLower()` in Where converts the column, so the database can not use an index on it. SQL Server compares case insensitively with its default collation, so compare the column directly. For a case sensitive column, use EF.Functions.Collate with a case insensitive collation.
+}

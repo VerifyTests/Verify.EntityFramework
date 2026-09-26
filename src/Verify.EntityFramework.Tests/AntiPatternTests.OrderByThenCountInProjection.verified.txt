@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: OrderBy(_ => _.Age) is discarded, since it is followed by Count, whose result does not depend on order. Remove the ordering.
+}

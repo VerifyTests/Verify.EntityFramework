@@ -1,0 +1,4 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: An error was generated for warning 'Microsoft.EntityFrameworkCore.Infrastructure.NavigationLazyLoading': The navigation 'LazyBlog.Posts' is being lazy-loaded. This exception can be suppressed or logged by passing event ID 'CoreEventId.NavigationLazyLoading' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+}

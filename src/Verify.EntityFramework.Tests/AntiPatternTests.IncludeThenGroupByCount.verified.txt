@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: Include(_ => _.Company) is ignored, since it is followed by Select, which returns no entity. EF only applies Include to entities returned by the query, and a projection already loads the related data it references. Remove it.
+}

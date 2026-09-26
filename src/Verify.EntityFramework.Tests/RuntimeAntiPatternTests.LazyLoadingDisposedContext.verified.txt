@@ -1,0 +1,4 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: An error was generated for warning 'Microsoft.EntityFrameworkCore.Infrastructure.LazyLoadOnDisposedContextWarning': An attempt was made to lazy-load navigation 'LazyBlog.Posts' after the associated DbContext was disposed or returned to the pool, or the entity was explicitly detached from the context. This exception can be suppressed or logged by passing event ID 'CoreEventId.LazyLoadOnDisposedContextWarning' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+}

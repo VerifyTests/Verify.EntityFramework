@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Migrations;
-
 namespace VerifyTests;
 
 public static class MigrationReplay

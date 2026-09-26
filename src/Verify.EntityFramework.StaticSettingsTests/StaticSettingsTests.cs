@@ -1,4 +1,4 @@
-[TestFixture]
+﻿[TestFixture]
 [NonParallelizable]
 public class StaticSettingsTests
 {
@@ -12,8 +12,32 @@ public class StaticSettingsTests
         });
 
     [TearDown]
-    public void TearDown() =>
+    public void TearDown()
+    {
         VerifyEntityFramework.DisableSqlFormatting = false;
+        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = true;
+    }
+
+    [Test]
+    public void DisableThrowOnAntiPatternsByDefault()
+    {
+        #region ThrowOnAntiPatternsByDefault
+
+        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
+
+        #endregion
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        // ToQueryString does not connect
+        builder.UseSqlServer("Server=.;Database=StaticSettings;Trusted_Connection=True");
+        builder.EnableRecording();
+        using var data = new SampleDbContext(builder.Options);
+
+        data.Companies
+            .Include(_ => _.Employees)
+            .Select(_ => _.Name)
+            .ToQueryString();
+    }
 
     [Test]
     public async Task DisableSqlFormattingRecording()

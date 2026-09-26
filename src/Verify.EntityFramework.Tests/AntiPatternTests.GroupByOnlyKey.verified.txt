@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: GroupBy(_ => _.CompanyId) only returns the distinct keys, since the groups are only used for their Key. Use Select(_ => _.CompanyId).Distinct(), which states that directly.
+}

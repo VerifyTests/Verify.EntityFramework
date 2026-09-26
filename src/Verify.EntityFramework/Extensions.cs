@@ -58,4 +58,35 @@
 
         return dictionary;
     }
+
+    public static Expression Unquote(this Expression expression)
+    {
+        while (expression is System.Linq.Expressions.UnaryExpression { NodeType: ExpressionType.Quote } quote)
+        {
+            expression = quote.Operand;
+        }
+
+        return expression;
+    }
+
+    // for example Include(_ => _.Employees)
+    public static string Describe(this MethodCallExpression call) =>
+        $"{call.Method.Name}({call.DescribeArguments()})";
+
+    // the arguments after the source
+    public static string DescribeArguments(this MethodCallExpression call) =>
+        string.Join(
+            ", ",
+            call.Arguments
+                .Skip(1)
+                .Select(_ => _.Unquote())
+                .Select(_ =>
+                {
+                    if (_ is ConstantExpression { Value: string value })
+                    {
+                        return $"\"{value}\"";
+                    }
+
+                    return _.ToString();
+                }));
 }

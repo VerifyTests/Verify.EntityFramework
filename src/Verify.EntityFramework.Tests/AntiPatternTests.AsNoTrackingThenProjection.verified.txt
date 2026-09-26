@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: AsNoTracking() is ignored, since it is followed by Select, which returns no entity. EF only tracks entities, so tracking options do nothing on a query that returns none. Remove it.
+}

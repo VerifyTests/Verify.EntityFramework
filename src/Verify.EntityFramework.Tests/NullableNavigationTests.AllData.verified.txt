@@ -1,0 +1,18 @@
+﻿[
+  {
+    $type: NullableNavigationTests.Car,
+    Id: 1,
+    Model: with owner,
+    OwnerId: 1
+  },
+  {
+    $type: NullableNavigationTests.Car,
+    Id: 2,
+    Model: without owner
+  },
+  {
+    $type: NullableNavigationTests.Owner,
+    Id: 1,
+    Name: owner
+  }
+]

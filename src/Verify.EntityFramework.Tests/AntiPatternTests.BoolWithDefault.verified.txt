@@ -1,0 +1,4 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: An error was generated for warning 'Microsoft.EntityFrameworkCore.Model.Validation.BoolWithDefaultWarning': The 'bool' property 'Enabled' on entity type 'Flagged' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value 'False', since this is the CLR default for the 'bool' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information. This exception can be suppressed or logged by passing event ID 'RelationalEventId.BoolWithDefaultWarning' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+}
