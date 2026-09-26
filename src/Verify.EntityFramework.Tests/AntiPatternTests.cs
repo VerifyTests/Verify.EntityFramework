@@ -726,6 +726,102 @@ public class AntiPatternTests
             .ToListAsync();
     }
 
+    [Test]
+    public async Task DistinctOnKey()
+    {
+        await using var data = BuildData();
+
+        #region DistinctOnKey
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .Where(_ => _.Name != "")
+                    .Select(_ => new
+                    {
+                        _.Id,
+                        _.Name
+                    })
+                    .Distinct()
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task DistinctOnEntity()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .Include(_ => _.Employees)
+                    .Distinct()
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task DistinctOnKeyOnly()
+    {
+        await using var data = BuildData();
+        Assert.ThrowsAsync<Exception>(() =>
+            data.Employees
+                .Select(_ => _.Id)
+                .Distinct()
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task DistinctOnNavigationKey()
+    {
+        await using var data = BuildData();
+        Assert.ThrowsAsync<Exception>(() =>
+            data.Companies
+                .Select(_ => new
+                {
+                    _.Name,
+                    Ids = _.Employees
+                        .Select(_ => _.Id)
+                        .Distinct()
+                        .ToList()
+                })
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task DistinctKept()
+    {
+        await using var data = BuildData();
+
+        // without the key, rows can repeat
+        await data.Employees
+            .Select(_ => _.Name)
+            .Distinct()
+            .ToListAsync();
+
+        // an employee's CompanyId repeats
+        await data.Employees
+            .Select(_ => new
+            {
+                _.CompanyId
+            })
+            .Distinct()
+            .ToListAsync();
+
+        // SelectMany returns a row per employee, so a company can repeat
+        await data.Companies
+            .SelectMany(_ => _.Employees, (company, employee) => company.Id)
+            .Distinct()
+            .ToListAsync();
+
+        // GroupBy returns rows for the groups, not the employees
+        await data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.Key)
+            .Distinct()
+            .ToListAsync();
+    }
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();

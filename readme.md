@@ -1105,6 +1105,44 @@ Throws:
 Only comparisons inside a query are detected. `query.Count() > 0` compares in C#, after the query has run.
 
 
+### Redundant Distinct
+
+`Distinct()` is redundant when each row comes from a single entity and includes its primary key, since the key already makes each row unique. That covers a projection that selects every key property, the entity itself, or the key alone:
+
+<!-- snippet: DistinctOnKey -->
+<a id='snippet-DistinctOnKey'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Name != "")
+            .Select(_ => new
+            {
+                _.Id,
+                _.Name
+            })
+            .Distinct()
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L734-L748' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.DistinctOnKey.verified.txt -->
+<a id='snippet-AntiPatternTests.DistinctOnKey.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique. Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.DistinctOnKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.DistinctOnKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only sources that return each entity once are detected: an entity set, or a collection navigation, followed by operators like `Where`, `OrderBy`, `Take`, and `Include`. A `Join`, `SelectMany`, `GroupBy`, raw SQL, or temporal query can return an entity more than once, so its `Distinct()` is kept. So is `Distinct()` with a comparer.
+
+
 ### Redundant null check
 
 EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.
