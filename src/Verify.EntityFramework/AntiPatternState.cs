@@ -1,17 +1,36 @@
-// What the runtime anti-pattern checks have counted for one context. Scoped, so each context has its own, and
-// disposed with the context, which is when unmodified tracking is checked.
-class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentContext) :
-    IDisposable
+// What the runtime anti-pattern checks have counted for one context. Scoped, so each context has its own.
+class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentContext)
 {
     public AntiPatternOptions Options { get; } =
         options.FindExtension<AntiPatternOptionsExtension>()?.Options ?? new();
+
+    // the recording that EnableRecording set up, which may have an identifier
+    LogCommandInterceptor? recording = options.FindExtension<RecordingOptionsExtension>()?.Interceptor;
 
     DbContextId? contextId;
     Dictionary<string, int> queries = [];
     int saves;
     int singleRowSaves;
-    int trackedLoads;
-    bool savedChanges;
+
+    // Whether the checks apply now. By default only while Verify is recording, which is the code under test, so the
+    // setup and assertions of a test are not counted.
+    public bool IsActive
+    {
+        get
+        {
+            if (!Options.OnlyWhileRecording)
+            {
+                return true;
+            }
+
+            if (recording != null)
+            {
+                return recording.IsRecording();
+            }
+
+            return Recording.IsRecording();
+        }
+    }
 
     // A pooled context keeps this state across leases, so the counts start again for each lease
     public AntiPatternState ForLease()
@@ -23,8 +42,6 @@ class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentConte
             queries.Clear();
             saves = 0;
             singleRowSaves = 0;
-            trackedLoads = 0;
-            savedChanges = false;
         }
 
         return this;
@@ -46,22 +63,4 @@ class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentConte
 
     public int CountSingleRowSave() =>
         Interlocked.Increment(ref singleRowSaves);
-
-    public void CountTrackedLoad() =>
-        Interlocked.Increment(ref trackedLoads);
-
-    public void SavedChanges() =>
-        savedChanges = true;
-
-    public void Dispose()
-    {
-        if (!Options.ThrowOnUnmodifiedTracking ||
-            trackedLoads == 0 ||
-            savedChanges)
-        {
-            return;
-        }
-
-        throw new($"The context loaded {trackedLoads} entities with tracking queries, but never saved a change. Use AsNoTracking for queries whose results are not modified.");
-    }
 }

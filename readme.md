@@ -1321,7 +1321,6 @@ EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()
  * `CoreEventId.PossibleUnintendedCollectionNavigationNullComparisonWarning`: a collection navigation compared to null.
  * `RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning`: `Equals` between values of different types.
  * `CoreEventId.NavigationBaseIncludeIgnored`: an `Include` of a navigation that fix-up already populates.
- * `CoreEventId.LazyLoadOnDisposedContextWarning` and `CoreEventId.DetachedLazyLoadingWarning`: lazy loading that does nothing.
  * `RelationalEventId.BoolWithDefaultWarning`: a `bool` property with a database-generated default and no sentinel value, for example `HasDefaultValueSql("1")`. EF treats `false` as unset, so it can never insert `false`.
  * `RelationalEventId.ModelValidationKeyDefaultValueWarning`: a key property with a database default, which EF treats as unset when it has the CLR default value.
  * `RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning`: an optional dependent, sharing a table, with no required property, so EF can not tell an instance with all null values from a missing one.
@@ -1371,13 +1370,50 @@ builder.ThrowOnAntiPatterns(
 
 | Flag | Throws when | Threshold |
 | --- | --- | --- |
-| `ThrowOnLazyLoading` | A navigation is lazy loaded. Each lazy load is a query, so reading a navigation in a loop runs one query per item. | |
+| `ThrowOnLazyLoading` | A navigation is lazy loaded, or lazy loading does nothing since the entity is detached. Each lazy load is a query, so reading a navigation in a loop runs one query per item. Checked whether or not Verify is recording. | |
 | `ThrowOnSynchronousCalls` | A query, `SaveChanges`, or raw SQL executes synchronously. Commands that EF runs itself, like migrations, are not checked. For InMemory only `SaveChanges` is checked. | |
-| `ThrowOnRepeatedQueries` | One context executes the same query SQL more than the threshold, which usually means a query in a loop (N+1). Relational providers only. | `RepeatedQueryThreshold`, 10 |
-| `ThrowOnRepeatedSaveChanges` | One context saves changes more times than the threshold. A `SaveChanges` with nothing to save is not counted. | `RepeatedSaveChangesThreshold`, 10 |
-| `ThrowOnSingleRowSaves` | One context has more `SaveChanges` calls that each save a single entity than the threshold. | `SingleRowSavesThreshold`, 10 |
-| `ThrowOnLoadThenModify` | A `SaveChanges` only deletes, or only makes the same change to, more entities of one type than the threshold. `ExecuteDelete` or `ExecuteUpdate` does that in one statement. | `LoadThenModifyThreshold`, 10 |
-| `ThrowOnUnmodifiedTracking` | A context is disposed after loading entities with tracking queries, but never saved a change, so `AsNoTracking` would have done. Throws from `Dispose`. Not checked for pooled contexts, which are not disposed. | |
+| `ThrowOnRepeatedQueries` | One context executes the same query SQL more than the threshold, which usually means a query in a loop (N+1). Relational providers only. | `RepeatedQueryThreshold`, 2 |
+| `ThrowOnRepeatedSaveChanges` | One context saves changes more times than the threshold. A `SaveChanges` with nothing to save is not counted. | `RepeatedSaveChangesThreshold`, 2 |
+| `ThrowOnSingleRowSaves` | One context has more `SaveChanges` calls that each save a single entity than the threshold. | `SingleRowSavesThreshold`, 2 |
+| `ThrowOnLoadThenModify` | A `SaveChanges` only deletes, or only makes the same change to, more entities of one type than the threshold. `ExecuteDelete` or `ExecuteUpdate` does that in one statement. | `LoadThenModifyThreshold`, 1 |
+
+The thresholds are low, since test data is usually small: an N+1 over three rows runs only three queries.
+
+Verify reads every navigation when it serializes an entity, so with `ThrowOnLazyLoading` use [IgnoreNavigationProperties](#ignorenavigationproperties) when verifying entities that lazy load. Entity Framework itself throws, by default, for a lazy load after the context is disposed.
+
+
+#### Only while recording
+
+A test usually runs setup, then the code under test, then assertions, all with one context, and the code under test is often only part of a unit of work. So by default the checks other than `ThrowOnLazyLoading` only count, and throw, while Verify is recording, which is the code under test. They use the recording that `EnableRecording` set up, including its identifier, or otherwise the default recording:
+
+<!-- snippet: AntiPatternsOnlyWhileRecording -->
+<a id='snippet-AntiPatternsOnlyWhileRecording'></a>
+```cs
+// setup, which is not counted
+for (var id = 1; id <= 3; id++)
+{
+    data.Add(NewCompany(id));
+    await data.SaveChangesAsync();
+}
+
+Recording.Start();
+
+// the code under test
+Assert.ThrowsAsync<Exception>(async () =>
+{
+    for (var id = 11; id <= 13; id++)
+    {
+        data.Add(NewCompany(id));
+        await data.SaveChangesAsync();
+    }
+});
+
+Recording.Stop();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L346-L369' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternsOnlyWhileRecording' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+To check everything a context does, set `OnlyWhileRecording = false`.
 
 For example, with `ThrowOnRepeatedQueries` and a `RepeatedQueryThreshold` of 2:
 
@@ -1395,7 +1431,7 @@ await ThrowsTask(async () =>
     })
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L95-L108' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L131-L144' title='Snippet source file'>snippet source</a> | <a href='#snippet-RepeatedQueries' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:

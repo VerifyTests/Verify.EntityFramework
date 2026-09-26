@@ -17,8 +17,6 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
     {
         services.AddSingleton<IInterceptor>(AntiPatternInterceptor.Instance);
         services.AddSingleton<IInterceptor>(RuntimeAntiPatternInterceptor.Instance);
-        // materialization interceptors are read from the ISingletonInterceptor services, not the IInterceptor ones
-        services.AddSingleton<ISingletonInterceptor>(RuntimeAntiPatternInterceptor.Instance);
         services.AddScoped<AntiPatternState>();
     }
 

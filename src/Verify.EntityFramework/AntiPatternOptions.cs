@@ -6,8 +6,19 @@
 public sealed class AntiPatternOptions
 {
     /// <summary>
-    /// Throw when a navigation is lazy loaded. Each lazy load is a separate query, so a loop that reads a
-    /// navigation runs one query per item.
+    /// Only run the runtime checks (synchronous calls, repeated queries, repeated SaveChanges, single row saves, and
+    /// load then modify) while Verify is recording, so the setup and assertions of a test are not counted. Uses the
+    /// recording that EnableRecording set up, including its identifier, or otherwise the default recording. Defaults to
+    /// true. Set to false to check everything a context does.
+    /// </summary>
+    public bool OnlyWhileRecording { get; set; } = true;
+
+    /// <summary>
+    /// Throw when a navigation is lazy loaded, or when lazy loading does nothing, since the entity is detached. Each
+    /// lazy load is a separate query, so a loop that reads a navigation runs one query per item. Applies whether or not
+    /// Verify is recording. Verify reads every navigation when it serializes an entity, so use
+    /// IgnoreNavigationProperties when verifying entities that lazy load. EF itself throws, by default, for a lazy load
+    /// after the context is disposed.
     /// </summary>
     public bool ThrowOnLazyLoading { get; set; }
 
@@ -23,7 +34,10 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnRepeatedQueries { get; set; }
 
-    public int RepeatedQueryThreshold { get; set; } = 10;
+    /// <summary>
+    /// Defaults to 2, since test data is usually small, and the count only covers the code under test.
+    /// </summary>
+    public int RepeatedQueryThreshold { get; set; } = 2;
 
     /// <summary>
     /// Throw when one context saves changes more than <see cref="RepeatedSaveChangesThreshold" /> times, which
@@ -31,7 +45,10 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnRepeatedSaveChanges { get; set; }
 
-    public int RepeatedSaveChangesThreshold { get; set; } = 10;
+    /// <summary>
+    /// Defaults to 2, since test data is usually small, and the count only covers the code under test.
+    /// </summary>
+    public int RepeatedSaveChangesThreshold { get; set; } = 2;
 
     /// <summary>
     /// Throw when one context has more than <see cref="SingleRowSavesThreshold" /> SaveChanges calls that each save a
@@ -39,7 +56,10 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnSingleRowSaves { get; set; }
 
-    public int SingleRowSavesThreshold { get; set; } = 10;
+    /// <summary>
+    /// Defaults to 2, since test data is usually small, and the count only covers the code under test.
+    /// </summary>
+    public int SingleRowSavesThreshold { get; set; } = 2;
 
     /// <summary>
     /// Throw when a SaveChanges only deletes, or only makes the same change to, more than
@@ -48,13 +68,11 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnLoadThenModify { get; set; }
 
-    public int LoadThenModifyThreshold { get; set; } = 10;
-
     /// <summary>
-    /// Throw, when a context is disposed, if it loaded entities with a tracking query but never saved a change.
-    /// AsNoTracking would have avoided the tracking cost. Not checked for pooled contexts, which are not disposed.
+    /// Defaults to 1, so it fires from 2 entities, since loading entities only to delete or update them is the
+    /// anti-pattern, however many there are.
     /// </summary>
-    public bool ThrowOnUnmodifiedTracking { get; set; }
+    public int LoadThenModifyThreshold { get; set; } = 1;
 
     /// <summary>
     /// Throw when ToLower, ToUpper, ToLowerInvariant, or ToUpperInvariant is called on a column in a filter, ordering,

@@ -1,4 +1,4 @@
-class LogCommandInterceptor(string? identifier) :
+﻿class LogCommandInterceptor(string? identifier) :
     DbCommandInterceptor
 {
     public override void CommandFailed(DbCommand command, CommandErrorEventData data)
@@ -104,7 +104,7 @@ class LogCommandInterceptor(string? identifier) :
         }
     }
 
-    bool IsRecording()
+    public bool IsRecording()
     {
         if (identifier is null)
         {

@@ -58,6 +58,42 @@ public class RuntimeAntiPatternTests
         Assert.That(blog.Posts, Has.Count.EqualTo(1));
     }
 
+    // lazy loading after the context is disposed, which is what happens when Verify serializes an entity after its
+    // context is disposed. EF throws for it by default, with or without ThrowOnLazyLoading.
+    [Test]
+    public async Task LazyLoadingDisposedContext()
+    {
+        var name = nameof(LazyLoadingDisposedContext);
+        await SeedLazy(name);
+
+        LazyBlog blog;
+        await using (var data = BuildLazy(name, _ => _.ThrowOnLazyLoading = true))
+        {
+            blog = await data.Blogs.SingleAsync();
+        }
+
+        await Throws(() => blog.Posts)
+            .IgnoreStackTrace();
+    }
+
+    static async Task SeedLazy(string name)
+    {
+        await using var seed = BuildLazy(name, _ => { });
+        seed.Add(
+            new LazyBlog
+            {
+                Id = 1,
+                Posts =
+                [
+                    new()
+                    {
+                        Id = 1
+                    }
+                ]
+            });
+        await seed.SaveChangesAsync();
+    }
+
     [Test]
     public async Task SynchronousQuery()
     {
@@ -253,42 +289,6 @@ public class RuntimeAntiPatternTests
         await data.SaveChangesAsync();
     }
 
-    [Test]
-    public async Task UnmodifiedTracking()
-    {
-        var name = nameof(UnmodifiedTracking);
-        await Seed(name);
-
-        var data = BuildInMemory(_ => _.ThrowOnUnmodifiedTracking = true, name);
-        await data.Companies.ToListAsync();
-        await Throws(() => data.Dispose())
-            .IgnoreStackTrace();
-    }
-
-    [Test]
-    public async Task NoTracking()
-    {
-        var name = nameof(NoTracking);
-        await Seed(name);
-
-        await using var data = BuildInMemory(_ => _.ThrowOnUnmodifiedTracking = true, name);
-        await data.Companies
-            .AsNoTracking()
-            .ToListAsync();
-    }
-
-    [Test]
-    public async Task TrackingThenSave()
-    {
-        var name = nameof(TrackingThenSave);
-        await Seed(name);
-
-        await using var data = BuildInMemory(_ => _.ThrowOnUnmodifiedTracking = true, name);
-        var company = await data.Companies.FirstAsync();
-        company.Name = "Renamed";
-        await data.SaveChangesAsync();
-    }
-
     // every check is off unless opted in to
     [Test]
     public async Task NotEnabled()
@@ -328,7 +328,81 @@ public class RuntimeAntiPatternTests
         builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
         data.Add(NewCompany(1));
+        Recording.Start();
         Assert.Throws<Exception>(() => data.SaveChanges());
+        Recording.Stop();
+    }
+
+    // the setup of a test is not counted, only what runs while Verify is recording
+    [Test]
+    public async Task OnlyWhileRecording()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(OnlyWhileRecording), databaseRoot);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnSingleRowSaves = true);
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        #region AntiPatternsOnlyWhileRecording
+
+        // setup, which is not counted
+        for (var id = 1; id <= 3; id++)
+        {
+            data.Add(NewCompany(id));
+            await data.SaveChangesAsync();
+        }
+
+        Recording.Start();
+
+        // the code under test
+        Assert.ThrowsAsync<Exception>(async () =>
+        {
+            for (var id = 11; id <= 13; id++)
+            {
+                data.Add(NewCompany(id));
+                await data.SaveChangesAsync();
+            }
+        });
+
+        Recording.Stop();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task NotRecording()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(NotRecording), databaseRoot);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnSynchronousCalls = true);
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        data.Add(NewCompany(1));
+        data.SaveChanges();
+    }
+
+    // EnableRecording with an identifier only checks while that recording is started
+    [Test]
+    public async Task RecordingIdentifier()
+    {
+        var identifier = nameof(RuntimeAntiPatternTests) + nameof(RecordingIdentifier);
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(RecordingIdentifier), databaseRoot);
+        builder.EnableRecording(identifier);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnSynchronousCalls = true);
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        Recording.Start();
+        data.Add(NewCompany(1));
+        data.SaveChanges();
+        Recording.Stop();
+
+        Recording.Start(identifier);
+        data.Add(NewCompany(2));
+        Assert.Throws<Exception>(() => data.SaveChanges());
+        Recording.Stop(identifier);
     }
 
     static Company NewCompany(int id) =>
@@ -371,7 +445,12 @@ public class RuntimeAntiPatternTests
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(RuntimeAntiPatternTests) + name, databaseRoot);
-        builder.ThrowOnAntiPatterns(configure);
+        builder.ThrowOnAntiPatterns(_ =>
+        {
+            // these tests check each check's logic, so whether Verify is recording is tested separately
+            _.OnlyWhileRecording = false;
+            configure(_);
+        });
         builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }
@@ -380,7 +459,11 @@ public class RuntimeAntiPatternTests
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseSqlServer(database.Connection);
-        builder.ThrowOnAntiPatterns(configure);
+        builder.ThrowOnAntiPatterns(_ =>
+        {
+            _.OnlyWhileRecording = false;
+            configure(_);
+        });
         builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }

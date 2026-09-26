@@ -324,7 +324,7 @@ public static class VerifyEntityFramework
         builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
         if (options.ThrowOnLazyLoading)
         {
-            builder.ConfigureWarnings(_ => _.Throw(CoreEventId.NavigationLazyLoading));
+            builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.LazyLoadingWarnings));
         }
 
         return builder;

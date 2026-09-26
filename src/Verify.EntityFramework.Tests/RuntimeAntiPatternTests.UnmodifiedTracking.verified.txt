@@ -1,4 +1,0 @@
-﻿{
-  Type: Exception,
-  Message: The context loaded 2 entities with tracking queries, but never saved a change. Use AsNoTracking for queries whose results are not modified.
-}

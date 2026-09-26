@@ -2,8 +2,7 @@
 // Stateless: what each context has counted is in its AntiPatternState.
 class RuntimeAntiPatternInterceptor :
     DbCommandInterceptor,
-    ISaveChangesInterceptor,
-    IMaterializationInterceptor
+    ISaveChangesInterceptor
 {
     public static RuntimeAntiPatternInterceptor Instance { get; } = new();
 
@@ -48,6 +47,11 @@ class RuntimeAntiPatternInterceptor :
         }
 
         var state = State(context);
+        if (!state.IsActive)
+        {
+            return result;
+        }
+
         if (state.Options.ThrowOnSynchronousCalls)
         {
             throw new("SaveChanges executed synchronously. Use SaveChangesAsync.");
@@ -60,24 +64,18 @@ class RuntimeAntiPatternInterceptor :
     public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData data, InterceptionResult<int> result, Cancel cancel = default)
     {
         var context = data.Context;
-        if (context != null)
+        if (context == null)
         {
-            CheckSave(context, State(context));
+            return new(result);
+        }
+
+        var state = State(context);
+        if (state.IsActive)
+        {
+            CheckSave(context, state);
         }
 
         return new(result);
-    }
-
-    public object InitializedInstance(MaterializationInterceptionData data, object entity)
-    {
-        var state = State(data.Context);
-        if (state.Options.ThrowOnUnmodifiedTracking &&
-            data.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
-        {
-            state.CountTrackedLoad();
-        }
-
-        return entity;
     }
 
     static AntiPatternState State(DbContext context) =>
@@ -87,8 +85,14 @@ class RuntimeAntiPatternInterceptor :
     {
         var context = data.Context;
         if (context == null ||
-            !IsUserCommand(data.CommandSource) ||
-            !State(context).Options.ThrowOnSynchronousCalls)
+            !IsUserCommand(data.CommandSource))
+        {
+            return;
+        }
+
+        var state = State(context);
+        if (!state.Options.ThrowOnSynchronousCalls ||
+            !state.IsActive)
         {
             return;
         }
@@ -117,7 +121,8 @@ class RuntimeAntiPatternInterceptor :
 
         var state = State(context);
         var options = state.Options;
-        if (!options.ThrowOnRepeatedQueries)
+        if (!options.ThrowOnRepeatedQueries ||
+            !state.IsActive)
         {
             return;
         }
@@ -140,8 +145,6 @@ class RuntimeAntiPatternInterceptor :
         {
             return;
         }
-
-        state.SavedChanges();
 
         if (options.ThrowOnRepeatedSaveChanges)
         {

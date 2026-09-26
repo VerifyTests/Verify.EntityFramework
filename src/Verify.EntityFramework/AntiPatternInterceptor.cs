@@ -22,8 +22,6 @@ class AntiPatternInterceptor :
         CoreEventId.PossibleUnintendedCollectionNavigationNullComparisonWarning,
         RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning,
         CoreEventId.NavigationBaseIncludeIgnored,
-        CoreEventId.LazyLoadOnDisposedContextWarning,
-        CoreEventId.DetachedLazyLoadingWarning,
         // model anti-patterns, logged when the model is built
         RelationalEventId.BoolWithDefaultWarning,
         RelationalEventId.ModelValidationKeyDefaultValueWarning,
@@ -32,6 +30,16 @@ class AntiPatternInterceptor :
         DecimalTypeDefaultWarning,
         // logged by SaveChanges, when an optional dependent with only null values is not saved
         RelationalEventId.OptionalDependentWithAllNullPropertiesWarning
+    ];
+
+    // Only thrown for ThrowOnLazyLoading, not by default. Verify reads every navigation when it serializes an entity, so
+    // for a detached entity DetachedLazyLoadingWarning would throw from inside Verify, not the code under test.
+    // LazyLoadOnDisposedContextWarning is listed for completeness: EF already throws for it by default.
+    public static Microsoft.Extensions.Logging.EventId[] LazyLoadingWarnings { get; } =
+    [
+        CoreEventId.NavigationLazyLoading,
+        CoreEventId.LazyLoadOnDisposedContextWarning,
+        CoreEventId.DetachedLazyLoadingWarning
     ];
 
     public Expression QueryCompilationStarting(Expression query, QueryExpressionEventData data)
