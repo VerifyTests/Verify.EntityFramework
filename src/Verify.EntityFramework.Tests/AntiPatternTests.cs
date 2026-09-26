@@ -822,6 +822,64 @@ public class AntiPatternTests
             .ToListAsync();
     }
 
+    // the queries are the case conversions the check detects
+#pragma warning disable CA1862
+    [Test]
+    public async Task ToLowerInWhere()
+    {
+        await using var data = BuildData();
+
+        #region ToLowerInWhere
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .Where(_ => _.Name.ToLower() == "company1")
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task ToUpperInvariantInOrderBy()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => _.Name.ToUpperInvariant())
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task ToLowerInNestedPredicate()
+    {
+        await using var data = BuildData();
+        Assert.ThrowsAsync<Exception>(() =>
+            data.Companies
+                .Where(_ => _.Employees.Any(employee => employee.Company.Name.ToLower() == "company1"))
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task CaseConversionKept()
+    {
+        await using var data = BuildData();
+
+        // a variable is sent as a parameter
+        var name = "Company1";
+        await data.Companies
+            .Where(_ => _.Name == name.ToLower())
+            .ToListAsync();
+
+        // a projection only changes the output
+        await data.Companies
+            .Select(_ => _.Name.ToUpper())
+            .ToListAsync();
+    }
+
+#pragma warning restore CA1862
+
     static SampleDbContext BuildSqlServerData()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();

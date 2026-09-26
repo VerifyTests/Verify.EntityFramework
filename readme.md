@@ -1143,6 +1143,38 @@ Throws:
 Only sources that return each entity once are detected: an entity set, or a collection navigation, followed by operators like `Where`, `OrderBy`, `Take`, and `Include`. A `Join`, `SelectMany`, `GroupBy`, raw SQL, or temporal query can return an entity more than once, so its `Distinct()` is kept. So is `Distinct()` with a comparer.
 
 
+### Case conversion of a column
+
+`ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too:
+
+<!-- snippet: ToLowerInWhere -->
+<a id='snippet-ToLowerInWhere'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .Where(_ => _.Name.ToLower() == "company1")
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L832-L840' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.ToLowerInWhere.verified.txt -->
+<a id='snippet-AntiPatternTests.ToLowerInWhere.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message: `_.Name.ToLower()` in Where converts the column, so the database can not use an index on it. SQL Server compares case insensitively with its default collation, so compare the column directly. For a case sensitive column, use EF.Functions.Collate with a case insensitive collation.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.ToLowerInWhere.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.ToLowerInWhere.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A conversion of a variable is not detected, since EF sends it as a parameter, and neither is one in a projection, since it only changes the output. For a column with a case sensitive collation, use `EF.Functions.Collate` with a case insensitive collation.
+
+
 ### Redundant null check
 
 EF evaluates a member of a null navigation as null, and null compared to a non null constant is false. So in `_.Owner != null && _.Owner.Name == "owner"` the null check is redundant, and `_.Owner!.Name == "owner"` returns the same rows with simpler SQL.

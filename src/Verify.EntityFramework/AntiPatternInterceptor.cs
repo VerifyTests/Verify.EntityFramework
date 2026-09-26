@@ -29,6 +29,7 @@ class AntiPatternInterceptor :
         DiscardedOrderByDetector.ThrowIfDiscarded(query);
         RedundantNullCheckDetector.ThrowIfRedundant(query);
         CountComparisonDetector.ThrowIfCountCompared(query);
+        CaseConversionDetector.ThrowIfColumnConverted(query);
 
         var context = data.Context;
         if (context != null)
