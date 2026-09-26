@@ -924,6 +924,8 @@ var data = new SampleDbContext(builder.Options);
 
 A context that uses `UseInternalServiceProvider` is not checked, since EF does not apply extension services to that provider.
 
+These checks find queries that are written wrong, whatever data they run against. To limit how large or expensive a query can be, for example the number of values in a `Contains` list, the number of rows, or the number of includes, use [EfQueryComplexity](https://github.com/SimonCropp/EfQueryComplexity).
+
 
 ### Opting out
 
