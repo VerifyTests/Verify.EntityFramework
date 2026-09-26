@@ -250,13 +250,13 @@ public class InMemoryRecordingTests
         var factory = new PooledDbContextFactory<SampleDbContext>(builder.Options);
 
         SampleDbContext disabled;
-        await using (var data = factory.CreateDbContext())
+        await using (var data = await factory.CreateDbContextAsync())
         {
             disabled = data;
             data.DisableRecording();
         }
 
-        await using (var data = factory.CreateDbContext())
+        await using (var data = await factory.CreateDbContextAsync())
         {
             Assert.That(data, Is.SameAs(disabled));
 
