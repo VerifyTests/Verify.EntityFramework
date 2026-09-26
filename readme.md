@@ -987,10 +987,13 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: Include(_ => _.Employees) is ignored, since it is followed by Select, which returns no entity. EF only applies Include to entities returned by the query, and a projection already loads the related data it references. Remove it.
+  Message:
+Include(_ => _.Employees) is ignored, since it is followed by Select, which returns no entity.
+EF only applies Include to entities returned by the query, and a projection already loads the related data it references.
+Remove it.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeThenProjection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeThenProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeThenProjection.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeThenProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`.
@@ -1020,10 +1023,13 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: AsSplitQuery() is ignored, since the query loads no collection. Query splitting only changes how collection Includes and collections in a projection are loaded. Remove it.
+  Message:
+AsSplitQuery() is ignored, since the query loads no collection.
+Query splitting only changes how collection Includes and collections in a projection are loaded.
+Remove it.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.SplitQueryWithoutCollection.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.SplitQueryWithoutCollection.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.SplitQueryWithoutCollection.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -1051,10 +1057,12 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Id). Use ThenBy(_ => _.Id) to add a secondary ordering, or remove the first ordering.
+  Message:
+OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Id).
+Use ThenBy(_ => _.Id) to add a secondary ordering, or remove the first ordering.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.OrderByThenOrderBy.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.OrderByThenOrderBy.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.OrderByThenOrderBy.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -1096,10 +1104,12 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: `_.Employees.Count() > 0` counts every row, when only whether one exists is needed. Use `_.Employees.Any()`, which stops at the first.
+  Message:
+`_.Employees.Count() > 0` counts every row, when only whether one exists is needed.
+Use `_.Employees.Any()`, which stops at the first.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CountGreaterThanZero.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CountGreaterThanZero.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CountGreaterThanZero.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CountGreaterThanZero.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Only comparisons inside a query are detected. `query.Count() > 0` compares in C#, after the query has run.
@@ -1134,10 +1144,12 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique. Remove it.
+  Message:
+Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique.
+Remove it.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.DistinctOnKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.DistinctOnKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.DistinctOnKey.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.DistinctOnKey.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Only sources that return each entity once are detected: an entity set, or a collection navigation, followed by operators like `Where`, `OrderBy`, `Take`, and `Include`. A `Join`, `SelectMany`, `GroupBy`, raw SQL, or temporal query can return an entity more than once, so its `Distinct()` is kept. So is `Distinct()` with a comparer.
@@ -1167,10 +1179,12 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: GroupBy(_ => _.CompanyId) only returns the distinct keys, since the groups are only used for their Key. Use Select(_ => _.CompanyId).Distinct(), which states that directly.
+  Message:
+GroupBy(_ => _.CompanyId) only returns the distinct keys, since the groups are only used for their Key.
+Use Select(_ => _.CompanyId).Distinct(), which states that directly.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.GroupByOnlyKey.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.GroupByOnlyKey.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.GroupByOnlyKey.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.GroupByOnlyKey.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 A selector that uses the groups, for example `_.Count()`, is not detected.
@@ -1210,10 +1224,13 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: Where(_ => _.Employees.Any(_ => (_.Age > 30))) filters by Employees, but Include(_ => _.Employees) still loads all Employees of the rows returned. To load only the matching Employees, filter inside the Include, for example Include(_ => _.Employees.Where(...)). If filtering the rows by Employees is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
+  Message:
+Where(_ => _.Employees.Any(_ => (_.Age > 30))) filters by Employees, but Include(_ => _.Employees) still loads all Employees of the rows returned.
+To load only the matching Employees, filter inside the Include, for example Include(_ => _.Employees.Where(...)).
+If filtering the rows by Employees is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CollectionFilterOutsideInclude.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CollectionFilterOutsideInclude.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.CollectionFilterOutsideInclude.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.CollectionFilterOutsideInclude.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 A filtered `Include`, and a `Where` that does not read the included collection, are not detected.
@@ -1300,10 +1317,12 @@ Throws:
 ```txt
 {
   Type: Exception,
-  Message: The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null. Remove the null check.
+  Message:
+The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null.
+Remove the null check.
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.RedundantNullCheck.verified.txt#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-NullableNavigationTests.RedundantNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.RedundantNullCheck.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-NullableNavigationTests.RedundantNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Only comparisons with a non null constant using `==`, `>`, `>=`, `<`, or `<=` are detected. With `!=`, or a value that can be null, a null navigation can match, so the null check changes the result and is kept.
@@ -1442,13 +1461,15 @@ Throws:
 {
   Type: Exception,
   Message:
-The same query executed 3 times in one context, which usually means a query in a loop (N+1). Load the data in one query, for example with Include, a projection, or Contains. Query:
+The same query executed 3 times in one context, which usually means a query in a loop (N+1).
+Load the data in one query, for example with Include, a projection, or Contains.
+Query:
 SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
 WHERE [c].[Id] = @id
 }
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RepeatedQueries.verified.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RepeatedQueries.verified.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## ScrubInlineEfDateTimes

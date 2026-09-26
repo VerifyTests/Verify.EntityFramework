@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: `1 <= _.Employees.Count` counts every row, when only whether one exists is needed. Use `_.Employees.Any()`, which stops at the first.
+  Message:
+`1 <= _.Employees.Count` counts every row, when only whether one exists is needed.
+Use `_.Employees.Any()`, which stops at the first.
 }

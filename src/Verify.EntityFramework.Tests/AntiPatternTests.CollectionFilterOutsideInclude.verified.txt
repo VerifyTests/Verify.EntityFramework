@@ -1,4 +1,7 @@
 ﻿{
   Type: Exception,
-  Message: Where(_ => _.Employees.Any(_ => (_.Age > 30))) filters by Employees, but Include(_ => _.Employees) still loads all Employees of the rows returned. To load only the matching Employees, filter inside the Include, for example Include(_ => _.Employees.Where(...)). If filtering the rows by Employees is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
+  Message:
+Where(_ => _.Employees.Any(_ => (_.Age > 30))) filters by Employees, but Include(_ => _.Employees) still loads all Employees of the rows returned.
+To load only the matching Employees, filter inside the Include, for example Include(_ => _.Employees.Where(...)).
+If filtering the rows by Employees is intended, allow it with ThrowOnCollectionFilterOutsideInclude = false.
 }

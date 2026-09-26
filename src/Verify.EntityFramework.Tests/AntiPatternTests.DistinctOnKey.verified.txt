@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique. Remove it.
+  Message:
+Distinct() is redundant, since each row includes the key of Company (Id), so the rows are already unique.
+Remove it.
 }

@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: SaveChanges deleted 3 Company entities, and made no other change. ExecuteDeleteAsync deletes them in one statement, without loading them.
+  Message:
+SaveChanges deleted 3 Company entities, and made no other change.
+ExecuteDeleteAsync deletes them in one statement, without loading them.
 }

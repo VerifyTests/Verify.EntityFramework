@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null. Remove the null check.
+  Message:
+The null check `_.Owner != null` is redundant, since `_.Owner.Name == "owner"` is false when _.Owner is null.
+Remove the null check.
 }

@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: OrderBy(_ => _.Name) is discarded, since it is followed by Any, whose result does not depend on order. Remove the ordering.
+  Message:
+OrderBy(_ => _.Name) is discarded, since it is followed by Any, whose result does not depend on order.
+Remove the ordering.
 }

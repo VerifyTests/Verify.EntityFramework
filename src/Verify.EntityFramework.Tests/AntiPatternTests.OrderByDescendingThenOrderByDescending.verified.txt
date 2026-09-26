@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: OrderByDescending(_ => _.Name) is discarded, since it is followed by OrderByDescending(_ => _.Id). Use ThenByDescending(_ => _.Id) to add a secondary ordering, or remove the first ordering.
+  Message:
+OrderByDescending(_ => _.Name) is discarded, since it is followed by OrderByDescending(_ => _.Id).
+Use ThenByDescending(_ => _.Id) to add a secondary ordering, or remove the first ordering.
 }

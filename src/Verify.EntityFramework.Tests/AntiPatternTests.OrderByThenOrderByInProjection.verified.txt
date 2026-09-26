@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Age). Use ThenBy(_ => _.Age) to add a secondary ordering, or remove the first ordering.
+  Message:
+OrderBy(_ => _.Name) is discarded, since it is followed by OrderBy(_ => _.Age).
+Use ThenBy(_ => _.Age) to add a secondary ordering, or remove the first ordering.
 }

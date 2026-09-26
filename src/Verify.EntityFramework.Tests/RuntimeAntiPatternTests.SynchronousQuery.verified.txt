@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: A LinqQuery command executed synchronously. Use the async method, for example ToListAsync, SaveChangesAsync, or ExecuteDeleteAsync.
+  Message:
+A LinqQuery command executed synchronously.
+Use the async method, for example ToListAsync, SaveChangesAsync, or ExecuteDeleteAsync.
 }

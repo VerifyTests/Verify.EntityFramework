@@ -1,7 +1,9 @@
 ﻿{
   Type: Exception,
   Message:
-The same query executed 3 times in one context, which usually means a query in a loop (N+1). Load the data in one query, for example with Include, a projection, or Contains. Query:
+The same query executed 3 times in one context, which usually means a query in a loop (N+1).
+Load the data in one query, for example with Include, a projection, or Contains.
+Query:
 SELECT [c].[Id], [c].[Name]
 FROM [Companies] AS [c]
 WHERE [c].[Id] = @id

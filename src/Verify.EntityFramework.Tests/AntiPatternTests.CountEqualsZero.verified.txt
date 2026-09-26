@@ -1,4 +1,6 @@
 ﻿{
   Type: Exception,
-  Message: `_.Employees.Count(_ => (_.Age > 30)) == 0` counts every row, when only whether one exists is needed. Use `!_.Employees.Any(_ => (_.Age > 30))`, which stops at the first.
+  Message:
+`_.Employees.Count(_ => (_.Age > 30)) == 0` counts every row, when only whether one exists is needed.
+Use `!_.Employees.Any(_ => (_.Age > 30))`, which stops at the first.
 }
