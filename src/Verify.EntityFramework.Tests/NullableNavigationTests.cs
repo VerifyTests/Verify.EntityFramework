@@ -59,7 +59,7 @@ public class NullableNavigationTests
     {
         await using var data = await BuildData(nameof(RedundantNullCheckReversed));
 
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Cars
                 .Where(_ => _.Owner!.Id > 0 && null != _.Owner)
                 .ToListAsync());

@@ -236,6 +236,23 @@ public class AntiPatternTests
         await data.Companies.CountAsync();
     }
 
+    // Regression test: projecting into a constructor where a value is implicitly
+    // converted to a wider/nullable parameter type (here int -> int?) must not
+    // throw. EntityFinder looks past such conversions to check whether what is
+    // underneath is an entity, but was discarding the conversion from the
+    // expression it then returned. Rebuilding the containing NewExpression from
+    // that returned argument threw ArgumentException, even though this
+    // projection contains no Include or tracking option for the detector to
+    // legitimately flag
+    [Test]
+    public async Task ProjectionIntoConstructorWithNullableParameter()
+    {
+        await using var data = BuildData();
+        await data.Employees
+            .Select(_ => new EmployeeSummary(_.Name, _.Age))
+            .ToListAsync();
+    }
+
     [Test]
     public async Task NotEnabled()
     {
@@ -772,7 +789,7 @@ public class AntiPatternTests
     public async Task DistinctOnKeyOnly()
     {
         await using var data = BuildData();
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Employees
                 .Select(_ => _.Id)
                 .Distinct()
@@ -783,7 +800,7 @@ public class AntiPatternTests
     public async Task DistinctOnNavigationKey()
     {
         await using var data = BuildData();
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Companies
                 .Select(_ => new
                 {
@@ -851,7 +868,7 @@ public class AntiPatternTests
     public async Task GroupByOnlyKeyMembers()
     {
         await using var data = BuildData();
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Employees
                 .GroupBy(_ => new
                 {
@@ -870,7 +887,7 @@ public class AntiPatternTests
     public async Task GroupByResultSelectorIgnoresElements()
     {
         await using var data = BuildData();
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Employees
                 .GroupBy(_ => _.CompanyId, (companyId, employees) => companyId)
                 .ToListAsync());
@@ -926,7 +943,7 @@ public class AntiPatternTests
     public async Task ToLowerInNestedPredicate()
     {
         await using var data = BuildCaseConversionData();
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsAsync<Exception>(() =>
             data.Companies
                 .Where(_ => _.Employees.Any(employee => employee.Company.Name.ToLower() == "company1"))
                 .ToListAsync());
@@ -1139,3 +1156,5 @@ public class AntiPatternTests
         return new(builder.Options);
     }
 }
+
+record EmployeeSummary(string Name, int? Age);

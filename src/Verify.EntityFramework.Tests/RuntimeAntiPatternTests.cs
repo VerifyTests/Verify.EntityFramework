@@ -358,7 +358,7 @@ public class RuntimeAntiPatternTests
         Recording.Start();
 
         // the code under test
-        Assert.ThrowsAsync<Exception>(async () =>
+        await Assert.ThrowsAsync<Exception>(async () =>
         {
             for (var id = 11; id <= 13; id++)
             {

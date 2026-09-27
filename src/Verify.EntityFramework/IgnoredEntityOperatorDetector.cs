@@ -201,14 +201,20 @@ static class IgnoredEntityOperatorDetector
         [return: NotNullIfNotNull(nameof(node))]
         public override Expression? Visit(Expression? node)
         {
-            node = Unconvert(node);
             if (found ||
                 node == null)
             {
                 return node;
             }
 
-            if (IsEntity(node.Type, model))
+            // Unconvert is only used to look past conversions (e.g. bool -> bool?) when
+            // checking for an entity type. The original, possibly-converted, node must still
+            // be the one visited/returned: base.Visit rebuilds parent expressions (for example
+            // a NewExpression's arguments) from the returned node, and dropping a conversion
+            // here would leave an argument whose type no longer matches the constructor parameter
+            var unconverted = Unconvert(node);
+            if (unconverted != null &&
+                IsEntity(unconverted.Type, model))
             {
                 found = true;
                 return node;
