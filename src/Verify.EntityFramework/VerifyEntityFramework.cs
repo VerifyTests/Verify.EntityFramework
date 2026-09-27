@@ -270,6 +270,17 @@ public static class VerifyEntityFramework
     /// </summary>
     public static bool ThrowOnAntiPatternsByDefault { get; set; } = true;
 
+    // Binary compatibility for assemblies compiled against the pre optional parameter overloads, for example EfLocalDb
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder)
+        where TContext : DbContext =>
+        builder.EnableRecording(null, null);
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(this DbContextOptionsBuilder<TContext> builder, string? identifier)
+        where TContext : DbContext =>
+        builder.EnableRecording(identifier, null);
+
     /// <param name="builder">The options builder for the context.</param>
     /// <param name="identifier">Record under this identifier, so a test can start and stop its own recording.</param>
     /// <param name="throwOnAntiPatterns">
