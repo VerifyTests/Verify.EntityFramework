@@ -336,6 +336,50 @@ public class AntiPatternTests
             .ToListAsync();
     }
 
+    // a navigation is an entity, so projecting one returns entities that EF tracks
+    [Test]
+    public async Task AsNoTrackingThenProjectionOfNavigation()
+    {
+        await using var data = BuildData();
+        await data.Employees
+            .AsNoTracking()
+            .Select(_ => _.Company)
+            .ToListAsync();
+        await data.Companies
+            .AsNoTracking()
+            .Select(_ => _.Employees)
+            .ToListAsync();
+        await data.Employees
+            .AsNoTracking()
+            .Select(_ => new
+            {
+                _.Id,
+                _.Company
+            })
+            .ToListAsync();
+        await data.Employees
+            .Select(_ => _.Company)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    // only a member of the navigation is projected, so no entity is returned
+    [Test]
+    public async Task AsNoTrackingThenProjectionOfNavigationMember()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Employees
+                    .AsNoTracking()
+                    .Select(_ => new
+                    {
+                        _.Id,
+                        CompanyName = _.Company!.Name
+                    })
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
     [Test]
     public async Task OrderByThenOrderBy()
     {
