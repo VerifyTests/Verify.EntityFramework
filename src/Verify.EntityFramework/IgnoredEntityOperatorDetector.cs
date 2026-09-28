@@ -32,6 +32,11 @@ static class IgnoredEntityOperatorDetector
         {
             if (IsEntityOperator(call.Method))
             {
+                if (IsAddedByTemporalOperator(call))
+                {
+                    continue;
+                }
+
                 if (!returnsEntities)
                 {
                     throw Ignored([call], AfterReason(lostBy));
@@ -111,6 +116,30 @@ static class IgnoredEntityOperatorDetector
             nameof(EntityFrameworkQueryableExtensions.AsNoTracking) or
             nameof(EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution) or
             nameof(EntityFrameworkQueryableExtensions.AsTracking);
+
+    // SQL Server's temporal operators (TemporalAsOf, TemporalAll, etc) apply AsNoTracking to their query root
+    // themselves, so it is not something the caller can remove. Matched by name since this library does not
+    // reference the SqlServer provider.
+    static bool IsAddedByTemporalOperator(MethodCallExpression call)
+    {
+        if (!IsTracking(call.Method))
+        {
+            return false;
+        }
+
+        var type = call.Arguments[0].GetType();
+        while (type != null)
+        {
+            if (type.Name == "TemporalQueryRootExpression")
+            {
+                return true;
+            }
+
+            type = type.BaseType;
+        }
+
+        return false;
+    }
 
     static bool ReturnsEntities(MethodCallExpression call, bool sourceReturnsEntities, IModel model)
     {

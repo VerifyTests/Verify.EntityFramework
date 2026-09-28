@@ -1060,6 +1060,61 @@ public class AntiPatternTests
         public decimal Price { get; set; }
     }
 
+    // TemporalAsOf and TemporalAll apply AsNoTracking themselves, so a projection after them is not flagged
+    [Test]
+    public void TemporalThenProjection()
+    {
+        using var data = BuildTemporalData();
+
+        data.Items
+            .TemporalAsOf(DateTime.UtcNow)
+            .Select(_ => _.Name)
+            .ToQueryString();
+        data.Items
+            .TemporalAll()
+            .Select(_ => _.Id)
+            .ToQueryString();
+    }
+
+    [Test]
+    public void TemporalThenAsNoTrackingThenProjection()
+    {
+        using var data = BuildTemporalData();
+
+        var query = data.Items
+            .TemporalAsOf(DateTime.UtcNow)
+            .AsNoTracking()
+            .Select(_ => _.Name);
+        var exception = Assert.Throws<Exception>(() => query.ToQueryString());
+        Assert.That(exception!.Message, Does.StartWith("AsNoTracking() is ignored"));
+    }
+
+    static TemporalContext BuildTemporalData()
+    {
+        var builder = new DbContextOptionsBuilder<TemporalContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
+        return new(builder.Options);
+    }
+
+    class TemporalContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        public DbSet<Versioned> Items { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder model) =>
+            model
+                .Entity<Versioned>()
+                .ToTable(_ => _.IsTemporal());
+    }
+
+    class Versioned
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+    }
+
     [Test]
     public async Task RequiredNavigationWithQueryFilter()
     {
