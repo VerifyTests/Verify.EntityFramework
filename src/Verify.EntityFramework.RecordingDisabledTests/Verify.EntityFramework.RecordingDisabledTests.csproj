@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>VerifyEntityFrameworkRecordingDisabledTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="TUnit" />
     <PackageReference Include="Argon" />
     <PackageReference Include="Verify" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.EntityFramework\Verify.EntityFramework.csproj" />
     <Compile Include="..\Verify.EntityFramework.Tests\Snippets\DataContext\Company.cs" Link="DataContext\Company.cs" />

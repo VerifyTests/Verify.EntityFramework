@@ -1,4 +1,4 @@
-[TestFixture]
+[NotInParallel]
 public class RecordingDisabledTests
 {
     static SqlInstance<SampleDbContext> sqlInstance = new(
@@ -32,7 +32,7 @@ public class RecordingDisabledTests
             .Where(_ => _.Name == "Title")
             .ToListAsync();
 
-        Assert.That(Recording.Stop(), Is.Empty);
+        await Assert.That(Recording.Stop()).IsEmpty();
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class RecordingDisabledTests
             .Where(_ => _.Name == "Title")
             .ToListAsync();
 
-        Assert.That(Recording.Stop("theIdentifier"), Is.Empty);
+        await Assert.That(Recording.Stop("theIdentifier")).IsEmpty();
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class RecordingDisabledTests
             .Where(_ => _.Name == "Title")
             .ToListAsync();
 
-        Assert.That(Recording.Stop(), Is.Empty);
+        await Assert.That(Recording.Stop()).IsEmpty();
     }
 
     // recordCommands only disables the recording interceptor, not the converters

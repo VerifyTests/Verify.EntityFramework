@@ -1,6 +1,4 @@
-﻿[TestFixture]
-[Parallelizable(ParallelScope.All)]
-public class InMemoryRecordingTests
+﻿public class InMemoryRecordingTests
 {
     // ReSharper disable once UnusedVariable
     static void Build(string databaseName)
@@ -210,7 +208,7 @@ public class InMemoryRecordingTests
 
         await data.SaveChangesAsync();
 
-        Assert.That(Recording.Stop(), Is.Empty);
+        await Assert.That(Recording.Stop()).IsEmpty();
     }
 
     [Test]
@@ -258,7 +256,7 @@ public class InMemoryRecordingTests
 
         await using (var data = await factory.CreateDbContextAsync())
         {
-            Assert.That(data, Is.SameAs(disabled));
+            await Assert.That(data).IsSameReferenceAs(disabled);
 
             Recording.Start();
 
@@ -362,7 +360,7 @@ public class InMemoryRecordingTests
 
     // at the cost of the InMemory queries not being recorded
     [Test]
-    public void KeepsReplacedQueryCompiler()
+    public async Task KeepsReplacedQueryCompiler()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(KeepsReplacedQueryCompiler));
@@ -370,13 +368,13 @@ public class InMemoryRecordingTests
         builder.EnableRecording();
         using var data = new SampleDbContext(builder.Options);
 
-        Assert.That(data.GetService<IQueryCompiler>(), Is.TypeOf<QueryCompiler>());
+        await Assert.That(data.GetService<IQueryCompiler>()).IsTypeOf<QueryCompiler>();
     }
 
     // a library that adds, rather than replaces, its IQueryCompiler leaves EF's default as the first registration.
     // Replacing that would remove the default and put RecordingQueryCompiler last, displacing the library's.
     [Test]
-    public void KeepsAddedQueryCompiler()
+    public async Task KeepsAddedQueryCompiler()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(KeepsAddedQueryCompiler));
@@ -384,7 +382,7 @@ public class InMemoryRecordingTests
         builder.EnableRecording();
         using var data = new SampleDbContext(builder.Options);
 
-        Assert.That(data.GetService<IQueryCompiler>(), Is.TypeOf<QueryCompiler>());
+        await Assert.That(data.GetService<IQueryCompiler>()).IsTypeOf<QueryCompiler>();
     }
 
     class AddQueryCompilerExtension :

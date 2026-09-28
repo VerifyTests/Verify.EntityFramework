@@ -1,4 +1,4 @@
-[TestFixture]
+[NotInParallel]
 public class ProxyTests
 {
     static SqlInstance<ProxyDbContext> sqlInstance = new(
@@ -21,7 +21,7 @@ public class ProxyTests
 
         using var data2 = new ProxyDbContext(database.Connection);
         var parent = data2.Parents.Single();
-        Assert.That(parent.GetType(), Is.Not.EqualTo(typeof(Parent)));
+        await Assert.That(parent.GetType()).IsNotEqualTo(typeof(Parent));
         parent.Content = "after";
         await Verify(data2.ChangeTracker);
     }

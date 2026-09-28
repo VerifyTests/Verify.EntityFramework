@@ -2,8 +2,6 @@
 /// The case the feature exists for. A migration that is valid against an empty database fails
 /// against a deployed one, because deployment state conflicts with the DDL.
 /// </summary>
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class ChangeTrackingReplayTests
 {
     static SqlInstance<TrackedDbContext> instance = new(

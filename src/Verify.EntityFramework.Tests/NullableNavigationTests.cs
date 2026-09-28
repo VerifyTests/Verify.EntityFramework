@@ -1,6 +1,4 @@
-﻿[TestFixture]
-[Parallelizable(ParallelScope.All)]
-public class NullableNavigationTests
+﻿public class NullableNavigationTests
 {
     [Test]
     public async Task Include()
@@ -59,7 +57,7 @@ public class NullableNavigationTests
     {
         await using var data = await BuildData(nameof(RedundantNullCheckReversed));
 
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Cars
                 .Where(_ => _.Owner!.Id > 0 && null != _.Owner)
                 .ToListAsync());
@@ -74,7 +72,7 @@ public class NullableNavigationTests
         var cars = await data.Cars
             .Where(_ => _.Owner != null && _.Owner.Name != "other")
             .ToListAsync();
-        Assert.That(cars, Has.Count.EqualTo(1));
+        await Assert.That(cars).Count().IsEqualTo(1);
     }
 
     // a null Owner matches when the variable is null, so the check changes the result
@@ -87,7 +85,7 @@ public class NullableNavigationTests
         var cars = await data.Cars
             .Where(_ => _.Owner != null && _.Owner.Name == name)
             .ToListAsync();
-        Assert.That(cars, Is.Empty);
+        await Assert.That(cars).IsEmpty();
     }
 
     [Test]
@@ -139,7 +137,7 @@ public class NullableNavigationTests
         var cars = await data.Cars
             .Where(_ => _.OwnerId != null && _.OwnerId != 2)
             .ToListAsync();
-        Assert.That(cars, Has.Count.EqualTo(1));
+        await Assert.That(cars).Count().IsEqualTo(1);
     }
 
     [Test]

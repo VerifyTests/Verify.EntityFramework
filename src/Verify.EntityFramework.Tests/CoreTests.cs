@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class CoreTests
 {
     [Test]
@@ -670,10 +668,12 @@ public class CoreTests
         #endregion
     }
 
-    [DatapointSource]
-    public IEnumerable<int> runs = Enumerable.Range(0, 5);
-
-    [Theory]
+    [Test]
+    [Arguments(0)]
+    [Arguments(1)]
+    [Arguments(2)]
+    [Arguments(3)]
+    [Arguments(4)]
     public async Task RecordingWebApplicationFactory(int run)
     {
         // Not actually the test name, the variable name is for README.md to make sense

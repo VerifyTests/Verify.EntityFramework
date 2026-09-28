@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class AllDataTests
 {
     // derived entities were returned once for each type in the hierarchy

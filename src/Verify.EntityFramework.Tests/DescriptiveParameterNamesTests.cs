@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class DescriptiveParameterNamesTests
 {
     static SqlInstance<DescriptiveDbContext> instance = new(

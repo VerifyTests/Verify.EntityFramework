@@ -1,5 +1,4 @@
-﻿[TestFixture]
-[NonParallelizable]
+﻿[NotInParallel]
 public class StaticSettingsTests
 {
     static SqlInstance<SampleDbContext> sqlInstance = new(
@@ -11,7 +10,7 @@ public class StaticSettingsTests
             return new(builder.Options);
         });
 
-    [TearDown]
+    [After(Test)]
     public void TearDown()
     {
         VerifyEntityFramework.DisableSqlFormatting = false;

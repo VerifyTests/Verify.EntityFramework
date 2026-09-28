@@ -1,6 +1,4 @@
-﻿[TestFixture]
-[Parallelizable(ParallelScope.All)]
-public class AntiPatternTests
+﻿public class AntiPatternTests
 {
     // ReSharper disable once UnusedVariable
     // ReSharper disable once UnusedParameter.Local
@@ -139,25 +137,25 @@ public class AntiPatternTests
 
     // the query is checked by any provider, including when converted to SQL, as done when verifying a queryable
     [Test]
-    public void SqlServerToQueryString()
+    public async Task SqlServerToQueryString()
     {
         using var data = BuildSqlServerData();
 
         var query = data.Companies
             .Include(_ => _.Employees)
             .Select(_ => _.Name);
-        var exception = Assert.Throws<Exception>(() => query.ToQueryString());
-        Assert.That(exception!.Message, Does.StartWith("Include(_ => _.Employees) is ignored"));
+        var exception = Assert.ThrowsExactly<Exception>(() => query.ToQueryString());
+        await Assert.That(exception!.Message).StartsWith("Include(_ => _.Employees) is ignored");
     }
 
     // a query that throws is not cached, so it throws every time
     [Test]
-    public void ThrowsOnEachExecution()
+    public async Task ThrowsOnEachExecution()
     {
         using var data = BuildData();
         for (var i = 0; i < 2; i++)
         {
-            Assert.ThrowsAsync<Exception>(() =>
+            await Assert.ThrowsExactlyAsync<Exception>(() =>
                 data.Companies
                     .Include(_ => _.Employees)
                     .Select(_ => _.Name)
@@ -505,7 +503,7 @@ public class AntiPatternTests
     }
 
     [Test]
-    public void EnabledByEnableRecording()
+    public async Task EnabledByEnableRecording()
     {
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(EnabledByEnableRecording));
@@ -513,7 +511,7 @@ public class AntiPatternTests
         builder.EnableServiceProviderCaching(false);
         using var data = new SampleDbContext(builder.Options);
 
-        Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Companies
                 .Include(_ => _.Employees)
                 .Select(_ => _.Name)
@@ -833,7 +831,7 @@ public class AntiPatternTests
     public async Task DistinctOnKeyOnly()
     {
         await using var data = BuildData();
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Employees
                 .Select(_ => _.Id)
                 .Distinct()
@@ -844,7 +842,7 @@ public class AntiPatternTests
     public async Task DistinctOnNavigationKey()
     {
         await using var data = BuildData();
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Companies
                 .Select(_ => new
                 {
@@ -912,7 +910,7 @@ public class AntiPatternTests
     public async Task GroupByOnlyKeyMembers()
     {
         await using var data = BuildData();
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Employees
                 .GroupBy(_ => new
                 {
@@ -931,7 +929,7 @@ public class AntiPatternTests
     public async Task GroupByResultSelectorIgnoresElements()
     {
         await using var data = BuildData();
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Employees
                 .GroupBy(_ => _.CompanyId, (companyId, employees) => companyId)
                 .ToListAsync());
@@ -987,7 +985,7 @@ public class AntiPatternTests
     public async Task ToLowerInNestedPredicate()
     {
         await using var data = BuildCaseConversionData();
-        await Assert.ThrowsAsync<Exception>(() =>
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Companies
                 .Where(_ => _.Employees.Any(employee => employee.Company.Name.ToLower() == "company1"))
                 .ToListAsync());
@@ -1077,7 +1075,7 @@ public class AntiPatternTests
     }
 
     [Test]
-    public void TemporalThenAsNoTrackingThenProjection()
+    public async Task TemporalThenAsNoTrackingThenProjection()
     {
         using var data = BuildTemporalData();
 
@@ -1085,8 +1083,8 @@ public class AntiPatternTests
             .TemporalAsOf(DateTime.UtcNow)
             .AsNoTracking()
             .Select(_ => _.Name);
-        var exception = Assert.Throws<Exception>(() => query.ToQueryString());
-        Assert.That(exception!.Message, Does.StartWith("AsNoTracking() is ignored"));
+        var exception = Assert.ThrowsExactly<Exception>(() => query.ToQueryString());
+        await Assert.That(exception!.Message).StartsWith("AsNoTracking() is ignored");
     }
 
     static TemporalContext BuildTemporalData()

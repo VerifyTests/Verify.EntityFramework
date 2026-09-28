@@ -1,6 +1,4 @@
-﻿[TestFixture]
-[Parallelizable(ParallelScope.All)]
-public class RuntimeAntiPatternTests
+﻿public class RuntimeAntiPatternTests
 {
     // Opting in to some checks changes the service provider, and InMemory keeps a database per service provider
     static Microsoft.EntityFrameworkCore.Storage.InMemoryDatabaseRoot databaseRoot = new();
@@ -55,7 +53,7 @@ public class RuntimeAntiPatternTests
 
         await using var data = BuildLazy(name, _ => { });
         var blog = await data.Blogs.SingleAsync();
-        Assert.That(blog.Posts, Has.Count.EqualTo(1));
+        await Assert.That(blog.Posts).Count().IsEqualTo(1);
     }
 
     // lazy loading after the context is disposed, which is what happens when Verify serializes an entity after its
@@ -332,7 +330,7 @@ public class RuntimeAntiPatternTests
         data.Add(NewCompany(1));
         Recording.Start();
         // ReSharper disable once MethodHasAsyncOverload
-        Assert.Throws<Exception>(() => data.SaveChanges());
+        Assert.ThrowsExactly<Exception>(() => data.SaveChanges());
         Recording.Stop();
     }
 
@@ -358,7 +356,7 @@ public class RuntimeAntiPatternTests
         Recording.Start();
 
         // the code under test
-        await Assert.ThrowsAsync<Exception>(async () =>
+        await Assert.ThrowsExactlyAsync<Exception>(async () =>
         {
             for (var id = 11; id <= 13; id++)
             {
@@ -407,7 +405,7 @@ public class RuntimeAntiPatternTests
         Recording.Start(identifier);
         data.Add(NewCompany(2));
         // ReSharper disable once MethodHasAsyncOverload
-        Assert.Throws<Exception>(() => data.SaveChanges());
+        Assert.ThrowsExactly<Exception>(() => data.SaveChanges());
         Recording.Stop(identifier);
     }
 

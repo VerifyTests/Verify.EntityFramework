@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class QueryableTests
 {
     // Include returns an IIncludableQueryable, which was not recognized, so no sql was written

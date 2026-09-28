@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class IgnoreNavigationPropertiesTests
 {
     // owned types were ignored like any other navigation, so their data was dropped. The navigation from an owned

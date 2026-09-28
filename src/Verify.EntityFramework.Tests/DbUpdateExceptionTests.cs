@@ -1,4 +1,4 @@
-[TestFixture]
+[NotInParallel]
 public class DbUpdateExceptionTests
 {
     [Test]

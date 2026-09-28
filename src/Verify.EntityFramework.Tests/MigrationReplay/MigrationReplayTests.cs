@@ -1,5 +1,3 @@
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class MigrationReplayTests
 {
     static SqlInstance<ReplayDbContext> instance = new(
