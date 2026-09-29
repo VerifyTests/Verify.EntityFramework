@@ -1,0 +1,6 @@
+{
+  Type: Exception,
+  Message:
+The null check `_.Owner == null` is redundant, since `_.Owner.Name` is null when _.Owner is null.
+Use `_.Owner.Name` without the condition.
+}

@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+The null check `_.OwnerId.HasValue` is redundant, since the conditional returns `_.OwnerId` in both cases.
+Use `_.OwnerId` without the condition.
+}
