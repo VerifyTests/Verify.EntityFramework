@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.117.0" />
     <PackageVersion Include="TUnit" Version="1.71.0" />
     <PackageVersion Include="Polyfill" Version="11.4.1" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.181" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.182" />
     <PackageVersion Include="Sbom" Version="0.3.1" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="Verify" Version="33.1.5" />
