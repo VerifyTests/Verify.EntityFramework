@@ -141,6 +141,133 @@
     }
 
     [Test]
+    public async Task RedundantConditionalNullCheck()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheck));
+
+        #region RedundantConditionalNullCheck
+
+        await ThrowsTask(() =>
+                data.Cars
+                    .OrderBy(_ => _.Owner == null)
+                    .ThenBy(_ => _.Owner == null ? null : _.Owner.Name)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task RedundantConditionalNullCheckNotEqual()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheckNotEqual));
+
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Cars
+                .Select(_ => _.Owner != null ? _.Owner.Name : null)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task RedundantConditionalNullCheckInWhere()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheckInWhere));
+
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Cars
+                .Where(_ => (null == _.Owner ? null : _.Owner.Name) == "owner")
+                .ToListAsync());
+    }
+
+    // the member is null when the navigation is, so it returns the same values as the conditional
+    [Test]
+    public async Task ConditionalNullCheckRemoved()
+    {
+        await using var data = await BuildData(nameof(ConditionalNullCheckRemoved));
+
+        var names = await data.Cars
+            .OrderBy(_ => _.Id)
+            .Select(_ => _.Owner!.Name)
+            .ToListAsync();
+        await Assert.That(names).IsEquivalentTo(["owner", null]);
+    }
+
+    // a null Owner gives "none", not null, so the check changes the result
+    [Test]
+    public async Task ConditionalNullCheckKeptForNonNullFallback()
+    {
+        await using var data = await BuildData(nameof(ConditionalNullCheckKeptForNonNullFallback));
+
+        var names = await data.Cars
+            .OrderBy(_ => _.Id)
+            .Select(_ => _.Owner == null ? "none" : _.Owner.Name)
+            .ToListAsync();
+        await Assert.That(names).IsEquivalentTo(["owner", "none"]);
+    }
+
+    [Test]
+    public async Task RedundantConditionalNullCheckValueType()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheckValueType));
+
+        await ThrowsTask(() =>
+                data.Cars
+                    .Select(_ => _.Owner == null ? (int?) null : _.Owner.Id)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    // the converted member is null when the navigation is, so it returns the same values as the conditional
+    [Test]
+    public async Task ConditionalNullCheckRemovedValueType()
+    {
+        await using var data = await BuildData(nameof(ConditionalNullCheckRemovedValueType));
+
+        var ids = await data.Cars
+            .OrderBy(_ => _.Id)
+            .Select(_ => (int?) _.Owner!.Id)
+            .ToListAsync();
+        await Assert.That(ids).IsEquivalentTo([1, (int?) null]);
+    }
+
+    [Test]
+    public async Task RedundantConditionalNullCheckHasValue()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheckHasValue));
+
+        await ThrowsTask(() =>
+                data.Cars
+                    .Select(_ => _.OwnerId.HasValue ? _.OwnerId.Value : (int?) null)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    // EF returns an empty collection for a null navigation, with or without the check, so the check never gives null
+    [Test]
+    public async Task RedundantConditionalNullCheckCollection()
+    {
+        await using var data = await BuildData(nameof(RedundantConditionalNullCheckCollection));
+
+        await ThrowsTask(() =>
+                data.Cars
+                    .Select(_ => _.Owner == null ? null : _.Owner.Cars)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task ConditionalNullCheckRemovedCollection()
+    {
+        await using var data = await BuildData(nameof(ConditionalNullCheckRemovedCollection));
+
+        var cars = await data.Cars
+            .OrderBy(_ => _.Id)
+            .Select(_ => _.Owner!.Cars)
+            .ToListAsync();
+        await Assert.That(cars[1]).IsEmpty();
+    }
+
+    [Test]
     public async Task AllData()
     {
         await using var data = await BuildData(nameof(AllData));

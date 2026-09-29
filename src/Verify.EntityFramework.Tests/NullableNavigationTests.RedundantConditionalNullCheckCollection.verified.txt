@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+The null check `_.Owner == null` is redundant, since EF returns `_.Owner.Cars` empty, not null, when _.Owner is null, with or without the check.
+Use `_.Owner.Cars` without the condition.
+}

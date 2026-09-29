@@ -6,6 +6,9 @@ using UnaryExpression = System.Linq.Expressions.UnaryExpression;
 // comparison already excludes null. This holds in any context, including negated, since the comparison is false
 // exactly when the check is. Only comparisons with a non null constant are matched: with != or a value that can be
 // null, null can match, so the check changes the result.
+// For the same reason `_.Owner == null ? null : _.Owner.Name` is `_.Owner.Name`, and `_.Owner == null ? null :
+// _.Owner.Id` is `(int?)_.Owner.Id`. For a collection, `_.Owner == null ? null : _.Owner.Cars`, the check is ignored:
+// both InMemory and SQL Server return an empty collection, not null, with or without it.
 class RedundantNullCheckDetector :
     ExpressionVisitor
 {
@@ -43,6 +46,71 @@ class RedundantNullCheckDetector :
         }
 
         return base.VisitBinary(node);
+    }
+
+    // `value == null ? null : value.Member`, or `value != null ? value.Member : null`
+    protected override Expression VisitConditional(ConditionalExpression node)
+    {
+        var value = CheckedValue(node.Test);
+        var member = node.IfTrue;
+        var fallback = node.IfFalse;
+        if (value == null)
+        {
+            value = NullCheckedValue(node.Test);
+            member = node.IfFalse;
+            fallback = node.IfTrue;
+        }
+
+        member = Unconvert(member);
+        if (value == null ||
+            !IsNull(Unconvert(fallback)) ||
+            !IsMemberOf(member, value))
+        {
+            return base.VisitConditional(node);
+        }
+
+        var replacement = Replacement(member, value, node.Type);
+        if (replacement == Describe(value))
+        {
+            throw new(
+                $"""
+                 The null check `{Describe(node.Test)}` is redundant, since the conditional returns `{replacement}` in both cases.
+                 Use `{replacement}` without the condition.
+                 """);
+        }
+
+        if (IsCollection(member.Type))
+        {
+            throw new(
+                $"""
+                 The null check `{Describe(node.Test)}` is redundant, since EF returns `{replacement}` empty, not null, when {value} is null, with or without the check.
+                 Use `{replacement}` without the condition.
+                 """);
+        }
+
+        throw new(
+            $"""
+             The null check `{Describe(node.Test)}` is redundant, since `{replacement}` is null when {value} is null.
+             Use `{replacement}` without the condition.
+             """);
+    }
+
+    // the member, converted to the type of the conditional when it is a value type, for example `(Int32?)_.Owner.Id`,
+    // or for `_.Age.Value` just `_.Age`
+    static string Replacement(Expression member, Expression value, Type type)
+    {
+        if (CanBeNull(member.Type))
+        {
+            return Describe(member);
+        }
+
+        if (member is MemberExpression { Member.Name: "Value", Expression: { } nullable } &&
+            ExpressionEqualityComparer.Instance.Equals(Unconvert(nullable), value))
+        {
+            return Describe(value);
+        }
+
+        return $"({Nullable.GetUnderlyingType(type)?.Name}?){Describe(member)}";
     }
 
     // without the parentheses and conversions that BinaryExpression.ToString adds
@@ -94,14 +162,33 @@ class RedundantNullCheckDetector :
             return CheckableValue(nullable);
         }
 
-        if (expression is not BinaryExpression
+        if (expression is BinaryExpression
             {
                 NodeType: ExpressionType.NotEqual
             } binary)
         {
-            return null;
+            return ComparedToNull(binary);
         }
 
+        return null;
+    }
+
+    // the value in `value == null` or `null == value`
+    static Expression? NullCheckedValue(Expression expression)
+    {
+        if (expression is BinaryExpression
+            {
+                NodeType: ExpressionType.Equal
+            } binary)
+        {
+            return ComparedToNull(binary);
+        }
+
+        return null;
+    }
+
+    static Expression? ComparedToNull(BinaryExpression binary)
+    {
         var left = Unconvert(binary.Left);
         var right = Unconvert(binary.Right);
         if (IsNull(right))
@@ -121,7 +208,7 @@ class RedundantNullCheckDetector :
     static Expression? CheckableValue(Expression expression)
     {
         if (expression is MemberExpression &&
-            (!expression.Type.IsValueType || IsNullable(expression.Type)))
+            CanBeNull(expression.Type))
         {
             return expression;
         }
@@ -129,8 +216,15 @@ class RedundantNullCheckDetector :
         return null;
     }
 
+    static bool CanBeNull(Type type) =>
+        !type.IsValueType || IsNullable(type);
+
     static bool IsNullable(Type type) =>
         Nullable.GetUnderlyingType(type) != null;
+
+    static bool IsCollection(Type type) =>
+        type != typeof(string) &&
+        typeof(IEnumerable).IsAssignableFrom(type);
 
     // `value == constant`, `value.Member == constant`, or another comparison that is false when value is null
     static bool Compares(Expression expression, Expression value)
