@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfClassicLocalDb" Version="27.0.0" />
-    <PackageVersion Include="EfLocalDb" Version="27.0.0" />
+    <PackageVersion Include="EfClassicLocalDb" Version="27.1.0" />
+    <PackageVersion Include="EfLocalDb" Version="27.1.0" />
     <PackageVersion Include="EntityFramework" Version="6.5.2" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.117.0" />
-    <PackageVersion Include="TUnit" Version="1.70.1" />
+    <PackageVersion Include="TUnit" Version="1.71.0" />
     <PackageVersion Include="Polyfill" Version="11.4.1" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.181" />
     <PackageVersion Include="Sbom" Version="0.3.1" />
