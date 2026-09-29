@@ -1327,6 +1327,38 @@ Remove the null check.
 
 Only comparisons with a non null constant using `==`, `>`, `>=`, `<`, or `<=` are detected. With `!=`, or a value that can be null, a null navigation can match, so the null check changes the result and is kept.
 
+For the same reason, a conditional that returns null when the navigation is null is redundant. `_.Owner == null ? null : _.Owner.Name` is `_.Owner!.Name`, in any part of the query, for example an ordering:
+
+<!-- snippet: RedundantConditionalNullCheck -->
+<a id='snippet-RedundantConditionalNullCheck'></a>
+```cs
+await ThrowsTask(() =>
+        data.Cars
+            .OrderBy(_ => _.Owner == null)
+            .ThenBy(_ => _.Owner == null ? null : _.Owner.Name)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.cs#L148-L157' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantConditionalNullCheck' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: NullableNavigationTests.RedundantConditionalNullCheck.verified.txt -->
+<a id='snippet-NullableNavigationTests.RedundantConditionalNullCheck.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+The null check `_.Owner == null` is redundant, since `_.Owner.Name` is null when _.Owner is null.
+Use `_.Owner.Name` without the condition.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/NullableNavigationTests.RedundantConditionalNullCheck.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-NullableNavigationTests.RedundantConditionalNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A value type member is detected too: `_.Owner == null ? (int?)null : _.Owner.Id` is `(int?)_.Owner!.Id`. So is a collection: for `_.Owner == null ? null : _.Owner.Cars` EF returns an empty collection, not null, when the owner is null, with or without the check. The conditional is kept when the other branch is not null, for example `_.Owner == null ? "none" : _.Owner.Name`.
+
 
 ### EF warnings
 

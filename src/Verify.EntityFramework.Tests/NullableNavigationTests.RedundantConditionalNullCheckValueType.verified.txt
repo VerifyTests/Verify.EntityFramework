@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+The null check `_.Owner == null` is redundant, since `(Int32?)_.Owner.Id` is null when _.Owner is null.
+Use `(Int32?)_.Owner.Id` without the condition.
+}

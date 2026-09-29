@@ -313,7 +313,7 @@ public static class VerifyEntityFramework
     ///   <item>An Include, ThenInclude, or tracking option that EF ignores, since the query returns no entity. For example it ends in a projection, or a scalar like Count.</item>
     ///   <item>An ordering that EF discards, since it is followed by another OrderBy, or by an operator whose result does not depend on order, like Count or Any.</item>
     ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
-    ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`.</item>
+    ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`, or `_.Owner == null ? null : _.Owner.Name`.</item>
     ///   <item>A count compared to zero, for example `_.Employees.Count() &gt; 0`, where Any() stops at the first row.</item>
     ///   <item>A redundant Distinct, on rows that each come from one entity and include its primary key.</item>
     ///   <item>A GroupBy whose groups are only used for their Key, which is Select(key).Distinct().</item>
