@@ -33,8 +33,8 @@ class AntiPatternInterceptor :
     ];
 
     // Only thrown for ThrowOnLazyLoading, not by default. Verify reads every navigation when it serializes an entity, so
-    // for a detached entity DetachedLazyLoadingWarning would throw from inside Verify, not the code under test.
-    // LazyLoadOnDisposedContextWarning is listed for completeness: EF already throws for it by default.
+    // NavigationLazyLoading would throw from inside Verify, not the code under test. LazyLoadOnDisposedContextWarning
+    // and DetachedLazyLoadingWarning are listed for completeness: EF already throws for them by default.
     public static Microsoft.Extensions.Logging.EventId[] LazyLoadingWarnings { get; } =
     [
         CoreEventId.NavigationLazyLoading,

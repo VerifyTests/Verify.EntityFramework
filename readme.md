@@ -1371,13 +1371,14 @@ EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()
  * `CoreEventId.PossibleUnintendedReferenceComparisonWarning`: entities compared by reference.
  * `CoreEventId.PossibleUnintendedCollectionNavigationNullComparisonWarning`: a collection navigation compared to null.
  * `RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning`: `Equals` between values of different types.
- * `CoreEventId.NavigationBaseIncludeIgnored`: an `Include` of a navigation that fix-up already populates.
  * `RelationalEventId.BoolWithDefaultWarning`: a `bool` property with a database-generated default and no sentinel value, for example `HasDefaultValueSql("1")`. EF treats `false` as unset, so it can never insert `false`.
  * `RelationalEventId.ModelValidationKeyDefaultValueWarning`: a key property with a database default, which EF treats as unset when it has the CLR default value.
  * `RelationalEventId.OptionalDependentWithoutIdentifyingPropertyWarning`: an optional dependent, sharing a table, with no required property, so EF can not tell an instance with all null values from a missing one.
  * `CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning`: a required navigation to an entity with a query filter. When the filter excludes that entity, the entities that require it disappear from queries too.
  * `SqlServerEventId.DecimalTypeDefaultWarning`: a `decimal` property with no precision or column type, whose values SQL Server silently truncates to the default precision.
  * `RelationalEventId.OptionalDependentWithAllNullPropertiesWarning`: logged by `SaveChanges` when it saves an optional dependent, sharing a table, whose properties are all null, so it can not be read back.
+
+`CoreEventId.NavigationBaseIncludeIgnored`, an `Include` of a navigation that fix-up already populates, is also configured to throw. Entity Framework already throws for it by default, so this only matters when it was configured otherwise before `ThrowOnAntiPatterns()`.
 
 The model warnings are logged when the model is built, which happens once per context type. If a context type is first used without `ThrowOnAntiPatterns()`, later contexts reuse that model and are not checked.
 
