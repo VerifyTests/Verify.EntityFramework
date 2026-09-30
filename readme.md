@@ -943,7 +943,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(nameof(EnableRecordingOptOut));
 builder.EnableRecording(throwOnAntiPatterns: false);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L579-L585' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingAllowAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L628-L634' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingAllowAntiPatterns' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 For all contexts, at assembly load time and before any context is built:
@@ -996,7 +996,7 @@ Remove it.
 <sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeThenProjection.verified.txt#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeThenProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`.
+The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`. A new instance of an entity type, created by a projection like `Select(_ => new Company { Name = _.Name })`, is not an entity that Entity Framework tracks or includes into, so the operators before it are ignored too.
 
 
 ### Ignored query splitting
@@ -1013,7 +1013,7 @@ await Throws(() =>
             .ToQueryString())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L600-L609' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L649-L658' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1047,7 +1047,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L386-L395' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscardedOrderBy' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L435-L444' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscardedOrderBy' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1077,7 +1077,7 @@ await ThrowsTask(() =>
             .CountAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L752-L760' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L801-L809' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 So does `GroupBy`. Unlike LINQ to objects, Entity Framework drops an ordering before a `GroupBy`, so it orders neither the groups nor the elements in them, and `First()` of a group picks by primary key, not by that ordering:
@@ -1093,7 +1093,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L832-L842' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenGroupBy' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L881-L891' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenGroupBy' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1125,7 +1125,7 @@ await ThrowsTask(() =>
             .ExecuteDeleteAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L886-L895' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenExecuteDelete' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L935-L944' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenExecuteDelete' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1160,7 +1160,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L465-L474' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByConstant' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L514-L523' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByConstant' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1192,7 +1192,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L938-L946' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L987-L995' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1232,7 +1232,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L986-L1000' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1035-L1049' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1267,7 +1267,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1082-L1091' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1131-L1140' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1306,7 +1306,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1145-L1158' title='Snippet source file'>snippet source</a> | <a href='#snippet-UnorderedFirst' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1194-L1207' title='Snippet source file'>snippet source</a> | <a href='#snippet-UnorderedFirst' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1338,7 +1338,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1524-L1530' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1573-L1579' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1351,7 +1351,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1482-L1491' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1531-L1540' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1386,7 +1386,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1320-L1326' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1369-L1375' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: ToLowerInWhere -->
@@ -1398,7 +1398,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1260-L1268' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1309-L1317' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1532,7 +1532,7 @@ builder.ThrowOnAntiPatterns();
 builder.ConfigureWarnings(_ =>
     _.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L543-L551' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAntiPatternWarning' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L592-L600' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAntiPatternWarning' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

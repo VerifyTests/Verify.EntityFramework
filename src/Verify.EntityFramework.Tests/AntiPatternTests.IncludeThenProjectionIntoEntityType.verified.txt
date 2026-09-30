@@ -1,0 +1,8 @@
+﻿{
+  Type: Exception,
+  Message:
+Include(_ => _.Employees).AsNoTracking() is ignored, since it is followed by Select, which creates new Company instances that EF does not track or include into.
+EF only applies Include to entities returned by the query, and a projection already loads the related data it references.
+EF only tracks entities, so tracking options do nothing on a query that returns none.
+Remove it.
+}

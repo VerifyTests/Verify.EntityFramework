@@ -39,7 +39,7 @@ static class IgnoredEntityOperatorDetector
 
                 if (!returnsEntities)
                 {
-                    throw Ignored([call], AfterReason(lostBy));
+                    throw Ignored([call], AfterReason(lostBy, model));
                 }
 
                 pending.Add(call);
@@ -55,20 +55,47 @@ static class IgnoredEntityOperatorDetector
             lostBy = call;
             if (pending.Count > 0)
             {
-                throw Ignored(pending, $"it is followed by {call.Method.Name}, which returns no entity");
+                throw Ignored(pending, $"it is followed by {call.Method.Name}, which {Returns(call, model)}");
             }
         }
     }
 
-    static string AfterReason(MethodCallExpression? lostBy)
+    static string AfterReason(MethodCallExpression? lostBy, IModel model)
     {
         if (lostBy == null)
         {
             return "the query returns no entity";
         }
 
-        return $"it comes after {lostBy.Method.Name}, which returns no entity";
+        return $"it comes after {lostBy.Method.Name}, which {Returns(lostBy, model)}";
     }
+
+    // what an operator that loses the entities returns instead
+    static string Returns(MethodCallExpression call, IModel model)
+    {
+        if (IsSelect(call.Method) &&
+            Selector(call)?.Body is { } body &&
+            EntityFinder.Unconvert(body) is NewExpression or MemberInitExpression &&
+            IsEntity(body.Type, model))
+        {
+            return $"creates new {body.Type.Name} instances that EF does not track or include into";
+        }
+
+        return "returns no entity";
+    }
+
+    static bool IsSelect(MethodInfo method) =>
+        (method.DeclaringType == typeof(Queryable) ||
+         method.DeclaringType == typeof(Enumerable)) &&
+        method.Name == nameof(Queryable.Select);
+
+    // a result selector, for example of Select or Join
+    static LambdaExpression? Selector(MethodCallExpression call) =>
+        call.Arguments
+            .Skip(1)
+            .Select(_ => _.Unquote())
+            .OfType<LambdaExpression>()
+            .LastOrDefault();
 
     static Exception Ignored(List<MethodCallExpression> calls, string reason)
     {
@@ -143,24 +170,24 @@ static class IgnoredEntityOperatorDetector
 
     static bool ReturnsEntities(MethodCallExpression call, bool sourceReturnsEntities, IModel model)
     {
-        var arguments = call.Arguments;
-        // operators like Where, OrderBy, Take, and First return elements of the source
-        if (ElementOrSelf(call.Type) == ElementOrSelf(arguments[0].Type))
+        // A Select is decided by its selector, even when it returns the type of its source, since it can create new
+        // instances of an entity type, for example `Select(_ => new Company { Name = _.Name })`
+        if (!IsSelect(call.Method))
         {
-            return sourceReturnsEntities;
-        }
+            // operators like Where, OrderBy, Take, and First return elements of the source
+            if (ElementOrSelf(call.Type) == ElementOrSelf(call.Arguments[0].Type))
+            {
+                return sourceReturnsEntities;
+            }
 
-        if (IsEntity(call.Type, model))
-        {
-            return true;
+            if (IsEntity(call.Type, model))
+            {
+                return true;
+            }
         }
 
         // a result selector, for example of Select or Join, can return an entity inside a new type
-        var selector = arguments
-            .Skip(1)
-            .Select(_ => _.Unquote())
-            .OfType<LambdaExpression>()
-            .LastOrDefault();
+        var selector = Selector(call);
         if (selector == null)
         {
             return false;
@@ -241,8 +268,10 @@ static class IgnoredEntityOperatorDetector
             // be the one visited/returned: base.Visit rebuilds parent expressions (for example
             // a NewExpression's arguments) from the returned node, and dropping a conversion
             // here would leave an argument whose type no longer matches the constructor parameter
+            // A new instance of an entity type is created by the projection, so EF neither tracks it nor includes into it.
+            // Its arguments and bindings can still hold entities, for example `new Company { Employees = _.Employees }`.
             var unconverted = Unconvert(node);
-            if (unconverted != null &&
+            if (unconverted is not (null or NewExpression or MemberInitExpression) &&
                 IsEntity(unconverted.Type, model))
             {
                 found = true;
@@ -318,7 +347,7 @@ static class IgnoredEntityOperatorDetector
             base.Visit(node);
         }
 
-        static Expression? Unconvert(Expression? node)
+        public static Expression? Unconvert(Expression? node)
         {
             while (node is UnaryExpression
                    {

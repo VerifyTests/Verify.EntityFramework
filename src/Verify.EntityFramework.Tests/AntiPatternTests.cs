@@ -361,6 +361,55 @@
             .ToListAsync();
     }
 
+    // a new instance of an entity type, created by the projection, is not tracked or included into
+    [Test]
+    public async Task IncludeThenProjectionIntoEntityType()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .Include(_ => _.Employees)
+                    .AsNoTracking()
+                    .Select(_ => new Company
+                    {
+                        Id = _.Id,
+                        Name = _.Name
+                    })
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task ProjectionIntoEntityTypeThenAsNoTracking()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Select(_ => new Company
+                {
+                    Id = _.Id,
+                    Name = _.Name
+                })
+                .AsNoTracking()
+                .ToListAsync());
+    }
+
+    // the Employees in the new Company are entities, which AsNoTracking applies to
+    [Test]
+    public async Task ProjectionIntoEntityTypeWithEntitiesKept()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .AsNoTracking()
+            .Select(_ => new Company
+            {
+                Id = _.Id,
+                Name = _.Name,
+                Employees = _.Employees
+            })
+            .ToListAsync();
+    }
+
     // only a member of the navigation is projected, so no entity is returned
     [Test]
     public async Task AsNoTrackingThenProjectionOfNavigationMember()

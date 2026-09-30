@@ -39,7 +39,7 @@ Anti-patterns that are not flagged yet. Each was checked against EF Core 10.0.12
 
 ## Fixes to existing checks
 
-- [ ] **`IgnoredEntityOperatorDetector` misses a projection into an entity type**
+- [x] **`IgnoredEntityOperatorDetector` misses a projection into an entity type**: done
   - `Include(_ => _.Employees).AsNoTracking().Select(c => new Company { Id = c.Id, Name = c.Name })` is not flagged, though EF ignores both: it produces `SELECT [c].[Id], [c].[Name] FROM [Companies] AS [c]`, and nothing is tracked.
   - `ReturnsEntities` returns early, since `Select` keeps the element type, and `EntityFinder` treats the `new Company { ... }` as an entity.
   - A `new` of an entity type is built by the projection, so is not an entity EF loads, tracks, or includes into. Its bindings can still hold real entities, for example `new Company { Employees = c.Employees }`.
