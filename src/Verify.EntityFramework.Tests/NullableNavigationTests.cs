@@ -237,6 +237,7 @@
 
         await ThrowsTask(() =>
                 data.Cars
+                    // ReSharper disable once MergeConditionalExpression
                     .Select(_ => _.OwnerId.HasValue ? _.OwnerId.Value : (int?) null)
                     .ToListAsync())
             .IgnoreStackTrace();

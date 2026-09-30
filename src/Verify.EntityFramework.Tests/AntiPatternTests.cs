@@ -1446,6 +1446,7 @@
     class TemporalContext(DbContextOptions options) :
         DbContext(options)
     {
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         public DbSet<Versioned> Items { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder model) =>
