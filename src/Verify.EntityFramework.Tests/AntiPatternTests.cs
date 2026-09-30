@@ -769,6 +769,48 @@
                 .ToListAsync());
     }
 
+    [Test]
+    public async Task OrderByThenExecuteDelete()
+    {
+        await using var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+
+        #region OrderByThenExecuteDelete
+
+        await ThrowsTask(() =>
+                data.Employees
+                    .Where(_ => _.Age > 30)
+                    .OrderBy(_ => _.Name)
+                    .ExecuteDeleteAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task OrderByThenExecuteUpdate()
+    {
+        await using var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Employees
+                .OrderBy(_ => _.Name)
+                .ExecuteUpdateAsync(_ => _.SetProperty(_ => _.Age, 40)));
+    }
+
+    // the ordering selects which rows Take keeps
+    [Test]
+    public async Task OrderByThenTakeThenExecuteDelete()
+    {
+        await using var database = await DbContextBuilder.GetDatabase();
+        var data = database.Context;
+        var deleted = await data.Employees
+            .OrderBy(_ => _.Age)
+            .Take(1)
+            .ExecuteDeleteAsync();
+        await Assert.That(deleted).IsEqualTo(1);
+    }
+
     // the ordering selects which row Take keeps
     [Test]
     public async Task OrderByThenTakeThenSingle()

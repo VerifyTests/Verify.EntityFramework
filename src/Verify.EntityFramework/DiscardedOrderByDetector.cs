@@ -1,6 +1,7 @@
 ﻿// An OrderBy replaces any earlier ordering, unless a row limiting operator, like Take, is between them.
 // ThenBy was usually intended. An operator whose result does not depend on order, like Count, Any, or Single, also
-// discards the ordering. Checks every query in the expression, including those inside lambdas.
+// discards the ordering, and so do ExecuteDelete and ExecuteUpdate. Checks every query in the expression, including
+// those inside lambdas.
 class DiscardedOrderByDetector :
     ExpressionVisitor
 {
@@ -31,6 +32,18 @@ class DiscardedOrderByDetector :
                 throw new(
                     $"""
                      {Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, whose result does not depend on order.
+                     Remove the ordering.
+                     """);
+            }
+        }
+        else if (IsBulkOperation(node.Method))
+        {
+            var discarded = FindOrdering(node.Arguments[0]);
+            if (discarded != null)
+            {
+                throw new(
+                    $"""
+                     {Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, which changes the same rows whatever the order. EF drops the ordering, but still wraps the rows in a subquery.
                      Remove the ordering.
                      """);
             }
@@ -130,6 +143,13 @@ class DiscardedOrderByDetector :
             // the only element, or an exception, whatever the order
             nameof(Queryable.Single) or
             nameof(Queryable.SingleOrDefault);
+
+    // ExecuteDeleteAsync and ExecuteUpdateAsync put these in the query too
+    static bool IsBulkOperation(MethodInfo method) =>
+        method.DeclaringType == typeof(EntityFrameworkQueryableExtensions) &&
+        method.Name is
+            nameof(EntityFrameworkQueryableExtensions.ExecuteDelete) or
+            nameof(EntityFrameworkQueryableExtensions.ExecuteUpdate);
 
     static bool IsRowLimiting(MethodInfo method) =>
         IsLinq(method) &&

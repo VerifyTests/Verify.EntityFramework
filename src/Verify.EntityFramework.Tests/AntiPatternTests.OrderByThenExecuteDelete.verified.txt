@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+OrderBy(_ => _.Name) is discarded, since it is followed by ExecuteDelete, which changes the same rows whatever the order. EF drops the ordering, but still wraps the rows in a subquery.
+Remove the ordering.
+}

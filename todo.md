@@ -21,7 +21,7 @@ Anti-patterns that are not flagged yet. Each was checked against EF Core 10.0.12
   - `OrderBy(_ => _.Name).SingleOrDefault(_ => _.Id == 1)` produces `SELECT TOP(2) ... WHERE [c].[Id] = 1 ORDER BY [c].[Name]`. The sort runs, but the result of `Single` does not depend on order.
   - Add both to `DiscardedOrderByDetector.IsOrderIndependent`.
 
-- [ ] **`OrderBy` before `ExecuteDelete`/`ExecuteUpdate`**
+- [x] **`OrderBy` before `ExecuteDelete`/`ExecuteUpdate`**: done
   - EF drops the ordering. `Where(_ => _.Id < 0).OrderBy(_ => _.Name).ExecuteDeleteAsync()` produces `DELETE FROM [c] FROM [Companies] AS [c] WHERE [c].[Id] IN (SELECT [c0].[Id] FROM [Companies] AS [c0] WHERE [c0].[Id] < 0)`: no ordering, and a needless subquery. Without the `OrderBy` it is `WHERE [c].[Id] < 0`.
   - `ExecuteUpdate` produces an `INNER JOIN` to a subquery, also with no ordering.
   - Both are declared on `EntityFrameworkQueryableExtensions` in EF 10, so `DiscardedOrderByDetector.IsLinq` does not match them.
