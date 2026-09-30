@@ -139,20 +139,20 @@
     [Test]
     public async Task SqlServerToQueryString()
     {
-        using var data = BuildSqlServerData();
+        await using var data = BuildSqlServerData();
 
         var query = data.Companies
             .Include(_ => _.Employees)
             .Select(_ => _.Name);
         var exception = Assert.ThrowsExactly<Exception>(() => query.ToQueryString());
-        await Assert.That(exception!.Message).StartsWith("Include(_ => _.Employees) is ignored");
+        await Assert.That(exception.Message).StartsWith("Include(_ => _.Employees) is ignored");
     }
 
     // a query that throws is not cached, so it throws every time
     [Test]
     public async Task ThrowsOnEachExecution()
     {
-        using var data = BuildData();
+        await using var data = BuildData();
         for (var i = 0; i < 2; i++)
         {
             await Assert.ThrowsExactlyAsync<Exception>(() =>
@@ -421,7 +421,7 @@
                     .Select(_ => new
                     {
                         _.Id,
-                        CompanyName = _.Company!.Name
+                        CompanyName = _.Company.Name
                     })
                     .ToListAsync())
             .IgnoreStackTrace();
@@ -613,7 +613,7 @@
         builder.UseInMemoryDatabase(nameof(EnabledByEnableRecording));
         builder.EnableRecording();
         builder.EnableServiceProviderCaching(false);
-        using var data = new SampleDbContext(builder.Options);
+        await using var data = new SampleDbContext(builder.Options);
 
         await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Companies
@@ -1424,14 +1424,14 @@
     [Test]
     public async Task TemporalThenAsNoTrackingThenProjection()
     {
-        using var data = BuildTemporalData();
+        await using var data = BuildTemporalData();
 
         var query = data.Items
             .TemporalAsOf(DateTime.UtcNow)
             .AsNoTracking()
             .Select(_ => _.Name);
         var exception = Assert.ThrowsExactly<Exception>(() => query.ToQueryString());
-        await Assert.That(exception!.Message).StartsWith("AsNoTracking() is ignored");
+        await Assert.That(exception.Message).StartsWith("AsNoTracking() is ignored");
     }
 
     static TemporalContext BuildTemporalData()

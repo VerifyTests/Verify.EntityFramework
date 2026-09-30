@@ -366,7 +366,7 @@
         builder.UseInMemoryDatabase(nameof(KeepsReplacedQueryCompiler));
         ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new QueryCompilerExtension());
         builder.EnableRecording();
-        using var data = new SampleDbContext(builder.Options);
+        await using var data = new SampleDbContext(builder.Options);
 
         await Assert.That(data.GetService<IQueryCompiler>()).IsTypeOf<QueryCompiler>();
     }
@@ -380,7 +380,7 @@
         builder.UseInMemoryDatabase(nameof(KeepsAddedQueryCompiler));
         ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AddQueryCompilerExtension());
         builder.EnableRecording();
-        using var data = new SampleDbContext(builder.Options);
+        await using var data = new SampleDbContext(builder.Options);
 
         await Assert.That(data.GetService<IQueryCompiler>()).IsTypeOf<QueryCompiler>();
     }
