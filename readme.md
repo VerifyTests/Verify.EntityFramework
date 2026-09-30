@@ -1338,7 +1338,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1573-L1579' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1574-L1580' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1351,7 +1351,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1531-L1540' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1532-L1541' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
