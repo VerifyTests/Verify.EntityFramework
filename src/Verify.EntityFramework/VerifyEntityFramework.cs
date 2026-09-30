@@ -311,7 +311,7 @@ public static class VerifyEntityFramework
     /// Throw when a query that uses an anti-pattern is compiled. Detects:
     /// <list type="bullet">
     ///   <item>An Include, ThenInclude, or tracking option that EF ignores, since the query returns no entity. For example it ends in a projection, or a scalar like Count.</item>
-    ///   <item>An ordering that EF discards, since it is followed by another OrderBy, or by an operator whose result does not depend on order, like Count, Any, Single, or ExecuteDelete.</item>
+    ///   <item>An ordering that EF discards, since it is followed by another OrderBy, or by an operator whose result does not depend on order, like Count, Any, Single, GroupBy, or ExecuteDelete.</item>
     ///   <item>An ordering by a value that is the same for every row, for example OrderBy(_ =&gt; 1), which does not order the rows.</item>
     ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
     ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`, or `_.Owner == null ? null : _.Owner.Name`.</item>

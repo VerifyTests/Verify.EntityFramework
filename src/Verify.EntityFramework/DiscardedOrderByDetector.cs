@@ -1,7 +1,7 @@
 ﻿// An OrderBy replaces any earlier ordering, unless a row limiting operator, like Take, is between them.
 // ThenBy was usually intended. An operator whose result does not depend on order, like Count, Any, or Single, also
-// discards the ordering, and so do ExecuteDelete and ExecuteUpdate. Checks every query in the expression, including
-// those inside lambdas.
+// discards the ordering, and so do GroupBy, ExecuteDelete, and ExecuteUpdate. Checks every query in the expression,
+// including those inside lambdas.
 class DiscardedOrderByDetector :
     ExpressionVisitor
 {
@@ -33,6 +33,18 @@ class DiscardedOrderByDetector :
                     $"""
                      {Describe(discarded)} is discarded, since it is followed by {node.Method.Name}, whose result does not depend on order.
                      Remove the ordering.
+                     """);
+            }
+        }
+        else if (IsGroupBy(node.Method))
+        {
+            var discarded = FindOrdering(node.Arguments[0]);
+            if (discarded != null)
+            {
+                throw new(
+                    $"""
+                     {Describe(discarded)} is discarded, since it is followed by GroupBy. EF drops an ordering before a GroupBy, so it orders neither the groups nor the elements in them, and First picks by primary key, not by this ordering.
+                     Order the elements of each group instead, for example Select(_ => _.OrderBy(...).First()), or order after the GroupBy.
                      """);
             }
         }
@@ -143,6 +155,11 @@ class DiscardedOrderByDetector :
             // the only element, or an exception, whatever the order
             nameof(Queryable.Single) or
             nameof(Queryable.SingleOrDefault);
+
+    // Unlike LINQ to objects, which keeps the order of the elements in each group
+    static bool IsGroupBy(MethodInfo method) =>
+        IsLinq(method) &&
+        method.Name == nameof(Queryable.GroupBy);
 
     // ExecuteDeleteAsync and ExecuteUpdateAsync put these in the query too
     static bool IsBulkOperation(MethodInfo method) =>

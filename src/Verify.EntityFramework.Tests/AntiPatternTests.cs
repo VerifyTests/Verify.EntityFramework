@@ -825,6 +825,59 @@
     }
 
     [Test]
+    public async Task OrderByThenGroupBy()
+    {
+        await using var data = BuildData();
+
+        #region OrderByThenGroupBy
+
+        await ThrowsTask(() =>
+                data.Employees
+                    .OrderBy(_ => _.Age)
+                    .GroupBy(_ => _.CompanyId)
+                    .Select(_ => _.First())
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task OrderByThenGroupByCount()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Employees
+                .OrderBy(_ => _.Name)
+                .GroupBy(_ => _.CompanyId, (key, employees) => new
+                {
+                    key,
+                    Count = employees.Count()
+                })
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task GroupByOrderingKept()
+    {
+        await using var data = BuildData();
+
+        // the ordering selects which rows Take keeps
+        await data.Employees
+            .OrderBy(_ => _.Age)
+            .Take(10)
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.Count())
+            .ToListAsync();
+
+        // ordered within each group
+        await data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.OrderBy(_ => _.Age).First())
+            .ToListAsync();
+    }
+
+    [Test]
     public async Task OrderByThenExecuteDelete()
     {
         await using var database = await DbContextBuilder.GetDatabase();

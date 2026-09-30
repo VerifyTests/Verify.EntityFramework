@@ -32,7 +32,7 @@ Anti-patterns that are not flagged yet. Each was checked against EF Core 10.0.12
   - It also silences `RowLimitingOperationWithoutOrderByWarning`, which `ThrowOnAntiPatterns()` throws on, so it is the obvious workaround.
   - Detect: an `OrderBy`, `OrderByDescending`, `ThenBy`, or `ThenByDescending` whose key selector does not use its parameter.
 
-- [ ] **`OrderBy` before `GroupBy`, then an aggregate**
+- [x] **`OrderBy` before `GroupBy`, then an aggregate**: done. EF 10 drops the ordering for every `GroupBy`, not only an aggregate: a final `GroupBy` orders by the key only, and `g.First()` orders its window by the primary key.
   - `OrderBy(_ => _.Name).GroupBy(_ => _.CompanyId).Select(_ => new { _.Key, Count = _.Count() })` produces `SELECT [e].[CompanyId] AS [Key], COUNT(*) AS [Count] FROM [Employees] AS [e] GROUP BY [e].[CompanyId]`. The ordering is dropped.
   - Lower confidence. Check what EF does with a final `GroupBy`, one that returns the groups, before matching it. Safest to only match a `GroupBy` followed by a `Select`, or with a result selector.
 

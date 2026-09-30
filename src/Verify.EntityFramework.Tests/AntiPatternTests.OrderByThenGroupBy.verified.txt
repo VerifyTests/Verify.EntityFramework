@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+OrderBy(_ => _.Age) is discarded, since it is followed by GroupBy. EF drops an ordering before a GroupBy, so it orders neither the groups nor the elements in them, and First picks by primary key, not by this ordering.
+Order the elements of each group instead, for example Select(_ => _.OrderBy(...).First()), or order after the GroupBy.
+}
