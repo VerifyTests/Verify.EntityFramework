@@ -27,7 +27,7 @@ Anti-patterns that are not flagged yet. Each was checked against EF Core 10.0.12
   - Both are declared on `EntityFrameworkQueryableExtensions` in EF 10, so `DiscardedOrderByDetector.IsLinq` does not match them.
   - An ordering followed by `Take` is kept, since it chooses which rows are changed.
 
-- [ ] **Ordering by a constant**
+- [x] **Ordering by a constant**: done, in `ConstantOrderingDetector`
   - `OrderBy(_ => 1)`, or ordering by a captured variable, produces `ORDER BY (SELECT 1)`, so the rows are not ordered.
   - It also silences `RowLimitingOperationWithoutOrderByWarning`, which `ThrowOnAntiPatterns()` throws on, so it is the obvious workaround.
   - Detect: an `OrderBy`, `OrderByDescending`, `ThenBy`, or `ThenByDescending` whose key selector does not use its parameter.

@@ -87,6 +87,24 @@
                         return $"\"{value}\"";
                     }
 
-                    return _.ToString();
+                    return QueryParameterNamer.Instance.Visit(_).ToString();
                 }));
+
+    // EF replaces a captured variable with a QueryParameterExpression before the query is intercepted, which
+    // ToString describes by its type name. Shows it by its name instead, for example `_ => name`.
+    class QueryParameterNamer :
+        ExpressionVisitor
+    {
+        public static QueryParameterNamer Instance { get; } = new();
+
+        protected override Expression VisitExtension(Expression node)
+        {
+            if (node is QueryParameterExpression parameter)
+            {
+                return Expression.Parameter(parameter.Type, parameter.Name);
+            }
+
+            return base.VisitExtension(node);
+        }
+    }
 }

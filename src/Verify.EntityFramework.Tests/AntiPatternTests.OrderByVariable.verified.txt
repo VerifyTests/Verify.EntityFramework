@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+OrderBy(_ => name) orders by a value that is the same for every row, so it does not order the rows.
+Order by a member of the row, for example its key, or remove the ordering.
+}

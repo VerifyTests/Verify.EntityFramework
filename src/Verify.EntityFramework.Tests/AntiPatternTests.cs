@@ -457,6 +457,61 @@
             .ToListAsync();
     }
 
+    [Test]
+    public async Task OrderByConstant()
+    {
+        await using var data = BuildData();
+
+        #region OrderByConstant
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => 1)
+                    .Take(10)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task OrderByVariable()
+    {
+        await using var data = BuildData();
+        var name = "Company1";
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => name)
+                    .Take(10)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task ThenByConstant()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .OrderBy(_ => _.Name)
+                .ThenByDescending(_ => 0)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task OrderByRowValueKept()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .OrderBy(_ => _.Name.Length * 2)
+            .ThenBy(_ => _.Employees.Count())
+            .ToListAsync();
+        await data.Employees
+            .Select(_ => _.Age)
+            .Order()
+            .ToListAsync();
+    }
+
     // an anti-pattern that EF detects, but only logs. The relational pipeline logs it, so InMemory does not.
     [Test]
     public async Task TakeWithoutOrderBy()
