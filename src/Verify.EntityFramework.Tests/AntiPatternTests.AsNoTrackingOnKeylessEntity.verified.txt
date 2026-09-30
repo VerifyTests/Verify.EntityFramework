@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+AsNoTracking() is ignored, since the query only returns ShopView, a keyless entity type, which EF never tracks.
+Remove it.
+}

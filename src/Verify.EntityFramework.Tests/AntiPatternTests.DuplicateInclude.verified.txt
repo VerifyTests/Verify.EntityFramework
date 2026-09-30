@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+Include(_ => _.Company) is redundant, since Include(_ => _.Company.Employees) also includes Company.
+Remove it.
+}

@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+IgnoreQueryFilters(["Other"]) is ignored, since no entity type in the query has a query filter with the key Other.
+Remove it, or use the key of the filter to ignore.
+}

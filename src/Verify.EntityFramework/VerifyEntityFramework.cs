@@ -314,6 +314,10 @@ public static class VerifyEntityFramework
     ///   <item>An ordering that EF discards, since it is followed by another OrderBy, or by an operator whose result does not depend on order, like Count, Any, Single, GroupBy, or ExecuteDelete.</item>
     ///   <item>An ordering by a value that is the same for every row, for example OrderBy(_ =&gt; 1), which does not order the rows.</item>
     ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
+    ///   <item>An Include of an owned or AutoInclude navigation, or whose path is the same as, or the start of, another Include path.</item>
+    ///   <item>IgnoreQueryFilters on a query where no entity type has a query filter, or none with the given keys.</item>
+    ///   <item>AsNoTracking or AsTracking on a query that only returns a keyless entity type.</item>
+    ///   <item>A null check of a required property or navigation, for example `_.Name != null`, which is always true.</item>
     ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`, or `_.Owner == null ? null : _.Owner.Name`.</item>
     ///   <item>A count compared to zero, for example `_.Employees.Count() &gt; 0`, where Any() stops at the first row.</item>
     ///   <item>A redundant Distinct, on rows that each come from one entity and include its primary key.</item>

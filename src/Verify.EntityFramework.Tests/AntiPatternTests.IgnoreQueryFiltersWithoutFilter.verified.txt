@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+IgnoreQueryFilters() is ignored, since no entity type in the query has a query filter.
+Remove it.
+}

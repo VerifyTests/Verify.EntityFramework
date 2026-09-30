@@ -58,6 +58,48 @@ static class IgnoredEntityOperatorDetector
                 throw Ignored(pending, $"it is followed by {call.Method.Name}, which {Returns(call, model)}");
             }
         }
+
+        ThrowIfKeyless(calls, expression);
+    }
+
+    // EF never tracks a keyless entity, so a tracking option on a query that only returns one does nothing. Only a query
+    // of a keyless entity type, with operators that keep its elements, is matched. An Include loads entities of other
+    // types, which can be tracked.
+    static void ThrowIfKeyless(List<MethodCallExpression> calls, Expression root)
+    {
+        if (root is not EntityQueryRootExpression { EntityType: var entityType } ||
+            entityType.FindPrimaryKey() != null)
+        {
+            return;
+        }
+
+        var tracking = calls
+            .Where(_ => IsTracking(_.Method))
+            .ToList();
+        if (tracking.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var call in calls)
+        {
+            if (IsInclude(call.Method))
+            {
+                return;
+            }
+
+            if (!IsTracking(call.Method) &&
+                ElementOrSelf(call.Type) != ElementOrSelf(call.Arguments[0].Type))
+            {
+                return;
+            }
+        }
+
+        throw new(
+            $"""
+             {string.Join('.', tracking.Select(_ => _.Describe()))} is ignored, since the query only returns {entityType.DisplayName()}, a keyless entity type, which EF never tracks.
+             Remove it.
+             """);
     }
 
     static string AfterReason(MethodCallExpression? lostBy, IModel model)

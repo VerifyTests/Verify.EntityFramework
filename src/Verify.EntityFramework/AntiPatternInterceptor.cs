@@ -57,6 +57,9 @@ class AntiPatternInterceptor :
             IgnoredQuerySplittingDetector.ThrowIfIgnored(query, context.Model);
             RedundantDistinctDetector.ThrowIfRedundant(query, context.Model);
             UnorderedFirstDetector.ThrowIfUnordered(query, context.Model);
+            RedundantIncludeDetector.ThrowIfRedundant(query, context.Model);
+            IgnoredQueryFiltersDetector.ThrowIfIgnored(query, context.Model);
+            RequiredNullCheckDetector.ThrowIfRedundant(query, context.Model);
 
             var options = context.GetService<IDbContextOptions>().FindExtension<AntiPatternOptionsExtension>()?.Options;
             if (options is { ThrowOnColumnCaseConversion: true })

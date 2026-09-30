@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+Include(_ => _.Staff) is ignored, since Staff is configured with AutoInclude, so EF already loads it.
+Remove it.
+}

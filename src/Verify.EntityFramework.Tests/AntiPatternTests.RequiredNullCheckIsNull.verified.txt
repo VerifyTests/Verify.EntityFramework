@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+`_.Name == null` is always false, since Name is a required property. EF translates it to `0 = 1`.
+Remove the null check, or configure Name as optional if it can be null.
+}

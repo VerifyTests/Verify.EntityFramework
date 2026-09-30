@@ -998,6 +998,8 @@ Remove it.
 
 The operators are kept when an entity is returned, including inside a projection, for example `Select(_ => new { Company = _, _.Name })`. A new instance of an entity type, created by a projection like `Select(_ => new Company { Name = _.Name })`, is not an entity that Entity Framework tracks or includes into, so the operators before it are ignored too.
 
+Entity Framework never tracks a keyless entity type, so `AsNoTracking()` or `AsTracking()` on a query that only returns one is ignored as well. A query with an `Include` is not checked, since the included entities can be tracked.
+
 
 ### Ignored query splitting
 
@@ -1327,6 +1329,106 @@ Add an OrderBy before FirstOrDefault.
 A `First` after an ordering or a `Where`, or with a predicate, for example `_.Employees.FirstOrDefault(_ => _.Age > 30)`, is not detected.
 
 
+### Redundant Include
+
+An `Include` does nothing when it ends in an owned navigation, since Entity Framework always loads an owned type with its owner:
+
+<!-- snippet: IncludeOwnedNavigation -->
+<a id='snippet-IncludeOwnedNavigation'></a>
+```cs
+await Throws(() =>
+        data.Shops
+            .Include(_ => _.Address)
+            .ToQueryString())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1577-L1585' title='Snippet source file'>snippet source</a> | <a href='#snippet-IncludeOwnedNavigation' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.IncludeOwnedNavigation.verified.txt -->
+<a id='snippet-AntiPatternTests.IncludeOwnedNavigation.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+Include(_ => _.Address) is ignored, since Address is owned, and EF always loads an owned type with its owner.
+Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IncludeOwnedNavigation.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IncludeOwnedNavigation.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The same applies to a navigation configured with `AutoInclude()`, unless the query uses `IgnoreAutoIncludes()`. An owned navigation followed by `ThenInclude` is kept, since it leads to another navigation.
+
+An `Include` whose path is the same as, or the start of, another `Include` path is redundant too, since Entity Framework merges them. A path is an `Include` and the `ThenInclude`s after it:
+
+<!-- snippet: DuplicateInclude -->
+<a id='snippet-DuplicateInclude'></a>
+```cs
+await ThrowsTask(() =>
+        data.Employees
+            .Include(_ => _.Company)
+            .Include(_ => _.Company.Employees)
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1604-L1613' title='Snippet source file'>snippet source</a> | <a href='#snippet-DuplicateInclude' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.DuplicateInclude.verified.txt -->
+<a id='snippet-AntiPatternTests.DuplicateInclude.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+Include(_ => _.Company) is redundant, since Include(_ => _.Company.Employees) also includes Company.
+Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.DuplicateInclude.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.DuplicateInclude.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+So repeating `Include(_ => _.Company)` to `ThenInclude` two different navigations under it is kept. A filtered `Include` is kept, since removing it would remove its filter, and a string `Include` is not checked.
+
+
+### Ignored IgnoreQueryFilters
+
+`IgnoreQueryFilters()` does nothing when no entity type in the query has a query filter. That covers the entity types the query reads, including navigations in a projection, `AutoInclude` navigations, and the join types of many-to-many navigations. With filter keys, for example `IgnoreQueryFilters(["SoftDelete"])`, it does nothing when none of them has a filter with one of those keys:
+
+<!-- snippet: IgnoreQueryFiltersWithoutFilter -->
+<a id='snippet-IgnoreQueryFiltersWithoutFilter'></a>
+```cs
+await Throws(() =>
+        data.Shops
+            .IgnoreQueryFilters()
+            .ToQueryString())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1664-L1672' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoreQueryFiltersWithoutFilter' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.IgnoreQueryFiltersWithoutFilter.verified.txt -->
+<a id='snippet-AntiPatternTests.IgnoreQueryFiltersWithoutFilter.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+IgnoreQueryFilters() is ignored, since no entity type in the query has a query filter.
+Remove it.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.IgnoreQueryFiltersWithoutFilter.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.IgnoreQueryFiltersWithoutFilter.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A query with a string `Include` is not checked.
+
+
 ### Collection filter outside the Include
 
 In `Include(_ => _.Employees).Where(_ => _.Employees.Any(...))` the `Where` filters the companies, but the `Include` still loads every employee of each company returned. That is often meant as a filtered `Include`, like `Include(_ => _.Employees.Where(...))`. Filtering the parents by their children is also a correct query, so this check is opt in:
@@ -1338,7 +1440,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1574-L1580' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1855-L1861' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1495,6 +1597,37 @@ Use `_.Owner.Name` without the condition.
 <!-- endSnippet -->
 
 A value type member is detected too: `_.Owner == null ? (int?)null : _.Owner.Id` is `(int?)_.Owner!.Id`. So is a collection: for `_.Owner == null ? null : _.Owner.Cars` EF returns an empty collection, not null, when the owner is null, with or without the check. The conditional is kept when the other branch is not null, for example `_.Owner == null ? "none" : _.Owner.Name`.
+
+A required property, or a required navigation to a principal, is never null, so a null check of one is always true, or with `==` always false. Entity Framework removes a check of a property, or translates it to `0 = 1`, but still joins the table of a navigation for its check:
+
+<!-- snippet: RequiredNullCheck -->
+<a id='snippet-RequiredNullCheck'></a>
+```cs
+await ThrowsTask(() =>
+        data.Employees
+            .Where(_ => _.Name != null && _.Name.StartsWith("Employee"))
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1730-L1738' title='Snippet source file'>snippet source</a> | <a href='#snippet-RequiredNullCheck' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.RequiredNullCheck.verified.txt -->
+<a id='snippet-AntiPatternTests.RequiredNullCheck.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+`_.Name != null` is always true, since Name is a required property. EF removes the check.
+Remove the null check.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.RequiredNullCheck.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.RequiredNullCheck.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only a member of the lambda parameter itself is detected, for example `_.Name`, when the parameter is an element of an entity set or a collection navigation. After a left join, for example `DefaultIfEmpty()`, the entity itself can be null, so the check is kept.
 
 
 ### EF warnings

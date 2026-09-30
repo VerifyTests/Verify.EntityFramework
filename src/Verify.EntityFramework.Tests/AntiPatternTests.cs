@@ -1569,6 +1569,287 @@
             .ToListAsync();
     }
 
+    [Test]
+    public async Task IncludeOwnedNavigation()
+    {
+        await using var data = BuildShopData();
+
+        #region IncludeOwnedNavigation
+
+        await Throws(() =>
+                data.Shops
+                    .Include(_ => _.Address)
+                    .ToQueryString())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task IncludeAutoIncludedNavigation()
+    {
+        await using var data = BuildShopData();
+        await Throws(() =>
+                data.Shops
+                    .Include(_ => _.Staff)
+                    .ToQueryString())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task DuplicateInclude()
+    {
+        await using var data = BuildData();
+
+        #region DuplicateInclude
+
+        await ThrowsTask(() =>
+                data.Employees
+                    .Include(_ => _.Company)
+                    .Include(_ => _.Company.Employees)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task SameInclude()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Include(_ => _.Employees)
+                .Include(_ => _.Employees)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task IncludeKept()
+    {
+        await using var shops = BuildShopData();
+
+        // IgnoreAutoIncludes stops EF loading Staff
+        shops.Shops
+            .IgnoreAutoIncludes()
+            .Include(_ => _.Staff)
+            .ToQueryString();
+
+        // the owned navigation is on the way to another navigation
+        shops.Shops
+            .Include(_ => _.Address)
+            .ThenInclude(_ => _!.Manager)
+            .ToQueryString();
+
+        await using var data = BuildData();
+
+        // one path
+        await data.Employees
+            .Include(_ => _.Company)
+            .ThenInclude(_ => _.Employees)
+            .ToListAsync();
+
+        // a filtered Include is kept, since removing it would remove its filter
+        await data.Companies
+            .Include(_ => _.Employees.Where(_ => _.Age > 30))
+            .Include(_ => _.Employees.Where(_ => _.Age > 30))
+            .ToListAsync();
+    }
+
+    [Test]
+    public async Task IgnoreQueryFiltersWithoutFilter()
+    {
+        await using var data = BuildShopData();
+
+        #region IgnoreQueryFiltersWithoutFilter
+
+        await Throws(() =>
+                data.Shops
+                    .IgnoreQueryFilters()
+                    .ToQueryString())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task IgnoreQueryFiltersWithOtherKey()
+    {
+        await using var data = BuildShopData();
+        await Throws(() =>
+                data.Products
+                    .IgnoreQueryFilters(["Other"])
+                    .ToQueryString())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task IgnoreQueryFiltersKept()
+    {
+        await using var data = BuildShopData();
+        data.Products
+            .IgnoreQueryFilters()
+            .ToQueryString();
+        data.Products
+            .IgnoreQueryFilters(["SoftDelete"])
+            .ToQueryString();
+
+        // Products is only read by the projection
+        data.Shops
+            .IgnoreQueryFilters()
+            .Select(_ => _.Products.Count)
+            .ToQueryString();
+
+        // Products is included
+        data.Shops
+            .Include(_ => _.Products)
+            .AsSplitQuery()
+            .IgnoreQueryFilters()
+            .ToQueryString();
+    }
+
+    [Test]
+    public async Task AsNoTrackingOnKeylessEntity()
+    {
+        await using var data = BuildShopData();
+        await Throws(() =>
+                data.ShopViews
+                    .AsNoTracking()
+                    .Where(_ => _.Name != "")
+                    .ToQueryString())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task RequiredNullCheck()
+    {
+        await using var data = BuildData();
+
+        // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+
+        #region RequiredNullCheck
+
+        await ThrowsTask(() =>
+                data.Employees
+                    .Where(_ => _.Name != null && _.Name.StartsWith("Employee"))
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+
+        // ReSharper restore ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+    }
+
+    [Test]
+    public async Task RequiredNullCheckIsNull()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Employees
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                    .Where(_ => _.Name == null)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task RequiredNavigationNullCheck()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Employees
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                    .Where(_ => _.Company != null)
+                    .ToListAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task RequiredNullCheckInSubquery()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                .Where(_ => _.Employees.Any(_ => _.Name != null))
+                .ToListAsync());
+    }
+
+    // DefaultIfEmpty returns null for a company without employees
+    [Test]
+    public async Task RequiredNullCheckAfterLeftJoinKept()
+    {
+        await using var data = BuildSqlServerData();
+        data.Companies
+            .SelectMany(_ => _.Employees.DefaultIfEmpty())
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            .Where(_ => _!.Name != null)
+            .ToQueryString();
+    }
+
+    static ShopContext BuildShopData()
+    {
+        var builder = new DbContextOptionsBuilder<ShopContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
+        return new(builder.Options);
+    }
+
+    class ShopContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        public DbSet<Shop> Shops => Set<Shop>();
+        public DbSet<Product> Products => Set<Product>();
+        public DbSet<ShopView> ShopViews => Set<ShopView>();
+
+        protected override void OnModelCreating(ModelBuilder model)
+        {
+            var shop = model.Entity<Shop>();
+            shop.OwnsOne(_ => _.Address);
+            shop
+                .Navigation(_ => _.Staff)
+                .AutoInclude();
+            model
+                .Entity<Product>()
+                .HasQueryFilter("SoftDelete", _ => !_.Deleted);
+            model
+                .Entity<ShopView>()
+                .HasNoKey()
+                .ToView("ShopView");
+        }
+    }
+
+    class Shop
+    {
+        public int Id { get; set; }
+        public ShopAddress? Address { get; set; }
+        public List<Clerk> Staff { get; set; } = [];
+        public List<Product> Products { get; set; } = [];
+    }
+
+    class ShopAddress
+    {
+        public string City { get; set; } = "";
+        public Clerk? Manager { get; set; }
+    }
+
+    class Clerk
+    {
+        public int Id { get; set; }
+    }
+
+    class Product
+    {
+        public int Id { get; set; }
+        public bool Deleted { get; set; }
+    }
+
+    class ShopView
+    {
+        public string Name { get; set; } = "";
+    }
+
     static SampleDbContext BuildCollectionFilterData([CallerMemberName] string databaseName = "")
     {
         #region ThrowOnCollectionFilterOutsideInclude

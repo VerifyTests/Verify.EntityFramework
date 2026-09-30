@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+`_.Company != null` is always true, since Company is a required navigation. EF still joins Company for the check.
+Remove the null check.
+}

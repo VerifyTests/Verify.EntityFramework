@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+`_.Name != null` is always true, since Name is a required property. EF removes the check.
+Remove the null check.
+}

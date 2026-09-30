@@ -87,6 +87,12 @@
                         return $"\"{value}\"";
                     }
 
+                    // for example the filter keys of IgnoreQueryFilters(["SoftDelete"])
+                    if (_ is ConstantExpression { Value: IEnumerable<string> values })
+                    {
+                        return $"[{string.Join(", ", values.Select(_ => $"\"{_}\""))}]";
+                    }
+
                     return QueryParameterNamer.Instance.Visit(_).ToString();
                 }));
 

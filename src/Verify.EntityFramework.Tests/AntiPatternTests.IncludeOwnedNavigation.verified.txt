@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+Include(_ => _.Address) is ignored, since Address is owned, and EF always loads an owned type with its owner.
+Remove it.
+}
