@@ -746,6 +746,41 @@
     }
 
     [Test]
+    public async Task OrderByThenSingle()
+    {
+        await using var data = BuildData();
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => _.Name)
+                    .SingleOrDefaultAsync(_ => _.Id == 1))
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task OrderByThenSingleInProjection()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Select(_ => _.Employees
+                    .OrderBy(_ => _.Age)
+                    .Select(_ => _.Name)
+                    .Single())
+                .ToListAsync());
+    }
+
+    // the ordering selects which row Take keeps
+    [Test]
+    public async Task OrderByThenTakeThenSingle()
+    {
+        await using var data = BuildData();
+        await data.Companies
+            .OrderBy(_ => _.Name)
+            .Take(1)
+            .SingleOrDefaultAsync();
+    }
+
+    [Test]
     public async Task CountGreaterThanZero()
     {
         await using var data = BuildData();

@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+OrderBy(_ => _.Name) is discarded, since it is followed by SingleOrDefault, whose result does not depend on order.
+Remove the ordering.
+}

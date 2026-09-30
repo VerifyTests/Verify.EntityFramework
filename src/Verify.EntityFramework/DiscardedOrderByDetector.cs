@@ -1,6 +1,6 @@
 ﻿// An OrderBy replaces any earlier ordering, unless a row limiting operator, like Take, is between them.
-// ThenBy was usually intended. An operator whose result does not depend on order, like Count or Any, also discards
-// the ordering. Checks every query in the expression, including those inside lambdas.
+// ThenBy was usually intended. An operator whose result does not depend on order, like Count, Any, or Single, also
+// discards the ordering. Checks every query in the expression, including those inside lambdas.
 class DiscardedOrderByDetector :
     ExpressionVisitor
 {
@@ -126,7 +126,10 @@ class DiscardedOrderByDetector :
             nameof(Queryable.Sum) or
             nameof(Queryable.Average) or
             nameof(Queryable.Min) or
-            nameof(Queryable.Max);
+            nameof(Queryable.Max) or
+            // the only element, or an exception, whatever the order
+            nameof(Queryable.Single) or
+            nameof(Queryable.SingleOrDefault);
 
     static bool IsRowLimiting(MethodInfo method) =>
         IsLinq(method) &&

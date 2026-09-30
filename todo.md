@@ -17,7 +17,7 @@ Anti-patterns that are not flagged yet. Each was checked against EF Core 10.0.12
   - Not covered by EfOrderBy, which only orders the root chain and `Include` lambdas.
   - Already handled: `Take`/`Skip` in a subquery (EF's `RowLimitingOperationWithoutOrderByWarning` throws), and `GroupBy(...).Select(g => g.First())` (EF 10 orders the `ROW_NUMBER` window by the key).
 
-- [ ] **`OrderBy` before `Single`/`SingleOrDefault`**
+- [x] **`OrderBy` before `Single`/`SingleOrDefault`**: done
   - `OrderBy(_ => _.Name).SingleOrDefault(_ => _.Id == 1)` produces `SELECT TOP(2) ... WHERE [c].[Id] = 1 ORDER BY [c].[Name]`. The sort runs, but the result of `Single` does not depend on order.
   - Add both to `DiscardedOrderByDetector.IsOrderIndependent`.
 
