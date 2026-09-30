@@ -1190,6 +1190,45 @@ Use Select(_ => _.CompanyId).Distinct(), which states that directly.
 A selector that uses the groups, for example `_.Count()`, is not detected.
 
 
+### Unordered First in a subquery
+
+`First()` or `FirstOrDefault()` on a collection navigation, in a projection or a predicate, is translated to a subquery that takes the first row without an `ORDER BY`, so it returns an arbitrary element. Entity Framework logs `FirstWithoutOrderByAndFilterWarning` for this at the root of a query, but not for a navigation, since it counts the join to the parent as a filter ([dotnet/efcore#39129](https://github.com/dotnet/efcore/issues/39129)):
+
+<!-- snippet: UnorderedFirst -->
+<a id='snippet-UnorderedFirst'></a>
+```cs
+await ThrowsTask(() =>
+        data.Companies
+            .OrderBy(_ => _.Id)
+            .Select(_ => new
+            {
+                _.Name,
+                FirstEmployee = _.Employees.FirstOrDefault()!.Name
+            })
+            .ToListAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L960-L973' title='Snippet source file'>snippet source</a> | <a href='#snippet-UnorderedFirst' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: AntiPatternTests.UnorderedFirstInProjection.verified.txt -->
+<a id='snippet-AntiPatternTests.UnorderedFirstInProjection.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+`_.Employees.FirstOrDefault()` returns an arbitrary element of Employees, since EF translates it to a subquery that takes the first row without an ORDER BY.
+Add an OrderBy before FirstOrDefault.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.UnorderedFirstInProjection.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-AntiPatternTests.UnorderedFirstInProjection.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A `First` after an ordering or a `Where`, or with a predicate, for example `_.Employees.FirstOrDefault(_ => _.Age > 30)`, is not detected.
+
+
 ### Collection filter outside the Include
 
 In `Include(_ => _.Employees).Where(_ => _.Employees.Any(...))` the `Where` filters the companies, but the `Include` still loads every employee of each company returned. That is often meant as a filtered `Include`, like `Include(_ => _.Employees.Where(...))`. Filtering the parents by their children is also a correct query, so this check is opt in:
@@ -1201,7 +1240,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1226-L1232' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1339-L1345' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1214,7 +1253,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1184-L1193' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1297-L1306' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1249,7 +1288,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1022-L1028' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1135-L1141' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: ToLowerInWhere -->
@@ -1261,7 +1300,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L962-L970' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1075-L1083' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:

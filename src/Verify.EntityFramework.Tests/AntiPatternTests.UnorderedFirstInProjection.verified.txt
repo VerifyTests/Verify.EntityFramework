@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+`_.Employees.FirstOrDefault()` returns an arbitrary element of Employees, since EF translates it to a subquery that takes the first row without an ORDER BY.
+Add an OrderBy before FirstOrDefault.
+}

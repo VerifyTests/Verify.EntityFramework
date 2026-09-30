@@ -317,6 +317,7 @@ public static class VerifyEntityFramework
     ///   <item>A count compared to zero, for example `_.Employees.Count() &gt; 0`, where Any() stops at the first row.</item>
     ///   <item>A redundant Distinct, on rows that each come from one entity and include its primary key.</item>
     ///   <item>A GroupBy whose groups are only used for their Key, which is Select(key).Distinct().</item>
+    ///   <item>First or FirstOrDefault on a collection navigation in a subquery, without an ordering or a filter, for example `_.Employees.FirstOrDefault()`, which returns an arbitrary element.</item>
     ///   <item>The query and model anti-patterns that EF detects but only logs, for example Take without OrderBy, or a decimal with no precision. To allow one, call ConfigureWarnings after this method.</item>
     /// </list>
     /// More checks are opt in, through <paramref name="configure" />. See <see cref="AntiPatternOptions" />.

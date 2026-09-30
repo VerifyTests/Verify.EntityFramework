@@ -952,6 +952,119 @@
             .ToListAsync();
     }
 
+    [Test]
+    public async Task UnorderedFirstInProjection()
+    {
+        await using var data = BuildData();
+
+        #region UnorderedFirst
+
+        await ThrowsTask(() =>
+                data.Companies
+                    .OrderBy(_ => _.Id)
+                    .Select(_ => new
+                    {
+                        _.Name,
+                        FirstEmployee = _.Employees.FirstOrDefault()!.Name
+                    })
+                    .ToListAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    [Test]
+    public async Task UnorderedFirstInWhere()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Where(_ => _.Employees.First().Age > 30)
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task UnorderedFirstAfterSelect()
+    {
+        await using var data = BuildData();
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Select(_ => _.Employees
+                    .Select(_ => _.Name)
+                    .Distinct()
+                    .FirstOrDefault())
+                .ToListAsync());
+    }
+
+    [Test]
+    public async Task OrderedOrFilteredFirstKept()
+    {
+        await using var data = BuildData();
+
+        // ordered
+        await data.Companies
+            .Select(_ => _.Employees
+                .OrderBy(_ => _.Name)
+                .Select(_ => _.Name)
+                .FirstOrDefault())
+            .ToListAsync();
+
+        // filtered, by a Where or a predicate
+        await data.Companies
+            .Select(_ => _.Employees
+                .Where(_ => _.Age > 30)
+                .Select(_ => _.Name)
+                .FirstOrDefault())
+            .ToListAsync();
+        await data.Companies
+            .Select(_ => _.Employees.FirstOrDefault(_ => _.Age > 30))
+            .ToListAsync();
+
+        // EF orders the groups by key
+        await data.Employees
+            .GroupBy(_ => _.CompanyId)
+            .Select(_ => _.First())
+            .ToListAsync();
+
+        // the root query is left to EF
+        await data.Companies
+            .OrderBy(_ => _.Id)
+            .FirstOrDefaultAsync();
+    }
+
+    // EF does not log FirstWithoutOrderByAndFilterWarning for First on a navigation in a subquery, which is why
+    // UnorderedFirstDetector exists. When this fails, EF logs it, and the detector can be removed.
+    [Test]
+    public void EfIgnoresUnorderedFirstInSubquery()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ConfigureWarnings(_ => _.Throw(CoreEventId.FirstWithoutOrderByAndFilterWarning));
+        builder.EnableServiceProviderCaching(false);
+        using var data = new SampleDbContext(builder.Options);
+
+        var query = data.Companies
+            .OrderBy(_ => _.Id)
+            .Select(_ => new
+            {
+                _.Name,
+                FirstEmployee = _.Employees.FirstOrDefault()!.Name
+            });
+        try
+        {
+            query.ToQueryString();
+        }
+        catch (InvalidOperationException exception)
+            when (exception.Message.Contains(nameof(CoreEventId.FirstWithoutOrderByAndFilterWarning)))
+        {
+            throw new(
+                """
+                You can remove UnorderedFirstDetector, since https://github.com/dotnet/efcore/issues/39129 is fixed.
+                EF now logs FirstWithoutOrderByAndFilterWarning for First on a collection navigation in a subquery.
+                """);
+        }
+    }
+
     // the queries are the case conversions the check detects
 #pragma warning disable CA1862
     [Test]
