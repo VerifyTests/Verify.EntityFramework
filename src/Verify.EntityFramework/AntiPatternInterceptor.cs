@@ -44,6 +44,11 @@ class AntiPatternInterceptor :
 
     public Expression QueryCompilationStarting(Expression query, QueryExpressionEventData data)
     {
+        if (InternalQuery.Is(query))
+        {
+            return query;
+        }
+
         DiscardedOrderByDetector.ThrowIfDiscarded(query);
         ConstantOrderingDetector.ThrowIfConstant(query);
         RedundantNullCheckDetector.ThrowIfRedundant(query);

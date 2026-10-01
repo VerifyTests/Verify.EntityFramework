@@ -49,6 +49,56 @@ public class AllDataTests
         await Verify(data.AllData());
     }
 
+    // AsNoTracking on a keyless entity type threw under ThrowOnAntiPatterns
+    [Test]
+    public async Task Keyless()
+    {
+        var builder = new DbContextOptionsBuilder<KeylessDbContext>();
+        builder.UseInMemoryDatabase(nameof(AllDataTests) + nameof(Keyless));
+        builder.ThrowOnAntiPatterns();
+        await using var data = new KeylessDbContext(builder.Options);
+        data.Add(new Animal { Id = 1, Name = "rex" });
+        await data.SaveChangesAsync();
+
+        await Verify(data.AllData());
+    }
+
+    // EF builds the query for Reload and GetDatabaseValues itself, with IgnoreQueryFilters, which threw under ThrowOnAntiPatterns
+    [Test]
+    public async Task Reload()
+    {
+        var builder = new DbContextOptionsBuilder<KeylessDbContext>();
+        builder.UseInMemoryDatabase(nameof(AllDataTests) + nameof(Reload));
+        builder.ThrowOnAntiPatterns();
+        await using var data = new KeylessDbContext(builder.Options);
+        var animal = new Animal { Id = 1, Name = "rex" };
+        data.Add(animal);
+        await data.SaveChangesAsync();
+
+        var entry = data.Entry(animal);
+        entry.Reload();
+        await entry.ReloadAsync();
+        await Assert.That(await entry.GetDatabaseValuesAsync()).IsNotNull();
+    }
+
+    public class KeylessDbContext(DbContextOptions options) :
+        DbContext(options)
+    {
+        public DbSet<Animal> Animals { get; set; } = null!;
+        public DbSet<AnimalName> AnimalNames { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder model) =>
+            model
+                .Entity<AnimalName>()
+                .HasNoKey()
+                .ToInMemoryQuery(() => Animals.Select(_ => new AnimalName { Name = _.Name }));
+    }
+
+    public class AnimalName
+    {
+        public required string Name { get; set; }
+    }
+
     static AllDataDbContext BuildData([CallerMemberName] string databaseName = "")
     {
         var builder = new DbContextOptionsBuilder<AllDataDbContext>();

@@ -43,11 +43,11 @@ public static class VerifyEntityFramework
             queryable = data.Set<T>();
         }
 
-        queryable = queryable.AsNoTracking();
-
         var key = entityType.FindPrimaryKey();
+        // EF never tracks a keyless entity type, so AsNoTracking would be redundant
         if (key != null)
         {
+            queryable = queryable.AsNoTracking();
             var method = nameof(Queryable.OrderBy);
             foreach (var property in key.Properties)
             {
