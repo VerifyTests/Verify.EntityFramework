@@ -12,6 +12,9 @@ class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentConte
     int saves;
     int singleRowSaves;
 
+    // the entities that a tracking query loaded
+    HashSet<object> loaded = new(ReferenceEqualityComparer.Instance);
+
     // Whether the checks apply now. By default only while Verify is recording, which is the code under test, so the
     // setup and assertions of a test are not counted.
     public bool IsActive
@@ -42,6 +45,10 @@ class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentConte
             queries.Clear();
             saves = 0;
             singleRowSaves = 0;
+            lock (loaded)
+            {
+                loaded.Clear();
+            }
         }
 
         return this;
@@ -63,4 +70,20 @@ class AntiPatternState(IDbContextOptions options, ICurrentDbContext currentConte
 
     public int CountSingleRowSave() =>
         Interlocked.Increment(ref singleRowSaves);
+
+    public void AddLoaded(object entity)
+    {
+        lock (loaded)
+        {
+            loaded.Add(entity);
+        }
+    }
+
+    public bool WasLoaded(object entity)
+    {
+        lock (loaded)
+        {
+            return loaded.Contains(entity);
+        }
+    }
 }

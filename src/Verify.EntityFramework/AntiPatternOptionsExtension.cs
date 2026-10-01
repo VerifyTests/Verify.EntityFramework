@@ -17,6 +17,8 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
     {
         services.AddSingleton<IInterceptor>(AntiPatternInterceptor.Instance);
         services.AddSingleton<IInterceptor>(RuntimeAntiPatternInterceptor.Instance);
+        // EF finds a materialization interceptor through ISingletonInterceptor, not IInterceptor
+        services.AddSingleton<ISingletonInterceptor>(RuntimeAntiPatternInterceptor.Instance);
         services.AddScoped<AntiPatternState>();
     }
 

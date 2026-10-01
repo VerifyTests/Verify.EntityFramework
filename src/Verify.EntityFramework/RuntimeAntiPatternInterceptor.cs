@@ -2,9 +2,28 @@
 // Stateless: what each context has counted is in its AntiPatternState.
 class RuntimeAntiPatternInterceptor :
     DbCommandInterceptor,
-    ISaveChangesInterceptor
+    ISaveChangesInterceptor,
+    IMaterializationInterceptor
 {
     public static RuntimeAntiPatternInterceptor Instance { get; } = new();
+
+    // Records the entities a tracking query loads, for ThrowOnRedundantUpdate. Recorded whether or not Verify is
+    // recording, since the setup of a test often loads what the code under test updates.
+    public object InitializedInstance(MaterializationInterceptionData data, object entity)
+    {
+        if (data.QueryTrackingBehavior != QueryTrackingBehavior.TrackAll)
+        {
+            return entity;
+        }
+
+        var state = State(data.Context);
+        if (state.Options.ThrowOnRedundantUpdate)
+        {
+            state.AddLoaded(entity);
+        }
+
+        return entity;
+    }
 
     public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData data, InterceptionResult<DbDataReader> result)
     {
@@ -194,6 +213,58 @@ class RuntimeAntiPatternInterceptor :
         {
             CheckLoadThenModify(entries);
         }
+
+        if (options.ThrowOnRedundantUpdate)
+        {
+            foreach (var entry in entries)
+            {
+                CheckRedundantUpdate(entry, state);
+            }
+        }
+    }
+
+    // Update(), or setting State to Modified, marks every property as modified, while change tracking only marks those
+    // that changed. So every property marked, when some are unchanged, on an entity a tracking query loaded, means one
+    // of those calls. A disconnected entity passed to Update() is not matched, since no query loaded it.
+    static void CheckRedundantUpdate(EntityEntry entry, AntiPatternState state)
+    {
+        if (entry.State != EntityState.Modified ||
+            !state.WasLoaded(entry.Entity))
+        {
+            return;
+        }
+
+        var properties = entry.Properties
+            .Where(_ => !_.Metadata.IsPrimaryKey() &&
+                        _.Metadata.GetAfterSaveBehavior() == PropertySaveBehavior.Save)
+            .ToList();
+        if (properties.Count == 0 ||
+            properties.Any(_ => !_.IsModified))
+        {
+            return;
+        }
+
+        var changed = entry
+            .ChangedProperties()
+            .Select(_ => _.Metadata.Name)
+            .ToList();
+        if (changed.Count == properties.Count)
+        {
+            return;
+        }
+
+        var name = entry.Metadata.DisplayName();
+        var what = "none of them changed";
+        if (changed.Count > 0)
+        {
+            what = $"only {string.Join(", ", changed)} changed";
+        }
+
+        throw new(
+            $"""
+             SaveChanges updates every column of {name}, though {what}. Update(), or setting State to Modified, marks every property as modified, but the context already tracks this {name}, which a query loaded, and detects its changes.
+             Remove the Update() call, or the State change, so only the changed columns are written.
+             """);
     }
 
     static void CheckLoadThenModify(List<EntityEntry> entries)

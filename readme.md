@@ -1698,6 +1698,7 @@ builder.ThrowOnAntiPatterns(
 | `ThrowOnRepeatedSaveChanges` | One context saves changes more times than the threshold. A `SaveChanges` with nothing to save is not counted. | `RepeatedSaveChangesThreshold`, 2 |
 | `ThrowOnSingleRowSaves` | One context has more `SaveChanges` calls that each save a single entity than the threshold. | `SingleRowSavesThreshold`, 2 |
 | `ThrowOnLoadThenModify` | A `SaveChanges` only deletes, or only makes the same change to, more entities of one type than the threshold. `ExecuteDelete` or `ExecuteUpdate` does that in one statement. | `LoadThenModifyThreshold`, 1 |
+| `ThrowOnRedundantUpdate` | `SaveChanges` updates every column of an entity that a tracking query loaded, though some are unchanged, which is what `Update()`, or setting `State` to `Modified`, does to an entity the context already tracks. See [Redundant Update](#redundant-update). | |
 
 The thresholds are low, since test data is usually small: an N+1 over three rows runs only three queries.
 
@@ -1774,6 +1775,40 @@ WHERE [c].[Id] = @id
 ```
 <sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RepeatedQueries.verified.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RepeatedQueries.verified.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+#### Redundant Update
+
+Change tracking marks only the properties that changed as modified, so `SaveChanges` only writes those columns. `Update()`, or setting `State` to `Modified`, marks every property as modified, so on an entity the context already tracks it makes `SaveChanges` write every column. That can overwrite a concurrent change to another column, and makes a trigger see every column as updated. With `ThrowOnRedundantUpdate`:
+
+<!-- snippet: RedundantUpdate -->
+<a id='snippet-RedundantUpdate'></a>
+```cs
+var employee = await data.Employees.SingleAsync();
+employee.Age = 41;
+data.Update(employee);
+await ThrowsTask(() => data.SaveChangesAsync())
+    .IgnoreStackTrace();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.cs#L417-L425' title='Snippet source file'>snippet source</a> | <a href='#snippet-RedundantUpdate' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Throws:
+
+<!-- snippet: RuntimeAntiPatternTests.RedundantUpdate.verified.txt -->
+<a id='snippet-RuntimeAntiPatternTests.RedundantUpdate.verified.txt'></a>
+```txt
+{
+  Type: Exception,
+  Message:
+SaveChanges updates every column of Employee, though only Age changed. Update(), or setting State to Modified, marks every property as modified, but the context already tracks this Employee, which a query loaded, and detects its changes.
+Remove the Update() call, or the State change, so only the changed columns are written.
+}
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/RuntimeAntiPatternTests.RedundantUpdate.verified.txt#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-RuntimeAntiPatternTests.RedundantUpdate.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Only an entity that a tracking query loaded is checked, whether or not Verify was recording when it was loaded. A disconnected entity passed to `Update()`, for example one built from a request, or loaded with `AsNoTracking()`, needs every column written, so is not detected.
+
 
 ## ScrubInlineEfDateTimes
 

@@ -1,0 +1,6 @@
+﻿{
+  Type: Exception,
+  Message:
+SaveChanges updates every column of Employee, though none of them changed. Update(), or setting State to Modified, marks every property as modified, but the context already tracks this Employee, which a query loaded, and detects its changes.
+Remove the Update() call, or the State change, so only the changed columns are written.
+}

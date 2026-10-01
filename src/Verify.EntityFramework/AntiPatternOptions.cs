@@ -75,6 +75,13 @@ public sealed class AntiPatternOptions
     public int LoadThenModifyThreshold { get; set; } = 1;
 
     /// <summary>
+    /// Throw when SaveChanges updates every column of an entity that a tracking query loaded, though some are unchanged.
+    /// That is what Update(), or setting State to Modified, does to an entity the context already tracks. Change tracking
+    /// already detects the changes, and without the call only the changed columns are written.
+    /// </summary>
+    public bool ThrowOnRedundantUpdate { get; set; }
+
+    /// <summary>
     /// Throw when ToLower, ToUpper, ToLowerInvariant, or ToUpperInvariant is called on a column in a filter, ordering,
     /// join, or predicate, which stops the database using an index on it. Opt in, since whether the conversion is
     /// needed depends on the column's collation: SQL Server's default is case insensitive, but many databases are case

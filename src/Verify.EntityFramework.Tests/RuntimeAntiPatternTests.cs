@@ -409,6 +409,114 @@
         Recording.Stop(identifier);
     }
 
+    [Test]
+    public async Task RedundantUpdate()
+    {
+        await using var data = await BuildWithEmployee();
+
+        #region RedundantUpdate
+
+        var employee = await data.Employees.SingleAsync();
+        employee.Age = 41;
+        data.Update(employee);
+        await ThrowsTask(() => data.SaveChangesAsync())
+            .IgnoreStackTrace();
+
+        #endregion
+    }
+
+    // writes a row that did not change
+    [Test]
+    public async Task RedundantUpdateWithoutChange()
+    {
+        await using var data = await BuildWithEmployee();
+        var employee = await data.Employees.SingleAsync();
+        data.Update(employee);
+        await ThrowsTask(() => data.SaveChangesAsync())
+            .IgnoreStackTrace();
+    }
+
+    [Test]
+    public async Task RedundantStateModified()
+    {
+        await using var data = await BuildWithEmployee();
+        var employee = await data.Employees.SingleAsync();
+        employee.Age = 41;
+        data.Entry(employee).State = EntityState.Modified;
+        await Assert.ThrowsExactlyAsync<Exception>(() => data.SaveChangesAsync());
+    }
+
+    [Test]
+    public async Task RedundantUpdateKept()
+    {
+        // change tracking alone
+        await using (var data = await BuildWithEmployee(name: "ChangeTracking"))
+        {
+            var employee = await data.Employees.SingleAsync();
+            employee.Age = 41;
+            await data.SaveChangesAsync();
+        }
+
+        // a disconnected entity, which no query loaded, needs every column written
+        await using (var data = await BuildWithEmployee(name: "Disconnected"))
+        {
+            data.Update(NewEmployee(41));
+            await data.SaveChangesAsync();
+        }
+
+        // an entity that a query loaded without tracking is disconnected too
+        await using (var data = await BuildWithEmployee(name: "NoTracking"))
+        {
+            var employee = await data.Employees
+                .AsNoTracking()
+                .SingleAsync();
+            employee.Age = 41;
+            data.Update(employee);
+            await data.SaveChangesAsync();
+        }
+
+        // every column changed
+        await using (var data = await BuildWithEmployee(name: "EveryColumn"))
+        {
+            var employee = await data.Employees.SingleAsync();
+            employee.Name = "Changed";
+            employee.Age = 41;
+            employee.CompanyId = 2;
+            data.Update(employee);
+            await data.SaveChangesAsync();
+        }
+    }
+
+    [Test]
+    public async Task RedundantUpdateNotEnabled()
+    {
+        await using var data = await BuildWithEmployee(enabled: false);
+        var employee = await data.Employees.SingleAsync();
+        data.Update(employee);
+        await data.SaveChangesAsync();
+    }
+
+    static Employee NewEmployee(int age) =>
+        new()
+        {
+            Id = 1,
+            CompanyId = 1,
+            Name = "Employee1",
+            Age = age
+        };
+
+    static async Task<SampleDbContext> BuildWithEmployee(bool enabled = true, [CallerMemberName] string name = "")
+    {
+        await using (var seed = BuildInMemory(_ => { }, name))
+        {
+            seed.Add(NewCompany(1));
+            seed.Add(NewEmployee(40));
+            await seed.SaveChangesAsync();
+        }
+
+        return BuildInMemory(_ => _.ThrowOnRedundantUpdate = enabled, name);
+    }
+
     static Company NewCompany(int id) =>
         new()
         {
