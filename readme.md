@@ -1397,7 +1397,19 @@ So repeating `Include(_ => _.Company)` to `ThenInclude` two different navigation
 
 ### Ignored IgnoreQueryFilters
 
-`IgnoreQueryFilters()` does nothing when no entity type in the query has a query filter. That covers the entity types the query reads, including navigations in a projection, `AutoInclude` navigations, and the join types of many-to-many navigations. With filter keys, for example `IgnoreQueryFilters(["SoftDelete"])`, it does nothing when none of them has a filter with one of those keys:
+`IgnoreQueryFilters()` does nothing when no entity type in the query has a query filter. That covers the entity types the query reads, including navigations in a projection, `AutoInclude` navigations, and the join types of many-to-many navigations. With filter keys, for example `IgnoreQueryFilters(["SoftDelete"])`, it does nothing when none of them has a filter with one of those keys.
+
+This check is opt in, since code that is shared between entity types, for example a generic helper, can not know whether the entity type it is given has a query filter:
+
+<!-- snippet: ThrowOnIgnoredQueryFilters -->
+<a id='snippet-ThrowOnIgnoredQueryFilters'></a>
+```cs
+var builder = new DbContextOptionsBuilder<ShopContext>();
+builder.UseSqlServer(connectionString);
+builder.ThrowOnAntiPatterns(_ => _.ThrowOnIgnoredQueryFilters = true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1813-L1819' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnIgnoredQueryFilters' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 <!-- snippet: IgnoreQueryFiltersWithoutFilter -->
 <a id='snippet-IgnoreQueryFiltersWithoutFilter'></a>
@@ -1440,7 +1452,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1855-L1861' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1881-L1887' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1609,7 +1621,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1730-L1738' title='Snippet source file'>snippet source</a> | <a href='#snippet-RequiredNullCheck' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1742-L1750' title='Snippet source file'>snippet source</a> | <a href='#snippet-RequiredNullCheck' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:

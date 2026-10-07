@@ -315,7 +315,6 @@ public static class VerifyEntityFramework
     ///   <item>An ordering by a value that is the same for every row, for example OrderBy(_ =&gt; 1), which does not order the rows.</item>
     ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
     ///   <item>An Include of an owned or AutoInclude navigation, or whose path is the same as, or the start of, another Include path.</item>
-    ///   <item>IgnoreQueryFilters on a query where no entity type has a query filter, or none with the given keys.</item>
     ///   <item>AsNoTracking or AsTracking on a query that only returns a keyless entity type.</item>
     ///   <item>A null check of a required property or navigation, for example `_.Name != null`, which is always true.</item>
     ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`, or `_.Owner == null ? null : _.Owner.Name`.</item>
@@ -329,7 +328,7 @@ public static class VerifyEntityFramework
     /// </summary>
     /// <param name="builder">The options builder for the context.</param>
     /// <param name="configure">
-    /// Opts in to more checks, for example lazy loading, repeated queries, and case conversion of a column. Applied on top of the options from an earlier
+    /// Opts in to more checks, for example lazy loading, repeated queries, case conversion of a column, and an ignored IgnoreQueryFilters. Applied on top of the options from an earlier
     /// call, including the one made by EnableRecording.
     /// </param>
     public static DbContextOptionsBuilder<TContext> ThrowOnAntiPatterns<TContext>(

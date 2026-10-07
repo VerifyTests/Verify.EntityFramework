@@ -97,6 +97,13 @@ public sealed class AntiPatternOptions
     /// </summary>
     public bool ThrowOnCollectionFilterOutsideInclude { get; set; }
 
+    /// <summary>
+    /// Throw when IgnoreQueryFilters is called on a query where no entity type has a query filter, or none with the
+    /// given keys, so it does nothing. Opt in, since code that is shared between entity types, for example a generic
+    /// helper, can not know whether the entity type it is given has a query filter.
+    /// </summary>
+    public bool ThrowOnIgnoredQueryFilters { get; set; }
+
     internal AntiPatternOptions Clone() =>
         (AntiPatternOptions) MemberwiseClone();
 }

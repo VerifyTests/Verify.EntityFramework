@@ -1659,7 +1659,7 @@
     [Test]
     public async Task IgnoreQueryFiltersWithoutFilter()
     {
-        await using var data = BuildShopData();
+        await using var data = BuildIgnoredQueryFiltersData();
 
         #region IgnoreQueryFiltersWithoutFilter
 
@@ -1675,7 +1675,7 @@
     [Test]
     public async Task IgnoreQueryFiltersWithOtherKey()
     {
-        await using var data = BuildShopData();
+        await using var data = BuildIgnoredQueryFiltersData();
         await Throws(() =>
                 data.Products
                     .IgnoreQueryFilters(["Other"])
@@ -1684,9 +1684,21 @@
     }
 
     [Test]
-    public async Task IgnoreQueryFiltersKept()
+    public async Task IgnoreQueryFiltersNotCheckedByDefault()
     {
         await using var data = BuildShopData();
+        data.Shops
+            .IgnoreQueryFilters()
+            .ToQueryString();
+        data.Products
+            .IgnoreQueryFilters(["Other"])
+            .ToQueryString();
+    }
+
+    [Test]
+    public async Task IgnoreQueryFiltersKept()
+    {
+        await using var data = BuildIgnoredQueryFiltersData();
         data.Products
             .IgnoreQueryFilters()
             .ToQueryString();
@@ -1792,6 +1804,20 @@
         var builder = new DbContextOptionsBuilder<ShopContext>();
         builder.UseSqlServer(connectionString);
         builder.ThrowOnAntiPatterns();
+        builder.EnableServiceProviderCaching(false);
+        return new(builder.Options);
+    }
+
+    static ShopContext BuildIgnoredQueryFiltersData()
+    {
+        #region ThrowOnIgnoredQueryFilters
+
+        var builder = new DbContextOptionsBuilder<ShopContext>();
+        builder.UseSqlServer(connectionString);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnIgnoredQueryFilters = true);
+
+        #endregion
+
         builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }

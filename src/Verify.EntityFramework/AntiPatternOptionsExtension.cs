@@ -36,7 +36,8 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
         AntiPatternOptions Options => ((AntiPatternOptionsExtension) Extension).Options;
 
         // the options checked while a query is compiled
-        (bool, bool) CompileOptions => (Options.ThrowOnColumnCaseConversion, Options.ThrowOnCollectionFilterOutsideInclude);
+        (bool, bool, bool) CompileOptions =>
+            (Options.ThrowOnColumnCaseConversion, Options.ThrowOnCollectionFilterOutsideInclude, Options.ThrowOnIgnoredQueryFilters);
 
         public override int GetServiceProviderHashCode() =>
             CompileOptions.GetHashCode();

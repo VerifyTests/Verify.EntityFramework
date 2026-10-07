@@ -63,7 +63,6 @@ class AntiPatternInterceptor :
             RedundantDistinctDetector.ThrowIfRedundant(query, context.Model);
             UnorderedFirstDetector.ThrowIfUnordered(query, context.Model);
             RedundantIncludeDetector.ThrowIfRedundant(query, context.Model);
-            IgnoredQueryFiltersDetector.ThrowIfIgnored(query, context.Model);
             RequiredNullCheckDetector.ThrowIfRedundant(query, context.Model);
 
             var options = context.GetService<IDbContextOptions>().FindExtension<AntiPatternOptionsExtension>()?.Options;
@@ -75,6 +74,11 @@ class AntiPatternInterceptor :
             if (options is { ThrowOnCollectionFilterOutsideInclude: true })
             {
                 CollectionFilterOutsideIncludeDetector.ThrowIfFilteredOutside(query);
+            }
+
+            if (options is { ThrowOnIgnoredQueryFilters: true })
+            {
+                IgnoredQueryFiltersDetector.ThrowIfIgnored(query, context.Model);
             }
         }
 
