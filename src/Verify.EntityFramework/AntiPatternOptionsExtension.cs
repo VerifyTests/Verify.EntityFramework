@@ -35,16 +35,12 @@ class AntiPatternOptionsExtension(AntiPatternOptions options) :
 
         AntiPatternOptions Options => ((AntiPatternOptionsExtension) Extension).Options;
 
-        // the options checked while a query is compiled
-        (bool, bool, bool) CompileOptions =>
-            (Options.ThrowOnColumnCaseConversion, Options.ThrowOnCollectionFilterOutsideInclude, Options.ThrowOnIgnoredQueryFilters);
-
         public override int GetServiceProviderHashCode() =>
-            CompileOptions.GetHashCode();
+            Options.CompileFlags;
 
         public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) =>
             other is ExtensionInfo info &&
-            info.CompileOptions == CompileOptions;
+            info.Options.CompileFlags == Options.CompileFlags;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
         {

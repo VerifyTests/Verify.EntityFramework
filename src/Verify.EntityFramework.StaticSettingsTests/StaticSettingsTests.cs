@@ -14,15 +14,15 @@ public class StaticSettingsTests
     public void TearDown()
     {
         VerifyEntityFramework.DisableSqlFormatting = false;
-        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = true;
+        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
     }
 
     [Test]
-    public void DisableThrowOnAntiPatternsByDefault()
+    public void EnableThrowOnAntiPatternsByDefault()
     {
         #region ThrowOnAntiPatternsByDefault
 
-        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
+        VerifyEntityFramework.ThrowOnAntiPatternsByDefault = true;
 
         #endregion
 
@@ -32,10 +32,11 @@ public class StaticSettingsTests
         builder.EnableRecording();
         using var data = new SampleDbContext(builder.Options);
 
-        data.Companies
-            .Include(_ => _.Employees)
-            .Select(_ => _.Name)
-            .ToQueryString();
+        Assert.ThrowsExactly<Exception>(() =>
+            data.Companies
+                .Include(_ => _.Employees)
+                .Select(_ => _.Name)
+                .ToQueryString());
     }
 
     [Test]

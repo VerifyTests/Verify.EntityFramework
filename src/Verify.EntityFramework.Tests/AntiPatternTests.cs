@@ -609,9 +609,14 @@
     [Test]
     public async Task EnabledByEnableRecording()
     {
+        #region EnableRecordingThrowOnAntiPatterns
+
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
         builder.UseInMemoryDatabase(nameof(EnabledByEnableRecording));
-        builder.EnableRecording();
+        builder.EnableRecording(throwOnAntiPatterns: true);
+
+        #endregion
+
         builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
 
@@ -622,23 +627,115 @@
                 .ToListAsync());
     }
 
+    // the checks are opt in, so EnableRecording alone does not apply them
     [Test]
-    public async Task EnableRecordingOptOut()
+    public async Task NotEnabledByEnableRecording()
     {
-        #region EnableRecordingAllowAntiPatterns
-
         var builder = new DbContextOptionsBuilder<SampleDbContext>();
-        builder.UseInMemoryDatabase(nameof(EnableRecordingOptOut));
-        builder.EnableRecording(throwOnAntiPatterns: false);
-
-        #endregion
-
+        builder.UseInMemoryDatabase(nameof(NotEnabledByEnableRecording));
+        builder.EnableRecording();
         builder.EnableServiceProviderCaching(false);
         await using var data = new SampleDbContext(builder.Options);
         await data.Companies
             .Include(_ => _.Employees)
             .Select(_ => _.Name)
             .ToListAsync();
+    }
+
+    // a configure action selects a subset: only the checks it switches on run
+    [Test]
+    public async Task Subset()
+    {
+        #region ThrowOnAntiPatternsSubset
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(Subset));
+        builder.ThrowOnAntiPatterns(
+            _ =>
+            {
+                _.ThrowOnDiscardedOrderBy = true;
+                _.ThrowOnCountComparison = true;
+            });
+
+        #endregion
+
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .OrderBy(_ => _.Name)
+                .OrderBy(_ => _.Id)
+                .ToListAsync());
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Where(_ => _.Employees.Count() > 0)
+                .ToListAsync());
+
+        // not selected
+        await data.Companies
+            .Include(_ => _.Employees)
+            .Select(_ => _.Name)
+            .ToListAsync();
+        // an EF warning, which is not selected either
+        await data.Companies
+            .Take(10)
+            .ToListAsync();
+    }
+
+    // EnableStandard in a configure action adds to the standard set
+    [Test]
+    public async Task StandardAndMore()
+    {
+        #region ThrowOnAntiPatternsStandardAndMore
+
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(StandardAndMore));
+        builder.ThrowOnAntiPatterns(
+            _ =>
+            {
+                _.EnableStandard();
+                _.ThrowOnColumnCaseConversion = true;
+            });
+
+        #endregion
+
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Include(_ => _.Employees)
+                .Select(_ => _.Name)
+                .ToListAsync());
+#pragma warning disable CA1862
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Where(_ => _.Name.ToLower() == "company1")
+                .ToListAsync());
+#pragma warning restore CA1862
+    }
+
+    // a later call adds to the checks an earlier call selected
+    [Test]
+    public async Task CallsAccumulate()
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseInMemoryDatabase(nameof(CallsAccumulate));
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnDiscardedOrderBy = true);
+        builder.ThrowOnAntiPatterns(_ => _.ThrowOnCountComparison = true);
+        builder.EnableServiceProviderCaching(false);
+        await using var data = new SampleDbContext(builder.Options);
+
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .OrderBy(_ => _.Name)
+                .OrderBy(_ => _.Id)
+                .ToListAsync());
+        await Assert.ThrowsExactlyAsync<Exception>(() =>
+            data.Companies
+                .Where(_ => _.Employees.Count() > 0)
+                .ToListAsync());
     }
 
     [Test]
@@ -930,7 +1027,7 @@
     public async Task OrderByThenExecuteDelete()
     {
         await using var database = await DbContextBuilder.GetDatabase();
-        var data = database.Context;
+        await using var data = BuildSqlServerData(database);
 
         #region OrderByThenExecuteDelete
 
@@ -948,7 +1045,7 @@
     public async Task OrderByThenExecuteUpdate()
     {
         await using var database = await DbContextBuilder.GetDatabase();
-        var data = database.Context;
+        await using var data = BuildSqlServerData(database);
         await Assert.ThrowsExactlyAsync<Exception>(() =>
             data.Employees
                 .OrderBy(_ => _.Name)
@@ -960,7 +1057,7 @@
     public async Task OrderByThenTakeThenExecuteDelete()
     {
         await using var database = await DbContextBuilder.GetDatabase();
-        var data = database.Context;
+        await using var data = BuildSqlServerData(database);
         var deleted = await data.Employees
             .OrderBy(_ => _.Age)
             .Take(1)
@@ -1886,6 +1983,16 @@
 
         #endregion
 
+        builder.EnableServiceProviderCaching(false);
+        return new(builder.Options);
+    }
+
+    // the context of the database is built with EnableRecording, which does not apply the checks
+    static SampleDbContext BuildSqlServerData(SqlDatabase<SampleDbContext> database)
+    {
+        var builder = new DbContextOptionsBuilder<SampleDbContext>();
+        builder.UseSqlServer(database.Connection);
+        builder.ThrowOnAntiPatterns();
         builder.EnableServiceProviderCaching(false);
         return new(builder.Options);
     }

@@ -914,7 +914,7 @@ To detect and limit overly large or expensive EF queries, for example unbounded 
 
 Queries that contain an anti-pattern throw when they are compiled. This works with any provider, and also applies to `ToQueryString()`, so verifying a [Queryable](#queryable) also throws.
 
-`EnableRecording()` enables this by default. For a context that does not use recording, use `ThrowOnAntiPatterns()`:
+The checks are opt in. `ThrowOnAntiPatterns()` switches on the [standard set](#selecting-checks):
 
 <!-- snippet: ThrowOnAntiPatterns -->
 <a id='snippet-ThrowOnAntiPatterns'></a>
@@ -932,31 +932,89 @@ A context that uses `UseInternalServiceProvider` is not checked, since EF does n
 These checks find queries that are written wrong, whatever data they run against. To limit how large or expensive a query can be, for example the number of values in a `Contains` list, the number of rows, or the number of includes, use [EfQueryComplexity](https://github.com/SimonCropp/EfQueryComplexity).
 
 
-### Opting out
+### Selecting checks
 
-For a single context:
+Each check has its own flag on `AntiPatternOptions`, and is off until selected.
 
-<!-- snippet: EnableRecordingAllowAntiPatterns -->
-<a id='snippet-EnableRecordingAllowAntiPatterns'></a>
+`ThrowOnAntiPatterns()`, with no arguments, switches on the standard set: the checks that find a query, or a model, that is written wrong whatever data it runs against.
+
+| Flag | Check |
+| --- | --- |
+| `ThrowOnIgnoredEntityOperators` | [Ignored Include and tracking options](#ignored-include-and-tracking-options) |
+| `ThrowOnIgnoredQuerySplitting` | [Ignored query splitting](#ignored-query-splitting) |
+| `ThrowOnDiscardedOrderBy` | [Discarded OrderBy](#discarded-orderby) |
+| `ThrowOnConstantOrdering` | [Ordering by a constant](#ordering-by-a-constant) |
+| `ThrowOnCountComparison` | [Count compared to zero](#count-compared-to-zero) |
+| `ThrowOnRedundantDistinct` | [Redundant Distinct](#redundant-distinct) |
+| `ThrowOnGroupByOnlyKey` | [GroupBy that only uses the Key](#groupby-that-only-uses-the-key) |
+| `ThrowOnUnorderedFirst` | [Unordered First in a subquery](#unordered-first-in-a-subquery) |
+| `ThrowOnRedundantInclude` | [Redundant Include](#redundant-include) |
+| `ThrowOnRedundantNullCheck` | [Redundant null check](#redundant-null-check), on a navigation or a nullable scalar |
+| `ThrowOnRequiredNullCheck` | [Redundant null check](#redundant-null-check), of a required property or navigation |
+| `ThrowOnEfWarnings` | [EF warnings](#ef-warnings) |
+
+The checks outside the standard set are `ThrowOnIgnoredQueryFilters`, `ThrowOnCollectionFilterOutsideInclude`, `ThrowOnColumnCaseConversion`, and the [runtime checks](#runtime-checks).
+
+To run a single check, or a subset, pass a configure action. Only the checks it selects are switched on:
+
+<!-- snippet: ThrowOnAntiPatternsSubset -->
+<a id='snippet-ThrowOnAntiPatternsSubset'></a>
 ```cs
 var builder = new DbContextOptionsBuilder<SampleDbContext>();
-builder.UseInMemoryDatabase(nameof(EnableRecordingOptOut));
-builder.EnableRecording(throwOnAntiPatterns: false);
+builder.UseInMemoryDatabase(nameof(Subset));
+builder.ThrowOnAntiPatterns(
+    _ =>
+    {
+        _.ThrowOnDiscardedOrderBy = true;
+        _.ThrowOnCountComparison = true;
+    });
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L628-L634' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingAllowAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L649-L660' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsSubset' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-For all contexts, at assembly load time and before any context is built:
+To add to the standard set, call `EnableStandard()` in the configure action:
+
+<!-- snippet: ThrowOnAntiPatternsStandardAndMore -->
+<a id='snippet-ThrowOnAntiPatternsStandardAndMore'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(StandardAndMore));
+builder.ThrowOnAntiPatterns(
+    _ =>
+    {
+        _.EnableStandard();
+        _.ThrowOnColumnCaseConversion = true;
+    });
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L690-L701' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsStandardAndMore' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The options are applied on top of those from an earlier call, so several calls add up.
+
+
+### With EnableRecording
+
+`EnableRecording()` does not apply the checks. To also apply `ThrowOnAntiPatterns()`, with the standard set, for a single context:
+
+<!-- snippet: EnableRecordingThrowOnAntiPatterns -->
+<a id='snippet-EnableRecordingThrowOnAntiPatterns'></a>
+```cs
+var builder = new DbContextOptionsBuilder<SampleDbContext>();
+builder.UseInMemoryDatabase(nameof(EnabledByEnableRecording));
+builder.EnableRecording(throwOnAntiPatterns: true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L612-L618' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableRecordingThrowOnAntiPatterns' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+For all contexts that use `EnableRecording()`, at assembly load time and before any context is built:
 
 <!-- snippet: ThrowOnAntiPatternsByDefault -->
 <a id='snippet-ThrowOnAntiPatternsByDefault'></a>
 ```cs
-VerifyEntityFramework.ThrowOnAntiPatternsByDefault = false;
+VerifyEntityFramework.ThrowOnAntiPatternsByDefault = true;
 ```
 <sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L23-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnAntiPatternsByDefault' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
-
-To allow one of the [EF warnings](#ef-warnings), use `ConfigureWarnings`. See below.
 
 
 ### Ignored Include and tracking options
@@ -1015,7 +1073,7 @@ await Throws(() =>
             .ToQueryString())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L649-L658' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L746-L755' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoredSplitQuery' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1079,7 +1137,7 @@ await ThrowsTask(() =>
             .CountAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L801-L809' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L898-L906' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenCount' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 So does `GroupBy`. Unlike LINQ to objects, Entity Framework drops an ordering before a `GroupBy`, so it orders neither the groups nor the elements in them, and `First()` of a group picks by primary key, not by that ordering:
@@ -1095,7 +1153,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L881-L891' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenGroupBy' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L978-L988' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenGroupBy' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1127,7 +1185,7 @@ await ThrowsTask(() =>
             .ExecuteDeleteAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L935-L944' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenExecuteDelete' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1032-L1041' title='Snippet source file'>snippet source</a> | <a href='#snippet-OrderByThenExecuteDelete' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1194,7 +1252,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L987-L995' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1084-L1092' title='Snippet source file'>snippet source</a> | <a href='#snippet-CountGreaterThanZero' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1234,7 +1292,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1035-L1049' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1132-L1146' title='Snippet source file'>snippet source</a> | <a href='#snippet-DistinctOnKey' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1269,7 +1327,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1131-L1140' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1228-L1237' title='Snippet source file'>snippet source</a> | <a href='#snippet-GroupByOnlyKey' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1308,7 +1366,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1194-L1207' title='Snippet source file'>snippet source</a> | <a href='#snippet-UnorderedFirst' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1291-L1304' title='Snippet source file'>snippet source</a> | <a href='#snippet-UnorderedFirst' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1342,7 +1400,7 @@ await Throws(() =>
             .ToQueryString())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1577-L1585' title='Snippet source file'>snippet source</a> | <a href='#snippet-IncludeOwnedNavigation' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1674-L1682' title='Snippet source file'>snippet source</a> | <a href='#snippet-IncludeOwnedNavigation' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1374,7 +1432,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1604-L1613' title='Snippet source file'>snippet source</a> | <a href='#snippet-DuplicateInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1701-L1710' title='Snippet source file'>snippet source</a> | <a href='#snippet-DuplicateInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1399,7 +1457,7 @@ So repeating `Include(_ => _.Company)` to `ThenInclude` two different navigation
 
 `IgnoreQueryFilters()` does nothing when no entity type in the query has a query filter. That covers the entity types the query reads, including navigations in a projection, `AutoInclude` navigations, and the join types of many-to-many navigations. With filter keys, for example `IgnoreQueryFilters(["SoftDelete"])`, it does nothing when none of them has a filter with one of those keys.
 
-This check is opt in, since code that is shared between entity types, for example a generic helper, can not know whether the entity type it is given has a query filter:
+This check is not in the standard set, since code that is shared between entity types, for example a generic helper, can not know whether the entity type it is given has a query filter:
 
 <!-- snippet: ThrowOnIgnoredQueryFilters -->
 <a id='snippet-ThrowOnIgnoredQueryFilters'></a>
@@ -1408,7 +1466,7 @@ var builder = new DbContextOptionsBuilder<ShopContext>();
 builder.UseSqlServer(connectionString);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnIgnoredQueryFilters = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1813-L1819' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnIgnoredQueryFilters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1910-L1916' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnIgnoredQueryFilters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: IgnoreQueryFiltersWithoutFilter -->
@@ -1420,7 +1478,7 @@ await Throws(() =>
             .ToQueryString())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1664-L1672' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoreQueryFiltersWithoutFilter' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1761-L1769' title='Snippet source file'>snippet source</a> | <a href='#snippet-IgnoreQueryFiltersWithoutFilter' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1443,7 +1501,7 @@ A query with a string `Include` is not checked.
 
 ### Collection filter outside the Include
 
-In `Include(_ => _.Employees).Where(_ => _.Employees.Any(...))` the `Where` filters the companies, but the `Include` still loads every employee of each company returned. That is often meant as a filtered `Include`, like `Include(_ => _.Employees.Where(...))`. Filtering the parents by their children is also a correct query, so this check is opt in:
+In `Include(_ => _.Employees).Where(_ => _.Employees.Any(...))` the `Where` filters the companies, but the `Include` still loads every employee of each company returned. That is often meant as a filtered `Include`, like `Include(_ => _.Employees.Where(...))`. Filtering the parents by their children is also a correct query, so this check is not in the standard set:
 
 <!-- snippet: ThrowOnCollectionFilterOutsideInclude -->
 <a id='snippet-ThrowOnCollectionFilterOutsideInclude'></a>
@@ -1452,7 +1510,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnCollectionFilterOutsideInclude = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1881-L1887' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1978-L1984' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnCollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: CollectionFilterOutsideInclude -->
@@ -1465,7 +1523,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1532-L1541' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1629-L1638' title='Snippet source file'>snippet source</a> | <a href='#snippet-CollectionFilterOutsideInclude' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1491,7 +1549,7 @@ A filtered `Include`, and a `Where` that does not read the included collection, 
 
 `ToLower()`, `ToUpper()`, `ToLowerInvariant()`, or `ToUpperInvariant()` on a column, in a filter, ordering, join, or predicate like `Any` or `First`, wraps the column in a function, so the database can not use an index on it. With SQL Server's default collation comparisons are case insensitive, so the conversion is redundant too.
 
-This check is opt in, since whether the conversion is needed depends on the column's collation, and many databases are case sensitive by default:
+This check is not in the standard set, since whether the conversion is needed depends on the column's collation, and many databases are case sensitive by default:
 
 <!-- snippet: ThrowOnColumnCaseConversion -->
 <a id='snippet-ThrowOnColumnCaseConversion'></a>
@@ -1500,7 +1558,7 @@ var builder = new DbContextOptionsBuilder<SampleDbContext>();
 builder.UseInMemoryDatabase(databaseName);
 builder.ThrowOnAntiPatterns(_ => _.ThrowOnColumnCaseConversion = true);
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1369-L1375' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1466-L1472' title='Snippet source file'>snippet source</a> | <a href='#snippet-ThrowOnColumnCaseConversion' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: ToLowerInWhere -->
@@ -1512,7 +1570,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1309-L1317' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1406-L1414' title='Snippet source file'>snippet source</a> | <a href='#snippet-ToLowerInWhere' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1621,7 +1679,7 @@ await ThrowsTask(() =>
             .ToListAsync())
     .IgnoreStackTrace();
 ```
-<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1742-L1750' title='Snippet source file'>snippet source</a> | <a href='#snippet-RequiredNullCheck' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.Tests/AntiPatternTests.cs#L1839-L1847' title='Snippet source file'>snippet source</a> | <a href='#snippet-RequiredNullCheck' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Throws:
@@ -1644,7 +1702,7 @@ Only a member of the lambda parameter itself is detected, for example `_.Name`, 
 
 ### EF warnings
 
-EF detects some anti-patterns itself, but only logs them. `ThrowOnAntiPatterns()` configures these to throw:
+EF detects some anti-patterns itself, but only logs them. `ThrowOnEfWarnings`, which is in the standard set, configures these to throw:
 
  * `RelationalEventId.MultipleCollectionIncludeWarning`: more than one collection `Include` in a single query, which multiplies the rows returned. Use `AsSplitQuery()`, or configure a query splitting behavior.
  * `CoreEventId.RowLimitingOperationWithoutOrderByWarning`: `Take` or `Skip` without `OrderBy`, which returns unpredictable rows.
@@ -1683,7 +1741,7 @@ builder.ConfigureWarnings(_ =>
 
 ### Runtime checks
 
-Some anti-patterns are only visible while a context runs. Each has its own opt in flag on `AntiPatternOptions`, passed to `ThrowOnAntiPatterns`. The options are applied on top of those from an earlier call, so this works before or after `EnableRecording()`:
+Some anti-patterns are only visible while a context runs. Each has its own flag on `AntiPatternOptions`, passed to `ThrowOnAntiPatterns`, and none is in the standard set. The options are applied on top of those from an earlier call, so this works before or after `EnableRecording()`:
 
 <!-- snippet: ThrowOnAntiPatternsRuntime -->
 <a id='snippet-ThrowOnAntiPatternsRuntime'></a>
@@ -1872,7 +1930,7 @@ Reformatting can be disabled globally:
 ```cs
 VerifyEntityFramework.DisableSqlFormatting = true;
 ```
-<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L44-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Verify.EntityFramework.StaticSettingsTests/StaticSettingsTests.cs#L45-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableSqlFormatting' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When disabled, the SQL is written verbatim as produced by EntityFramework.

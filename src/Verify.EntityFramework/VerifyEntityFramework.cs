@@ -266,9 +266,10 @@ public static class VerifyEntityFramework
 
     /// <summary>
     /// The default for the `throwOnAntiPatterns` parameter of
-    /// <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext}, string?, bool?)" />.
+    /// <see cref="EnableRecording{TContext}(DbContextOptionsBuilder{TContext}, string?, bool?)" />. Defaults to false,
+    /// so the anti-pattern checks are opt in.
     /// </summary>
-    public static bool ThrowOnAntiPatternsByDefault { get; set; } = true;
+    public static bool ThrowOnAntiPatternsByDefault { get; set; }
 
     // Binary compatibility for assemblies compiled against the pre optional parameter overloads, for example EfLocalDb
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
@@ -284,7 +285,8 @@ public static class VerifyEntityFramework
     /// <param name="builder">The options builder for the context.</param>
     /// <param name="identifier">Record under this identifier, so a test can start and stop its own recording.</param>
     /// <param name="throwOnAntiPatterns">
-    /// Apply <see cref="ThrowOnAntiPatterns{TContext}" />. Defaults to <see cref="ThrowOnAntiPatternsByDefault" />.
+    /// Apply <see cref="ThrowOnAntiPatterns{TContext}" />, with the standard set of checks. Defaults to
+    /// <see cref="ThrowOnAntiPatternsByDefault" />, which is false unless changed.
     /// </param>
     public static DbContextOptionsBuilder<TContext> EnableRecording<TContext>(
         this DbContextOptionsBuilder<TContext> builder,
@@ -308,28 +310,18 @@ public static class VerifyEntityFramework
     }
 
     /// <summary>
-    /// Throw when a query that uses an anti-pattern is compiled. Detects:
-    /// <list type="bullet">
-    ///   <item>An Include, ThenInclude, or tracking option that EF ignores, since the query returns no entity. For example it ends in a projection, or a scalar like Count.</item>
-    ///   <item>An ordering that EF discards, since it is followed by another OrderBy, or by an operator whose result does not depend on order, like Count, Any, Single, GroupBy, or ExecuteDelete.</item>
-    ///   <item>An ordering by a value that is the same for every row, for example OrderBy(_ =&gt; 1), which does not order the rows.</item>
-    ///   <item>AsSplitQuery or AsSingleQuery on a query that loads no collection.</item>
-    ///   <item>An Include of an owned or AutoInclude navigation, or whose path is the same as, or the start of, another Include path.</item>
-    ///   <item>AsNoTracking or AsTracking on a query that only returns a keyless entity type.</item>
-    ///   <item>A null check of a required property or navigation, for example `_.Name != null`, which is always true.</item>
-    ///   <item>A redundant null check, on a navigation or a nullable scalar, for example `_.Owner != null &amp;&amp; _.Owner.Name == "owner"`, or `_.Owner == null ? null : _.Owner.Name`.</item>
-    ///   <item>A count compared to zero, for example `_.Employees.Count() &gt; 0`, where Any() stops at the first row.</item>
-    ///   <item>A redundant Distinct, on rows that each come from one entity and include its primary key.</item>
-    ///   <item>A GroupBy whose groups are only used for their Key, which is Select(key).Distinct().</item>
-    ///   <item>First or FirstOrDefault on a collection navigation in a subquery, without an ordering or a filter, for example `_.Employees.FirstOrDefault()`, which returns an arbitrary element.</item>
-    ///   <item>The query and model anti-patterns that EF detects but only logs, for example Take without OrderBy, or a decimal with no precision. To allow one, call ConfigureWarnings after this method.</item>
-    /// </list>
-    /// More checks are opt in, through <paramref name="configure" />. See <see cref="AntiPatternOptions" />.
+    /// Opt in to anti-pattern checks, which throw when a query that uses an anti-pattern is compiled, or for some
+    /// checks, when it runs. Each check has its own flag on <see cref="AntiPatternOptions" />, and is off until
+    /// selected.
+    /// With no <paramref name="configure" />, the standard set is switched on. See
+    /// <see cref="AntiPatternOptions.EnableStandard" />.
+    /// With a <paramref name="configure" />, only the checks it selects are switched on, so a subset, or a single
+    /// check, can be chosen. Call <see cref="AntiPatternOptions.EnableStandard" /> in it to add to the standard set.
     /// </summary>
     /// <param name="builder">The options builder for the context.</param>
     /// <param name="configure">
-    /// Opts in to more checks, for example lazy loading, repeated queries, case conversion of a column, and an ignored IgnoreQueryFilters. Applied on top of the options from an earlier
-    /// call, including the one made by EnableRecording.
+    /// Selects the checks to run. Applied on top of the options from an earlier call, including the one made by
+    /// EnableRecording when its throwOnAntiPatterns is true.
     /// </param>
     public static DbContextOptionsBuilder<TContext> ThrowOnAntiPatterns<TContext>(
         this DbContextOptionsBuilder<TContext> builder,
@@ -337,9 +329,21 @@ public static class VerifyEntityFramework
         where TContext : DbContext
     {
         var options = builder.Options.FindExtension<AntiPatternOptionsExtension>()?.Options.Clone() ?? new();
-        configure?.Invoke(options);
+        if (configure == null)
+        {
+            options.EnableStandard();
+        }
+        else
+        {
+            configure(options);
+        }
+
         ((IDbContextOptionsBuilderInfrastructure) builder).AddOrUpdateExtension(new AntiPatternOptionsExtension(options));
-        builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
+        if (options.ThrowOnEfWarnings)
+        {
+            builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.Warnings));
+        }
+
         if (options.ThrowOnLazyLoading)
         {
             builder.ConfigureWarnings(_ => _.Throw(AntiPatternInterceptor.LazyLoadingWarnings));
