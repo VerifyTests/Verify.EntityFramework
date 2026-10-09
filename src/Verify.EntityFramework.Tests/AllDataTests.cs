@@ -76,7 +76,6 @@ public class AllDataTests
         await data.SaveChangesAsync();
 
         var entry = data.Entry(animal);
-        entry.Reload();
         await entry.ReloadAsync();
         await Assert.That(await entry.GetDatabaseValuesAsync()).IsNotNull();
     }
