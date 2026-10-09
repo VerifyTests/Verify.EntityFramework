@@ -658,6 +658,87 @@ Will result in the following verified file with all data in the database:
 <!-- endSnippet -->
 
 
+## Model diagram
+
+An `IModel` can be verified as a [Mermaid ER diagram](https://mermaid.js.org/syntax/entityRelationshipDiagram.html), using [DbToMermaid](https://github.com/SimonCropp/DbToMermaid). EF Core only.
+
+<!-- snippet: ModelDiagram -->
+<a id='snippet-ModelDiagram'></a>
+```cs
+await Verify(data.Model);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/ModelDiagramTests.cs#L10-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagram' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Result: [ModelDiagramTests.Markdown.verified.md](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Markdown.verified.md)
+
+The diagram can be verified as markdown, svg, png, or any combination. One file is verified for each format.
+
+<!-- snippet: ModelDiagramFormats -->
+<a id='snippet-ModelDiagramFormats'></a>
+```cs
+await Verify(data.Model)
+    .ModelAsDiagram(
+        ModelDiagramFormat.Markdown |
+        ModelDiagramFormat.Svg |
+        ModelDiagramFormat.Png);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/ModelDiagramTests.cs#L22-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagramFormats' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Result:
+
+ * [ModelDiagramTests.Formats.verified.md](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.md)
+ * [ModelDiagramTests.Formats.verified.svg](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.svg)
+ * [ModelDiagramTests.Formats.verified.png](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.png)
+
+Available values:
+
+<!-- snippet: ModelDiagramFormat.cs -->
+<a id='snippet-ModelDiagramFormat.cs'></a>
+```cs
+namespace VerifyTests.EntityFramework;
+
+/// <summary>
+/// The files produced when a model is verified as a diagram. Can be combined.
+/// </summary>
+[Flags]
+public enum ModelDiagramFormat
+{
+    /// <summary>
+    /// A Mermaid ER diagram in a markdown code block. Uses the `md` extension.
+    /// </summary>
+    Markdown = 1,
+
+    /// <summary>
+    /// The diagram rendered to an image. Uses the `svg` extension.
+    /// </summary>
+    Svg = 2,
+
+    /// <summary>
+    /// The diagram rendered to an image. Uses the `png` extension.
+    /// </summary>
+    Png = 4,
+
+    All = Markdown | Svg | Png
+}
+```
+<sup><a href='/src/Verify.EntityFramework/ModelDiagramFormat.cs#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagramFormat.cs' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+A rendered png may not be pixel identical across machines, so compare using [ssim](https://github.com/VerifyTests/Verify/blob/main/docs/comparer.md):
+
+<!-- snippet: UseSsimForPng -->
+<a id='snippet-UseSsimForPng'></a>
+```cs
+VerifierSettings.UseSsimForPng();
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/ModuleInitializer.cs#L27-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseSsimForPng' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The svg and png are rendered by [Naiad](https://github.com/Papyrine/Naiad). Its build check requires a sponsorship, or exemption, property to be set in the consuming project. The build error lists the options.
+
+
 ## IgnoreNavigationProperties
 
 `IgnoreNavigationProperties` extends `SerializationSettings` to exclude all navigation properties from serialization:

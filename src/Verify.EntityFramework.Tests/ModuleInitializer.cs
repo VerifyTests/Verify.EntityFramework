@@ -24,6 +24,12 @@ public static class ModuleInitializer
     [ModuleInitializer]
     public static void InitOther()
     {
+        #region UseSsimForPng
+
+        VerifierSettings.UseSsimForPng();
+
+        #endregion
+
         VerifierSettings.InitializePlugins();
         Recording.IgnoreNames("sql");
     }
