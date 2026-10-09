@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.117.0" />
-    <PackageVersion Include="TUnit" Version="1.73.5" />
+    <PackageVersion Include="TUnit" Version="1.73.19" />
     <PackageVersion Include="Polyfill" Version="11.4.3" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.184" />
     <PackageVersion Include="Sbom" Version="0.3.1" />
