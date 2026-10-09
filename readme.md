@@ -692,6 +692,8 @@ Result:
  * [ModelDiagramTests.Formats.verified.svg](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.svg)
  * [ModelDiagramTests.Formats.verified.png](/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.png)
 
+<img src="/src/Verify.EntityFramework.Tests/ModelDiagramTests.Formats.verified.png" alt="ModelDiagramTests.Formats.verified.png">
+
 Available values:
 
 <!-- snippet: ModelDiagramFormat.cs -->
