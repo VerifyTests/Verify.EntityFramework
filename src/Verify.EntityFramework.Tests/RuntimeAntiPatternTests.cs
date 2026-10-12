@@ -598,7 +598,6 @@
     public class LazyBlog
     {
         ILazyLoader? loader;
-        List<LazyPost> posts = [];
 
         public LazyBlog()
         {
@@ -614,9 +613,9 @@
 
         public List<LazyPost> Posts
         {
-            get => loader.Load(this, ref posts!)!;
-            set => posts = value;
-        }
+            get => loader.Load(this, ref field!)!;
+            set;
+        } = [];
     }
 
     public class LazyPost
