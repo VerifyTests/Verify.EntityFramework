@@ -728,6 +728,29 @@ public enum ModelDiagramFormat
 <sup><a href='/src/Verify.EntityFramework/ModelDiagramFormat.cs#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagramFormat.cs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+The entity types included in the diagram can be filtered. Foreign keys to an excluded entity type are omitted.
+
+<!-- snippet: ModelDiagramFilter -->
+<a id='snippet-ModelDiagramFilter'></a>
+```cs
+await Verify(data.Model)
+    // exclude the Employee entity
+    .ModelDiagramFilter(_ => _.ClrType != typeof(Employee));
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/ModelDiagramTests.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagramFilter' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+To render only the table names, without columns:
+
+<!-- snippet: ModelDiagramNamesOnly -->
+<a id='snippet-ModelDiagramNamesOnly'></a>
+```cs
+await Verify(data.Model)
+    .ModelAsDiagram(namesOnly: true);
+```
+<sup><a href='/src/Verify.EntityFramework.Tests/ModelDiagramTests.cs#L52-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModelDiagramNamesOnly' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
 A rendered png may not be pixel identical across machines, so compare using [ssim](https://github.com/VerifyTests/Verify/blob/main/docs/comparer.md):
 
 <!-- snippet: UseSsimForPng -->
