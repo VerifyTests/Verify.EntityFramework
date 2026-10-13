@@ -31,6 +31,33 @@ public class ModelDiagramTests
     }
 
     [Test]
+    public async Task Filter()
+    {
+        await using var data = BuildData();
+
+        #region ModelDiagramFilter
+
+        await Verify(data.Model)
+            // exclude the Employee entity
+            .ModelDiagramFilter(_ => _.ClrType != typeof(Employee));
+
+        #endregion
+    }
+
+    [Test]
+    public async Task NamesOnly()
+    {
+        await using var data = BuildData();
+
+        #region ModelDiagramNamesOnly
+
+        await Verify(data.Model)
+            .ModelAsDiagram(namesOnly: true);
+
+        #endregion
+    }
+
+    [Test]
     public async Task SvgOnly()
     {
         await using var data = BuildData();
