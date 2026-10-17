@@ -1845,7 +1845,7 @@ builder.ConfigureWarnings(_ =>
 <!-- endSnippet -->
 
 
-### Runtime checks
+### Test execution time checks
 
 Some anti-patterns are only visible while a context runs. Each has its own flag on `AntiPatternOptions`, passed to `ThrowOnAntiPatterns`, and none is in the standard set. The options are applied on top of those from an earlier call, so this works before or after `EnableRecording()`:
 
