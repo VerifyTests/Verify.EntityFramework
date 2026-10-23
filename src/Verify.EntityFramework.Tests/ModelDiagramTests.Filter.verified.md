@@ -1,6 +1,6 @@
 ﻿```mermaid
 erDiagram
-  Companies["**Companies**"] {
+  "Companies"["**Companies**"] {
     int Id pk
     nvarchar(max) Name
   }
