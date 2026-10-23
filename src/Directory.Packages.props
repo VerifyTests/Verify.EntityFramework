@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageVersion Include="EfClassicLocalDb" Version="27.2.5" />
     <PackageVersion Include="EfLocalDb" Version="27.2.5" />
-    <PackageVersion Include="EfToMermaid" Version="2.3.0" />
+    <PackageVersion Include="EfToMermaid" Version="2.3.1" />
     <PackageVersion Include="EntityFramework" Version="6.5.2" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.13" />
