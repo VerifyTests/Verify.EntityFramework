@@ -41,8 +41,7 @@ class RecordingQueryCompiler(
         Expression query,
         Dictionary<string, object?> parameters,
         IDiagnosticsLogger<DbLoggerCategory.Query> logger,
-        bool compiledQuery = false,
-        bool generateContextAccessors = false)
+        bool compiledQuery = false)
     {
         // read before extracting, since extracting can evaluate code that runs another query
         var entryType = type;
@@ -50,8 +49,7 @@ class RecordingQueryCompiler(
             query,
             parameters,
             logger,
-            compiledQuery,
-            generateContextAccessors);
+            compiledQuery);
 
         // a compiled query is extracted once, when compiled, and then executes without passing through here
         if (!compiledQuery &&

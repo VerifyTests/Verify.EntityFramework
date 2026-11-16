@@ -16,5 +16,4 @@ from     Employees as e
          Employees as e0
          on c.Id = e0.CompanyId
 where    e.Name = N'Employee1'
-order by e.Id,
-         c.Id
+order by e.Id
