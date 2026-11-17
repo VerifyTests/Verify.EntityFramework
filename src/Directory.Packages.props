@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfClassicLocalDb" Version="28.0.0" />
+    <PackageVersion Include="EfClassicLocalDb" Version="28.1.0" />
     <PackageVersion Include="EfLocalDb" Version="28.1.0" />
     <PackageVersion Include="EfToMermaid" Version="2.4.0" />
     <PackageVersion Include="EntityFramework" Version="6.5.2" />
