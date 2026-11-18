@@ -8,24 +8,24 @@
     <PackageVersion Include="EfLocalDb" Version="28.1.0" />
     <PackageVersion Include="EfToMermaid" Version="2.4.0" />
     <PackageVersion Include="EntityFramework" Version="6.5.2" />
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="29.0.0" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="30.0.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="11.0.0" />
     <PackageVersion Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.154.0" />
-    <PackageVersion Include="TUnit" Version="1.86.6" />
+    <PackageVersion Include="TUnit" Version="1.87.0" />
     <PackageVersion Include="Polyfill" Version="11.4.5" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.190" />
-    <PackageVersion Include="Sbom" Version="0.3.1" />
+    <PackageVersion Include="Sbom" Version="1.0.0" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
-    <PackageVersion Include="Verify" Version="33.5.0" />
-    <PackageVersion Include="Verify.TUnit" Version="33.5.0" />
+    <PackageVersion Include="Verify" Version="33.6.0" />
+    <PackageVersion Include="Verify.TUnit" Version="33.6.0" />
     <PackageVersion Include="Verify.SqlServer" Version="12.5.0" />
     <PackageVersion Include="Argon" Version="0.38.2" />
-    <PackageVersion Include="DiffEngine" Version="21.0.0" />
+    <PackageVersion Include="DiffEngine" Version="21.1.0" />
     <PackageVersion Include="EmptyFiles" Version="8.20.1" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.1" />
   </ItemGroup>
