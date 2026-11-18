@@ -18,7 +18,7 @@
     <PackageVersion Include="TUnit" Version="1.86.6" />
     <PackageVersion Include="Polyfill" Version="11.4.5" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.190" />
-    <PackageVersion Include="Sbom" Version="0.3.1" />
+    <PackageVersion Include="Sbom" Version="1.0.0" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
     <PackageVersion Include="Verify" Version="33.5.0" />
